@@ -2,7 +2,7 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_ui_2/config/config.dart';
+import 'package:mini_project/config/config.dart';
 
 
 import 'package:http/http.dart' as http;
