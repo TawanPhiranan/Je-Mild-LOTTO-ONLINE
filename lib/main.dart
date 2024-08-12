@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mini_project/pages/LogoPage.dart';
 
+
 void main() {
   runApp(const MyApp());
 }
