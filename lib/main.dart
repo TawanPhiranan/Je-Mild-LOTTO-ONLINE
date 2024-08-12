@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_ui_2/page/profile.dart';
+
 
 
 void main() {
@@ -15,7 +15,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       // theme: ThemeData(useMaterial3: f),
       title: 'Flutter Demo',
-      home: ProfilePage(),
+      
     );
   }
 }
