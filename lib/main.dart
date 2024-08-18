@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:mini_project/pages/LogoPage.dart';
-
+import 'package:mini_project/pages/Loginpage.dart';
+import 'package:mini_project/pages/register.dart';
 
 void main() {
   runApp(const MyApp());
@@ -15,7 +15,7 @@ class MyApp extends StatelessWidget {
     return const MaterialApp(
       // theme: ThemeData(useMaterial3: f),
       title: 'Flutter Demo',
-      home: Logopage(),
+      home: Loginpage(),
     );
   }
 }
