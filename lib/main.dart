@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mini_project/pages/HomePage.dart';
 import 'package:mini_project/pages/LogoPage.dart';
 import 'package:mini_project/pages/changePwdPage.dart';
 import 'package:mini_project/pages/editProfilePage.dart';
@@ -17,7 +18,7 @@ class MyApp extends StatelessWidget {
     return const MaterialApp(
       // theme: ThemeData(useMaterial3: f),
       title: 'Flutter Demo',
-      home: Walletpage(),
+      home: Homepage(),
     );
   }
 }

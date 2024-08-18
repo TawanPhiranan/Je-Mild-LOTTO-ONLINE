@@ -3,8 +3,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:mini_project/config/config.dart';
-
-
+import 'package:mini_project/pages/Loginpage.dart';
 import 'package:http/http.dart' as http;
 
 class RegisterPage extends StatefulWidget {
@@ -20,6 +19,7 @@ class _RegisterPageState extends State<RegisterPage> {
   var emailCtl = TextEditingController();
   var passwordCtl = TextEditingController();
   var confirmpassCtl = TextEditingController();
+  var AmountmoneyCtl = TextEditingController();
 
   String url = '';
   @override
@@ -39,11 +39,54 @@ class _RegisterPageState extends State<RegisterPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('ลงทะเบียนสมาชิกใหม่'),
+        backgroundColor: const Color.fromRGBO(177, 36, 24, 1),
+        title: const Text(
+          'Sing Up',
+          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+        ),
       ),
       body: SingleChildScrollView(
         child: Column(
           children: [
+            const Padding(
+              padding: EdgeInsets.all(8.0),
+              child: Text(
+                "Je'Mild",
+                style: TextStyle(
+                    fontSize: 35,
+                    fontWeight: FontWeight.bold,
+                    color: Color.fromRGBO(177, 36, 24, 1)),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    'เบอร์โทรศัพท์',
+                    style: const TextStyle(
+                        fontSize: 18, color: Color.fromARGB(255, 0, 0, 0)),
+                  ),
+                  TextField(
+                      controller: phoneCtl,
+                      keyboardType: TextInputType.phone,
+                      decoration: const InputDecoration(
+                          border: OutlineInputBorder(
+                              borderSide: BorderSide(width: 1)))),
+                ],
+              ),
+            ),
+            const Padding(
+              padding: EdgeInsets.fromLTRB(10, 2, 10, 10),
+              child: Text(
+                "เบอร์โทร ชื่อ-นามสกุล ที่สมัครต้องตรงกันกับบัญชี wallet",
+                style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.normal,
+                    color: Color.fromRGBO(177, 36, 24, 1)),
+              ),
+            ),
             Padding(
               padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
               child: Column(
@@ -56,25 +99,6 @@ class _RegisterPageState extends State<RegisterPage> {
                   ),
                   TextField(
                       controller: fullnameCtl,
-                      decoration: const InputDecoration(
-                          border: OutlineInputBorder(
-                              borderSide: BorderSide(width: 1)))),
-                ],
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    'หมายเลขโทรศัพท์',
-                    style: TextStyle(
-                        fontSize: 18, color: Color.fromARGB(255, 0, 0, 0)),
-                  ),
-                  TextField(
-                      controller: phoneCtl,
-                      keyboardType: TextInputType.phone,
                       decoration: const InputDecoration(
                           border: OutlineInputBorder(
                               borderSide: BorderSide(width: 1)))),
@@ -138,40 +162,71 @@ class _RegisterPageState extends State<RegisterPage> {
                 ],
               ),
             ),
+            const Padding(
+              padding: EdgeInsets.fromLTRB(10, 2, 10, 10),
+              child: Text(
+                "**กรุณาเติมเงินขั้นต่ำ 500 บาทเพื่อใช้งานเเอปพลิเคชัน",
+                style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.normal,
+                    color: Color.fromRGBO(177, 36, 24, 1)),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    'ระบุจำนวนเงิน*',
+                    style: const TextStyle(
+                        fontSize: 18, color: Color.fromARGB(255, 0, 0, 0)),
+                  ),
+                  TextField(
+                      controller: AmountmoneyCtl,
+                      keyboardType: TextInputType.number,
+                      decoration: const InputDecoration(
+                          border: OutlineInputBorder(
+                              borderSide: BorderSide(width: 1)))),
+                ],
+              ),
+            ),
             Padding(
               padding: const EdgeInsets.all(10),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+              child: Column(
                 children: [
-                  FilledButton(
-                   
-                    onPressed: () {  },
-                    child: const Text('สมัครสมาชิก'),
-                  ),
-                ],
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(7),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  TextButton(
-                    // onPressed: login,
-                    onPressed: () {  },
-                    child: const Text(
-                      'หากมีบัญชีอยู่เเล้ว?',
-                      style: TextStyle(color: Colors.black),
+                  SizedBox(
+                    width: double.infinity,
+                    child: FilledButton(
+                      onPressed: login ,
+                      style: FilledButton.styleFrom(
+                        backgroundColor:
+                            const Color.fromRGBO(177, 36, 24, 1),
+                      ),
+                      child: const Text(
+                        'ลงทะเบียน',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20,
+                          color: Colors.white,
+                        ),
+                      ),
                     ),
                   ),
-                  TextButton(
-                      onPressed: () {}, child: const Text('เข้าสู่ระบบ')),
                 ],
               ),
-            ),
+            )
           ],
         ),
       ),
     );
+  }
+
+  void login() {
+     Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => Loginpage(),
+        ));
   }
 }
