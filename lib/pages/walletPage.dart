@@ -40,21 +40,81 @@ class _WalletpageState extends State<Walletpage> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              Container(
+              SizedBox(
                 width: 390,
                 height: 200,
-                decoration: BoxDecoration(
-                  color:
-                      const Color.fromRGBO(213, 96, 97, 1), // Background color
-                  borderRadius: BorderRadius.circular(20),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.3), // Shadow color
-                      spreadRadius: 3, // How much the shadow spreads
-                      blurRadius: 7, // How blurry the shadow is
-                      offset: const Offset(0, 3), // Shadow offset
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: const Color.fromRGBO(213, 96, 97, 1),
+                    borderRadius: BorderRadius.circular(20),
+                    boxShadow: [
+                      //เเสงเเละเงา
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.3),
+                        spreadRadius: 3,
+                        blurRadius: 7,
+                        offset: const Offset(0, 3),
+                      ),
+                    ],
+                  ),
+                  child: const Padding(
+                    padding: EdgeInsets.fromLTRB(20, 20, 20, 20),
+                    child: Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              "ยอดเงินคงเหลือ",
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 26),
+                            ),
+                            Icon(
+                              Icons.wallet_rounded,
+                              color: Colors.white,
+                              size: 36,
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 10),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Icon(
+                              Icons.monetization_on_rounded,
+                              color: Colors.white,
+                              size: 36,
+                            ),
+                            Text(
+                              "0.00",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 40,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            Text(
+                              "บาท",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 30,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 10),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Text(
+                              "น้องมาย แจกจริง",
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 18),
+                            ),
+                          ],
+                        ),
+                      ],
                     ),
-                  ], // Rounded corners
+                  ),
                 ),
               ),
               const SizedBox(height: 20),
