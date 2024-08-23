@@ -12,8 +12,6 @@ class Orderpage extends StatefulWidget {
 }
 
 class _OrderpageState extends State<Orderpage> {
-<<<<<<< HEAD
-=======
   int _selectedIndex = 3; // Track the selected index
 
   void _onItemTapped(int index) {
@@ -23,10 +21,10 @@ class _OrderpageState extends State<Orderpage> {
 
     // Navigate to different pages based on the selected index
     switch (index) {
-      case 0:
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => const Homepage()));
-        break;
+      // case 0:
+      //   Navigator.push(
+      //       context, MaterialPageRoute(builder: (context) => const Homepage()));
+      //   break;
       case 1:
         Navigator.push(context,
             MaterialPageRoute(builder: (context) => const Walletpage()));
@@ -46,7 +44,6 @@ class _OrderpageState extends State<Orderpage> {
     }
   }
   
->>>>>>> 46479b4389ebce2278d98772db9ba955ea6ca4f6
   @override
   Widget build(BuildContext context) {
     return Scaffold(

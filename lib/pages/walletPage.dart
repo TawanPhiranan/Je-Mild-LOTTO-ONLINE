@@ -23,10 +23,10 @@ class _WalletpageState extends State<Walletpage> {
 
     // Navigate to different pages based on the selected index
     switch (index) {
-      case 0:
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => const Homepage()));
-        break;
+      // case 0:
+      //   Navigator.push(
+      //       context, MaterialPageRoute(builder: (context) => const Homepage()));
+      //   break;
       case 1:
         Navigator.push(context,
             MaterialPageRoute(builder: (context) => const Walletpage()));

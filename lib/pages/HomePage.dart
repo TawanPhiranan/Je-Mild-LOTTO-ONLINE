@@ -24,7 +24,7 @@ class _HomepageState extends State<Homepage> {
   // Navigate to different pages based on the selected index
   switch (index) {
     case 0:
-      Navigator.push(context, MaterialPageRoute(builder: (context) => Homepage()));
+      // Navigator.push(context, MaterialPageRoute(builder: (context) => Homepage()));
       break;
     case 1:
       Navigator.push(context, MaterialPageRoute(builder: (context) => Walletpage()));
