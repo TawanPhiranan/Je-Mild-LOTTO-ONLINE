@@ -109,7 +109,8 @@ class _AdminallrandomState extends State<Adminallrandom> {
                 ],
               ),
             ),
-            const SizedBox(height: 30), // Space between sections
+            
+            const SizedBox(height: 30), 
             SizedBox(
               width: double.infinity,
               height: 185,
