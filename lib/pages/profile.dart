@@ -2,15 +2,16 @@
 
 import 'dart:developer';
 import 'package:flutter/material.dart';
-import 'package:mini_project/pages/HomePage.dart';
+import 'package:mini_project/config/config.dart';
 import 'package:mini_project/pages/LottoPage.dart';
 import 'package:mini_project/pages/OrderPage.dart';
+import 'package:mini_project/pages/editProfilePage.dart';
+import 'package:http/http.dart' as http;
 import 'package:mini_project/pages/walletPage.dart';
 
 class ProfilePage extends StatefulWidget {
-  final int idx; // Define the idx field
 
-  ProfilePage({super.key, required this.idx}); // Add required idx parameter
+  ProfilePage({super.key}); 
 
   @override
   State<ProfilePage> createState() => _ProfilePageState();
@@ -43,9 +44,9 @@ class _ProfilePageState extends State<ProfilePage> {
             MaterialPageRoute(builder: (context) => const Orderpage()));
         break;
       case 4:
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => ProfilePage()));
-        break;
+        // Navigator.push(
+        //     context, MaterialPageRoute(builder: (context) => ProfilePage()));
+        // break;
     }
   }
   @override
@@ -314,48 +315,6 @@ class _ProfilePageState extends State<ProfilePage> {
   void _editProfileImage() {}
 
   void _deleteAccount() async {
-    // var value = await Configuration.getConfig();
-    // var url = value['apiEndpoint'];
-    // try {
-    //   var response = await http.delete(
-    //     Uri.parse('$url/customers/${widget.idx}'),
-    //     headers: {"Content-Type": "application/json; charset=utf-8"},
-    //   );
-    //   if (response.statusCode == 200) {
-    //     showDialog(
-    //       context: context,
-    //       builder: (context) => AlertDialog(
-    //         title: const Text('สำเร็จ'),
-    //         content: const Text('ลบข้อมูลเรียบร้อย'),
-    //         actions: [
-    //           FilledButton(
-    //             onPressed: () {
-    //               Navigator.popUntil(context, (route) => route.isFirst);
-    //             },
-    //             child: const Text('ปิด'),
-    //           ),
-    //         ],
-    //       ),
-    //     );
-    //   } else {
-    //     throw Exception('Failed to delete account');
-    //   }
-    // } catch (err) {
-    //   showDialog(
-    //     context: context,
-    //     builder: (context) => AlertDialog(
-    //       title: const Text('ผิดพลาด'),
-    //       content: Text('ลบข้อมูลไม่สำเร็จ $err'),
-    //       actions: [
-    //         FilledButton(
-    //           onPressed: () {
-    //             Navigator.pop(context);
-    //           },
-    //           child: const Text('ปิด'),
-    //         ),
-    //       ],
-    //     ),
-    //   );
-    // }
+   
   }
 }

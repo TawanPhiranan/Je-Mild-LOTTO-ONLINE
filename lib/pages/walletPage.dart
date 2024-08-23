@@ -39,10 +39,10 @@ class _WalletpageState extends State<Walletpage> {
         Navigator.push(context,
             MaterialPageRoute(builder: (context) => const Orderpage()));
         break;
-      case 4:
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => ProfilePage()));
-        break;
+      // case 4:
+      //   Navigator.push(
+      //       context, MaterialPageRoute(builder: (context) => ProfilePage()));
+      //   break;
     }
   }
 

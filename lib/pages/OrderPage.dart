@@ -37,10 +37,10 @@ class _OrderpageState extends State<Orderpage> {
         Navigator.push(context,
             MaterialPageRoute(builder: (context) => const Orderpage()));
         break;
-      case 4:
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => ProfilePage()));
-        break;
+      // case 4:
+      //   Navigator.push(
+      //       context, MaterialPageRoute(builder: (context) => ProfilePage()));
+      //   break;
     }
   }
   

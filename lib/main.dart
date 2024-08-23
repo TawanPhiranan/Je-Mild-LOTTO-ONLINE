@@ -9,13 +9,6 @@ import 'package:mini_project/pages/HomePage.dart';
 import 'package:mini_project/pages/LogoPage.dart';
 import 'package:mini_project/pages/LottoPage.dart';
 import 'package:mini_project/pages/profile.dart';
-import 'package:mini_project/pages/changePwdPage.dart';
-import 'package:mini_project/pages/editProfilePage.dart';
-import 'package:mini_project/pages/profile.dart';
-import 'package:mini_project/pages/walletPage.dart';
-import 'package:mini_project/pages/LoginPage.dart';
-import 'package:mini_project/pages/OrderPage.dart';
-// import 'package:mini_project/pages/profile.dart';
 
 void main() {
   runApp(const MyApp());
@@ -26,10 +19,9 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return  const MaterialApp(
-      // theme: ThemeData(useMaterial3: f),
+    return  MaterialApp(
       title: 'Flutter Demo',
-      home: Logopage(),
+      home: LottoPage()
     );
   }
 }
