@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
 
-class Orderpage extends StatelessWidget {
+class Orderpage extends StatefulWidget {
   const Orderpage({super.key});
 
+  @override
+  State<Orderpage> createState() => _OrderpageState();
+}
+
+class _OrderpageState extends State<Orderpage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -63,8 +68,8 @@ class Orderpage extends StatelessWidget {
                         Card(
                           color: Color.fromRGBO(217, 217, 217, 1),
                           child: Padding(
-                            padding:
-                                EdgeInsets.symmetric(vertical: 5, horizontal: 70),
+                            padding: EdgeInsets.symmetric(
+                                vertical: 5, horizontal: 70),
                             child: Text(
                               "407041",
                               style: TextStyle(
@@ -117,7 +122,8 @@ class Orderpage extends StatelessWidget {
                             Card(
                               color: Color.fromRGBO(217, 217, 217, 1),
                               child: Padding(
-                                padding: EdgeInsets.symmetric(vertical: 5, horizontal: 20),
+                                padding: EdgeInsets.symmetric(
+                                    vertical: 5, horizontal: 20),
                                 child: Text(
                                   "848197",
                                   style: TextStyle(
@@ -166,7 +172,8 @@ class Orderpage extends StatelessWidget {
                             Card(
                               color: Color.fromRGBO(217, 217, 217, 1),
                               child: Padding(
-                                padding: EdgeInsets.symmetric(vertical: 5, horizontal: 20),
+                                padding: EdgeInsets.symmetric(
+                                    vertical: 5, horizontal: 20),
                                 child: Text(
                                   "903093",
                                   style: TextStyle(
@@ -184,7 +191,7 @@ class Orderpage extends StatelessWidget {
                   ),
                 ],
               ),
-               Row(
+              Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   SizedBox(
@@ -220,7 +227,8 @@ class Orderpage extends StatelessWidget {
                             Card(
                               color: Color.fromRGBO(217, 217, 217, 1),
                               child: Padding(
-                                padding: EdgeInsets.symmetric(vertical: 5, horizontal: 20),
+                                padding: EdgeInsets.symmetric(
+                                    vertical: 5, horizontal: 20),
                                 child: Text(
                                   "504956",
                                   style: TextStyle(
@@ -269,7 +277,8 @@ class Orderpage extends StatelessWidget {
                             Card(
                               color: Color.fromRGBO(217, 217, 217, 1),
                               child: Padding(
-                                padding: EdgeInsets.symmetric(vertical: 5, horizontal: 20),
+                                padding: EdgeInsets.symmetric(
+                                    vertical: 5, horizontal: 20),
                                 child: Text(
                                   "505561",
                                   style: TextStyle(
@@ -287,9 +296,7 @@ class Orderpage extends StatelessWidget {
                   ),
                 ],
               ),
-              Row(
-                
-              )
+              Row()
             ],
           ),
         ),

@@ -1,7 +1,13 @@
-import 'package:flutter/material.dart';
+import 'dart:developer';
 
+import 'package:flutter/material.dart';
+import 'package:mini_project/models/request/users_login_post_req.dart';
+import 'package:mini_project/models/response/users_login_post_res.dart';
 import 'package:mini_project/pages/ForgetpwdPage.dart';
 import 'package:mini_project/pages/HomePage.dart';
+import 'package:http/http.dart' as http;
+import 'package:mini_project/config/config.dart';
+import 'package:mini_project/config/internal_config.dart';
 
 class Loginpage extends StatefulWidget {
   const Loginpage({super.key});
@@ -13,6 +19,21 @@ class Loginpage extends StatefulWidget {
 class _LoginpageState extends State<Loginpage> {
   var phoneCtl = TextEditingController();
   var passwordCtl = TextEditingController();
+  String text = '';
+  int number = 0;
+  String url = '';
+  @override
+  void initState() {
+    super.initState();
+    Configuration.getConfig().then(
+      (config) {
+        url = config['apiEndpoint'];
+        // log(config ['apiEndpoint']);
+      },
+    ).catchError((err) {
+      log(err.toString());
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -22,6 +43,13 @@ class _LoginpageState extends State<Loginpage> {
         title: const Text(
           'Log in',
           style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+        ),
+        leading: IconButton(
+          icon:
+              const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
         ),
       ),
       body: SingleChildScrollView(
@@ -105,7 +133,7 @@ class _LoginpageState extends State<Loginpage> {
                     SizedBox(
                       width: double.infinity,
                       child: FilledButton(
-                        onPressed: homepage,
+                        onPressed: login,
                         style: FilledButton.styleFrom(
                           backgroundColor: const Color.fromRGBO(177, 36, 24, 1),
                         ),
@@ -137,11 +165,28 @@ class _LoginpageState extends State<Loginpage> {
         ));
   }
 
-  void homepage() {
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => Homepage(),
-        ));
+  void login() async {
+    try {
+      var data = UsersLoginPostRequest(
+          phone: phoneCtl.text, password: passwordCtl.text);
+      var value = await http.post(Uri.parse('$API_ENDPOINT/login'),
+          headers: {"Content-Type": "application/json; charset=utf-8"},
+          body: usersLoginPostRequestToJson(data));
+      UsersLoginPostResponse users = usersLoginPostResponseFromJson(value.body);
+      log(users.users.email);
+      setState(() {
+        text = '';
+      });
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => Homepage(userId: users.users.userId),
+          ));
+    } catch (eeee) {
+      log(eeee.toString());
+      setState(() {
+        text = 'phone no or password incorrect';
+      });
+    }
   }
 }

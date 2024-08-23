@@ -22,8 +22,8 @@ class _LogopageState extends State<Logopage> {
             children: [
               Container(
                 height: screenHeight * 0.7, // สีแดงครอบ 70% ของหน้าจอ
-                decoration: BoxDecoration(
-                  color: const Color.fromRGBO(177, 36, 24, 1),
+                decoration: const BoxDecoration(
+                  color: Color.fromRGBO(177, 36, 24, 1),
                   borderRadius: BorderRadius.only(
                     bottomLeft: Radius.circular(30.0),
                     bottomRight: Radius.circular(30.0),
@@ -54,7 +54,7 @@ class _LogopageState extends State<Logopage> {
                   mainAxisAlignment:
                       MainAxisAlignment.start, // จัดแนวปุ่มจากด้านบน
                   children: [
-                    SizedBox(
+                    const SizedBox(
                         height: 30), // ระยะห่างระหว่างด้านบนของหน้าจอกับปุ่มแรก
                     SizedBox(
                       width: 200,
@@ -62,20 +62,21 @@ class _LogopageState extends State<Logopage> {
                       child: TextButton(
                         onPressed: () => login(),
                         style: TextButton.styleFrom(
-                          backgroundColor: Color.fromARGB(255, 211, 39, 24),
+                          backgroundColor:
+                              const Color.fromARGB(255, 211, 39, 24),
                           foregroundColor: Colors.white,
                           padding: EdgeInsets.zero,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(30.0),
                           ),
                         ),
-                        child: Text(
+                        child: const Text(
                           'เข้าสู่ระบบ',
                           style: TextStyle(fontSize: 20.0),
                         ),
                       ),
                     ),
-                    SizedBox(height: 20), // ระยะห่างระหว่างปุ่ม
+                    const SizedBox(height: 20), // ระยะห่างระหว่างปุ่ม
                     SizedBox(
                       width: 200,
                       height: 50,
@@ -83,8 +84,9 @@ class _LogopageState extends State<Logopage> {
                         onPressed: () => register(),
                         style: OutlinedButton.styleFrom(
                           foregroundColor: const Color.fromRGBO(177, 36, 24, 1),
-                          backgroundColor: Color.fromARGB(0, 206, 199, 198),
-                          side: BorderSide(
+                          backgroundColor:
+                              const Color.fromARGB(0, 206, 199, 198),
+                          side: const BorderSide(
                             color: Color.fromRGBO(177, 36, 24, 1),
                             width: 2.0,
                           ),
@@ -93,7 +95,7 @@ class _LogopageState extends State<Logopage> {
                             borderRadius: BorderRadius.circular(30.0),
                           ),
                         ),
-                        child: Text(
+                        child: const Text(
                           'สมัครสมาชิก',
                           style: TextStyle(fontSize: 20.0),
                         ),
@@ -113,7 +115,7 @@ class _LogopageState extends State<Logopage> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => Loginpage(),
+        builder: (context) => const Loginpage(),
       ),
     );
   }
@@ -122,7 +124,7 @@ class _LogopageState extends State<Logopage> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => RegisterPage(),
+        builder: (context) => const RegisterPage(),
       ),
     );
   }

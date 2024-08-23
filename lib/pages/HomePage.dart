@@ -1,7 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:mini_project/pages/HomePage.dart';
+import 'package:mini_project/pages/profile.dart';
+import 'package:mini_project/pages/walletPage.dart';
+import 'package:mini_project/pages/LoginPage.dart';
+import 'package:mini_project/pages/LottoPage.dart';
 
 class Homepage extends StatefulWidget {
-  const Homepage({super.key});
+  //รับ userID
+  int userId;
+  Homepage ({super.key, required this.userId});
 
   @override
   State<Homepage> createState() => _HomepageState();
@@ -389,36 +396,6 @@ class _HomepageState extends State<Homepage> {
           ),
         ),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-          items: const <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
-              icon: Icon(
-                Icons.home,
-              ), // ไอคอนสำหรับแท็บ "Home"
-              label: 'Home',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.wallet_rounded), // ไอคอนสำหรับแท็บ "Home"
-              label: 'Wallet',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.casino), // ไอคอนสำหรับแท็บ "Home"
-              label: 'Lotto',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.receipt), // ไอคอนสำหรับแท็บ "Home"
-              label: 'Order',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.account_circle), // ไอคอนสำหรับแท็บ "Home"
-              label: 'Profile',
-            ),
-          ],
-          unselectedItemColor:
-              const Color.fromARGB(255, 199, 199, 199), // สีของไอคอนที่ไม่เลือก
-          selectedItemColor: Colors.white,
-          backgroundColor: const Color.fromRGBO(177, 36, 24, 1),
-          type: BottomNavigationBarType.fixed),
     );
   }
 }
