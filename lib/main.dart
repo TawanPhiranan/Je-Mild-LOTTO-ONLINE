@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:mini_project/pages/HomePage.dart';
 import 'package:mini_project/pages/LogoPage.dart';
 import 'package:mini_project/pages/changePwdPage.dart';
-import 'package:mini_project/pages/editProfilePage.dart';
-import 'package:mini_project/pages/walletPage.dart';
 
 void main() {
   runApp(const MyApp());
