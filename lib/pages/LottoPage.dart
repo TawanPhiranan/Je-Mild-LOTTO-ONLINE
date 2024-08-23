@@ -1,6 +1,10 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:flutter/material.dart';
+import 'package:mini_project/pages/HomePage.dart';
+import 'package:mini_project/pages/OrderPage.dart';
+import 'package:mini_project/pages/profile.dart';
+import 'package:mini_project/pages/walletPage.dart';
 
 class LottoPage extends StatefulWidget {
   const LottoPage({super.key});
@@ -10,6 +14,37 @@ class LottoPage extends StatefulWidget {
 }
 
 class _LottoPageState extends State<LottoPage> {
+  int _selectedIndex = 2; // Track the selected index
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index; // Update the selected index
+    });
+
+    // Navigate to different pages based on the selected index
+    switch (index) {
+      case 0:
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => const Homepage()));
+        break;
+      case 1:
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => const Walletpage()));
+        break;
+      case 2:
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => const LottoPage()));
+        break;
+      case 3:
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => const Orderpage()));
+        break;
+      case 4:
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => ProfilePage()));
+        break;
+    }
+  }
   void _logout() {
     Navigator.pop(context);  
   }
@@ -76,6 +111,39 @@ class _LottoPageState extends State<LottoPage> {
             ],
           ),
         ],
+      ),
+      
+      bottomNavigationBar: BottomNavigationBar(
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.home,
+            ), // ไอคอนสำหรับแท็บ "Home"
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.wallet_rounded), // ไอคอนสำหรับแท็บ "Home"
+            label: 'Wallet',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.casino), // ไอคอนสำหรับแท็บ "Home"
+            label: 'Lotto',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.receipt), // ไอคอนสำหรับแท็บ "Home"
+            label: 'Order',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.account_circle), // ไอคอนสำหรับแท็บ "Home"
+            label: 'Profile',
+          ),
+        ],
+        unselectedItemColor: const Color.fromARGB(255, 199, 199, 199),
+        selectedItemColor: Colors.white,
+        backgroundColor: const Color.fromRGBO(177, 36, 24, 1),
+        currentIndex: _selectedIndex, // Set the current index
+        onTap: _onItemTapped, // Handle tap
+        type: BottomNavigationBarType.fixed,
       ),
       body: SingleChildScrollView(
         child: Column(
