@@ -11,7 +11,7 @@ import 'package:mini_project/pages/walletPage.dart';
 
 class ProfilePage extends StatefulWidget {
 
-  ProfilePage({super.key}); // Add required idx parameter
+  ProfilePage({super.key}); 
 
   @override
   State<ProfilePage> createState() => _ProfilePageState();
@@ -315,48 +315,6 @@ class _ProfilePageState extends State<ProfilePage> {
   void _editProfileImage() {}
 
   void _deleteAccount() async {
-    // var value = await Configuration.getConfig();
-    // var url = value['apiEndpoint'];
-    // try {
-    //   var response = await http.delete(
-    //     Uri.parse('$url/customers/${widget.idx}'),
-    //     headers: {"Content-Type": "application/json; charset=utf-8"},
-    //   );
-    //   if (response.statusCode == 200) {
-    //     showDialog(
-    //       context: context,
-    //       builder: (context) => AlertDialog(
-    //         title: const Text('สำเร็จ'),
-    //         content: const Text('ลบข้อมูลเรียบร้อย'),
-    //         actions: [
-    //           FilledButton(
-    //             onPressed: () {
-    //               Navigator.popUntil(context, (route) => route.isFirst);
-    //             },
-    //             child: const Text('ปิด'),
-    //           ),
-    //         ],
-    //       ),
-    //     );
-    //   } else {
-    //     throw Exception('Failed to delete account');
-    //   }
-    // } catch (err) {
-    //   showDialog(
-    //     context: context,
-    //     builder: (context) => AlertDialog(
-    //       title: const Text('ผิดพลาด'),
-    //       content: Text('ลบข้อมูลไม่สำเร็จ $err'),
-    //       actions: [
-    //         FilledButton(
-    //           onPressed: () {
-    //             Navigator.pop(context);
-    //           },
-    //           child: const Text('ปิด'),
-    //         ),
-    //       ],
-    //     ),
-    //   );
-    // }
+   
   }
 }
