@@ -10,9 +10,8 @@ import 'package:http/http.dart' as http;
 import 'package:mini_project/pages/walletPage.dart';
 
 class ProfilePage extends StatefulWidget {
-  final int idx; // Define the idx field
 
-  ProfilePage({super.key, required this.idx}); // Add required idx parameter
+  ProfilePage({super.key}); // Add required idx parameter
 
   @override
   State<ProfilePage> createState() => _ProfilePageState();
