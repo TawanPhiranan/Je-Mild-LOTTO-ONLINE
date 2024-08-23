@@ -1,26 +1,21 @@
 // ignore_for_file: deprecated_member_use
 
-import 'dart:developer';
 import 'package:flutter/material.dart';
-import 'package:mini_project/config/config.dart';
-import 'package:mini_project/pages/editProfilePage.dart';
-import 'package:http/http.dart' as http;
+import 'package:mini_project/pages/AdminEditPassword.dart';
 
-class ProfilePage extends StatefulWidget {
-  final int idx; // Define the idx field
-
-  ProfilePage({super.key, required this.idx}); // Add required idx parameter
+class Adminprofile extends StatefulWidget {
+  const Adminprofile({super.key});
 
   @override
-  State<ProfilePage> createState() => _ProfilePageState();
+  State<Adminprofile> createState() => _AdminprofileState();
 }
 
-class _ProfilePageState extends State<ProfilePage> {
+class _AdminprofileState extends State<Adminprofile> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: const Color.fromRGBO(177, 36, 24, 1),
+        backgroundColor: Color.fromRGBO(177, 36, 24, 1),
         title: const Text(
           'Profile',
           style: TextStyle(
@@ -28,14 +23,20 @@ class _ProfilePageState extends State<ProfilePage> {
             color: Colors.white,
           ),
         ),
+        leading: IconButton(
+          icon:
+              const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
         actions: [
           PopupMenuButton<String>(
-            icon: const Icon(
+            icon: Icon(
               Icons.more_vert,
               color: Colors.white,
             ),
             onSelected: (value) {
-              log(value);
               if (value == 'Logout') {
                 showDialog(
                   context: context,
@@ -99,7 +100,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       right: 0,
                       child: GestureDetector(
                         onTap: () {
-                          _editProfileImage();
+                          editProfileImage();
                         },
                         child: CircleAvatar(
                           radius: 25,
@@ -114,29 +115,29 @@ class _ProfilePageState extends State<ProfilePage> {
                   ],
                 ),
               ),
-              const SizedBox(height: 10),
-              const Text(
-                'น้องมาย แจกจริง',
+              SizedBox(height: 10),
+              Text(
+                'Admin Eiei',
                 style: TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              const SizedBox(height: 5),
+              SizedBox(height: 5),
               Text(
-                'น้องมาย@gmail.com',
+                'Admin@gmail.com',
                 style: TextStyle(
                   fontSize: 16,
                   color: Colors.grey[600],
                 ),
               ),
-              const SizedBox(height: 50),
+              SizedBox(height: 50),
               Row(
                 children: [
                   Expanded(
                     child: Container(
                       alignment: Alignment.centerLeft,
-                      child: const Text(
+                      child: Text(
                         'ชื่อ-นามสกุล',
                         style: TextStyle(
                           fontSize: 20,
@@ -144,12 +145,12 @@ class _ProfilePageState extends State<ProfilePage> {
                       ),
                     ),
                   ),
-                  const SizedBox(width: 30),
+                  SizedBox(width: 30),
                   Expanded(
                     child: Container(
                       alignment: Alignment.centerLeft,
                       child: Text(
-                        'น้องมาย แจกจริง',
+                        'Admin',
                         style: TextStyle(
                           fontSize: 20,
                           color: Colors.grey[600],
@@ -159,7 +160,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   ),
                 ],
               ),
-              const SizedBox(height: 30),
+              SizedBox(height: 30),
               Row(
                 children: [
                   Expanded(
@@ -173,7 +174,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       ),
                     ),
                   ),
-                  const SizedBox(width: 30),
+                  SizedBox(width: 30),
                   Expanded(
                     child: Container(
                       alignment: Alignment.centerLeft,
@@ -188,21 +189,21 @@ class _ProfilePageState extends State<ProfilePage> {
                   ),
                 ],
               ),
-              const SizedBox(height: 70),
+              SizedBox(height: 70),
               Center(
                 child: Column(
                   children: [
                     SizedBox(
                       width: double.infinity,
                       child: FilledButton(
-                        onPressed: _editPage,
+                        onPressed: EditPassword,
                         style: ButtonStyle(
                           backgroundColor: MaterialStateProperty.all(
                             const Color.fromRGBO(213, 96, 97, 1),
                           ),
                         ),
                         child: const Text(
-                          'จัดการโปรไฟล์',
+                          'เปลี่ยนรหัสผ่าน',
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 20,
@@ -210,24 +211,6 @@ class _ProfilePageState extends State<ProfilePage> {
                         ),
                       ),
                     ),
-                    const SizedBox(height: 20),
-                    SizedBox(
-                      width: double.infinity,
-                      child: FilledButton(
-                        onPressed: _deleteAccount,
-                        style: ButtonStyle(
-                          backgroundColor:
-                              MaterialStateProperty.all(Colors.grey),
-                        ),
-                        child: const Text(
-                          'ลบบัญชีผู้ใช้',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 20,
-                          ),
-                        ),
-                      ),
-                    )
                   ],
                 ),
               ),
@@ -237,61 +220,13 @@ class _ProfilePageState extends State<ProfilePage> {
       ),
     );
   }
-
-  void _editPage() {
+  EditPassword() {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => const EditProfilepage(),
+        builder: (context) => const Admineditpassword(),
       ),
     );
   }
-
-  void _editProfileImage() {}
-
-  void _deleteAccount() async {
-    // var value = await Configuration.getConfig();
-    // var url = value['apiEndpoint'];
-    // try {
-    //   var response = await http.delete(
-    //     Uri.parse('$url/customers/${widget.idx}'),
-    //     headers: {"Content-Type": "application/json; charset=utf-8"},
-    //   );
-    //   if (response.statusCode == 200) {
-    //     showDialog(
-    //       context: context,
-    //       builder: (context) => AlertDialog(
-    //         title: const Text('สำเร็จ'),
-    //         content: const Text('ลบข้อมูลเรียบร้อย'),
-    //         actions: [
-    //           FilledButton(
-    //             onPressed: () {
-    //               Navigator.popUntil(context, (route) => route.isFirst);
-    //             },
-    //             child: const Text('ปิด'),
-    //           ),
-    //         ],
-    //       ),
-    //     );
-    //   } else {
-    //     throw Exception('Failed to delete account');
-    //   }
-    // } catch (err) {
-    //   showDialog(
-    //     context: context,
-    //     builder: (context) => AlertDialog(
-    //       title: const Text('ผิดพลาด'),
-    //       content: Text('ลบข้อมูลไม่สำเร็จ $err'),
-    //       actions: [
-    //         FilledButton(
-    //           onPressed: () {
-    //             Navigator.pop(context);
-    //           },
-    //           child: const Text('ปิด'),
-    //         ),
-    //       ],
-    //     ),
-    //   );
-    // }
-  }
+  editProfileImage() {}
 }

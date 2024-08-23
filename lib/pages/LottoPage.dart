@@ -142,7 +142,7 @@ class _LottoPageState extends State<LottoPage> {
                           const SizedBox(height: 20),
                           SizedBox(
                             child: FilledButton(
-                              onPressed: () {},  
+                              onPressed: Search,  
                               style: ButtonStyle(
                                 backgroundColor: MaterialStateProperty.all(const Color.fromRGBO(217, 217, 217, 1)), 
                               ),
@@ -204,7 +204,6 @@ class _LottoPageState extends State<LottoPage> {
                 ],
               ),
             ),
-
             const SizedBox(height: 10),
             Padding(
               padding: const EdgeInsets.all(5.0),
@@ -345,65 +344,63 @@ class _LottoPageState extends State<LottoPage> {
                                 ),
                               ),
                             ),
-                            Align(
-                              alignment: Alignment.centerRight, 
-                              child: SizedBox(
-                                width: 50,
-                                height: 170, 
-                                child: Card(
-                                  color: Colors.white,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(0),
+                          const Align(
+                            alignment: Alignment.centerRight,
+                            child: SizedBox(
+                              width: 50,
+                              height: 170,
+                              child: Card(
+                                color: Colors.white,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.only(
+                                    topRight: Radius.circular(15), // ขอบมุมขวาบน
+                                    bottomRight: Radius.circular(15), // ขอบมุมขวาล่าง
                                   ),
-                                  child: const Center(
-                                    child: RotatedBox(
-                                      quarterTurns: 3, 
-                                      child: Text(
-                                        'เจ๊มายพารวย',
-                                        style: TextStyle(
-                                          color: Colors.black,
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.bold,
-                                        ),
+                                ),
+                                child: Center(
+                                  child: RotatedBox(
+                                    quarterTurns: 3,
+                                    child: Text(
+                                      'เจ๊มายพารวย',
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
                                       ),
                                     ),
                                   ),
                                 ),
                               ),
                             ),
+                          ),
                           ],
                         ),
                       ),
                     ),
                   ),
-                  const SizedBox(width: 10), 
-                  SizedBox(
-                    height: 65,
-                    width: 65,
-                    child: FilledButton(
-                      onPressed: () {},  
-                      style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all(const Color.fromRGBO(213, 96, 97, 1)),
-                      ),
-                      child: const Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            Icons.shopping_basket, 
-                            color: Colors.white,
-                            size: 20.0,
-                          ),
-                          Text(
-                            'สั่งซื้อ',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 13,
-                            ),
-                          ),
-                        ],    
-                      ),
-                    ),
-                  ),
+                 SizedBox(
+  height: 65,
+  width: 65,
+  child: FilledButton(
+    onPressed: () {},  
+    style: ButtonStyle(
+      backgroundColor: MaterialStateProperty.all(const Color.fromRGBO(213, 96, 97, 1)),
+      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+        RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(32.5), // ทำให้ปุ่มกลม
+        ),
+      ),
+    ),
+    child: const Center(  // ใช้ Center เพื่อให้อไอคอนอยู่ตรงกลาง
+      child: Icon(
+        Icons.shopping_basket, 
+        color: Colors.white,
+        size: 24,
+      ), 
+    ),
+  ),
+),
+
                 ],
               ),
             ),
@@ -411,5 +408,8 @@ class _LottoPageState extends State<LottoPage> {
         ),
       ),
     );
+  }
+ void Search(){
+
   }
 }
