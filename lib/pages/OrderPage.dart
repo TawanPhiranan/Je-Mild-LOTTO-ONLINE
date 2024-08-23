@@ -108,7 +108,6 @@ class _OrderpageState extends State<Orderpage> {
                     padding: EdgeInsets.all(16),
                     child: Column(
                       children: [
-                        // Date and Prize information
                         Text(
                           "1 สิงหาคม 2567",
                           style: TextStyle(

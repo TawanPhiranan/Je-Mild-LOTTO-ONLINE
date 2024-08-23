@@ -1,6 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:mini_project/pages/AdminHomePage.dart';
+import 'package:mini_project/pages/AdminAllRandom.dart';
+import 'package:mini_project/pages/AdminEditPassword.dart';
+import 'package:mini_project/pages/AdminLottoDraw.dart';
+import 'package:mini_project/pages/AdminProfile.dart';
+import 'package:mini_project/pages/AdminRandomNumber.dart';
 import 'package:mini_project/pages/HomePage.dart';
 import 'package:mini_project/pages/LogoPage.dart';
+import 'package:mini_project/pages/LottoPage.dart';
+import 'package:mini_project/pages/profile.dart';
 import 'package:mini_project/pages/changePwdPage.dart';
 import 'package:mini_project/pages/editProfilePage.dart';
 import 'package:mini_project/pages/profile.dart';
@@ -16,7 +24,6 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return  const MaterialApp(
