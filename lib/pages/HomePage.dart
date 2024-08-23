@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:mini_project/pages/LottoPage.dart';
+import 'package:mini_project/pages/OrderPage.dart';
+import 'package:mini_project/pages/profile.dart';
 import 'package:mini_project/pages/walletPage.dart';
 
 class Homepage extends StatefulWidget {
@@ -24,15 +27,15 @@ class _HomepageState extends State<Homepage> {
     case 1:
       Navigator.push(context, MaterialPageRoute(builder: (context) => Walletpage()));
       break;
-    // case 2:
-    //   Navigator.push(context, MaterialPageRoute(builder: (context) => LottoPage()));
-    //   break;
-    // case 3:
-    //   Navigator.push(context, MaterialPageRoute(builder: (context) => OrderPage()));
-    //   break;
-    // case 4:
-    //   Navigator.push(context, MaterialPageRoute(builder: (context) => ProfilePage()));
-    //   break;
+    case 2:
+      Navigator.push(context, MaterialPageRoute(builder: (context) => LottoPage()));
+      break;
+    case 3:
+      Navigator.push(context, MaterialPageRoute(builder: (context) => Orderpage()));
+      break;
+    case 4:
+      Navigator.push(context, MaterialPageRoute(builder: (context) => ProfilePage()));
+      break;
   }
 }
 

@@ -1,6 +1,9 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:mini_project/pages/HomePage.dart';
+import 'package:mini_project/pages/LottoPage.dart';
+import 'package:mini_project/pages/OrderPage.dart';
+import 'package:mini_project/pages/profile.dart';
 
 class Walletpage extends StatefulWidget {
   const Walletpage({super.key});
@@ -12,30 +15,34 @@ class Walletpage extends StatefulWidget {
 
 class _WalletpageState extends State<Walletpage> {
   int _selectedIndex = 1; // Track the selected index
-  
+
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index; // Update the selected index
     });
 
-      switch (index) {
+    // Navigate to different pages based on the selected index
+    switch (index) {
       case 0:
         Navigator.push(
-            context, MaterialPageRoute(builder: (context) => Homepage()));
+            context, MaterialPageRoute(builder: (context) => const Homepage()));
         break;
       case 1:
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => Walletpage()));
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => const Walletpage()));
         break;
-      // case 2:
-      //   Navigator.push(context, MaterialPageRoute(builder: (context) => LottoPage()));
-      //   break;
-      // case 3:
-      //   Navigator.push(context, MaterialPageRoute(builder: (context) => OrderPage()));
-      //   break;
-      // case 4:
-      //   Navigator.push(context, MaterialPageRoute(builder: (context) => ProfilePage()));
-      //   break;
+      case 2:
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => const LottoPage()));
+        break;
+      case 3:
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => const Orderpage()));
+        break;
+      case 4:
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => ProfilePage()));
+        break;
     }
   }
 
@@ -102,21 +109,81 @@ class _WalletpageState extends State<Walletpage> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              Container(
+              SizedBox(
                 width: 390,
                 height: 200,
-                decoration: BoxDecoration(
-                  color:
-                      const Color.fromRGBO(213, 96, 97, 1), // Background color
-                  borderRadius: BorderRadius.circular(20),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.3), // Shadow color
-                      spreadRadius: 3, // How much the shadow spreads
-                      blurRadius: 7, // How blurry the shadow is
-                      offset: const Offset(0, 3), // Shadow offset
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: const Color.fromRGBO(213, 96, 97, 1),
+                    borderRadius: BorderRadius.circular(20),
+                    boxShadow: [
+                      //เเสงเเละเงา
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.3),
+                        spreadRadius: 3,
+                        blurRadius: 7,
+                        offset: const Offset(0, 3),
+                      ),
+                    ],
+                  ),
+                  child: const Padding(
+                    padding: EdgeInsets.fromLTRB(20, 20, 20, 20),
+                    child: Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              "ยอดเงินคงเหลือ",
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 26),
+                            ),
+                            Icon(
+                              Icons.wallet_rounded,
+                              color: Colors.white,
+                              size: 36,
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 10),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Icon(
+                              Icons.monetization_on_rounded,
+                              color: Colors.white,
+                              size: 36,
+                            ),
+                            Text(
+                              "0.00",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 40,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            Text(
+                              "บาท",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 30,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 10),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Text(
+                              "น้องมาย แจกจริง",
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 18),
+                            ),
+                          ],
+                        ),
+                      ],
                     ),
-                  ], // Rounded corners
+                  ),
                 ),
               ),
               const SizedBox(height: 20),
