@@ -37,10 +37,10 @@ class _OrderpageState extends State<Orderpage> {
         Navigator.push(context,
             MaterialPageRoute(builder: (context) => const Orderpage()));
         break;
-      // case 4:
-      //   Navigator.push(
-      //       context, MaterialPageRoute(builder: (context) => ProfilePage()));
-      //   break;
+      case 4:
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => ProfilePage()));
+        break;
     }
   }
   
@@ -108,6 +108,7 @@ class _OrderpageState extends State<Orderpage> {
                     padding: EdgeInsets.all(16),
                     child: Column(
                       children: [
+                        // Date and Prize information
                         Text(
                           "1 สิงหาคม 2567",
                           style: TextStyle(
