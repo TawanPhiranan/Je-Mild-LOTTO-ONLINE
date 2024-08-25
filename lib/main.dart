@@ -8,6 +8,7 @@ import 'package:mini_project/pages/AdminRandomNumber.dart';
 import 'package:mini_project/pages/HomePage.dart';
 import 'package:mini_project/pages/LogoPage.dart';
 import 'package:mini_project/pages/LottoPage.dart';
+import 'package:mini_project/pages/OrderPage.dart';
 import 'package:mini_project/pages/profile.dart';
 
 void main() {
