@@ -415,7 +415,6 @@ class _AdiminhomepageState extends State<Adiminhomepage> {
       ),
     );
   }
-
   void reset() {
     Navigator.push(
       context,
