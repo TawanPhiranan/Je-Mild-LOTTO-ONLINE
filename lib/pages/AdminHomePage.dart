@@ -338,7 +338,7 @@ class _AdiminhomepageState extends State<Adiminhomepage> {
                   Padding(
                     padding: const EdgeInsets.fromLTRB(10, 20, 10, 10),
                     child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
                         Column(
                           children: [
