@@ -1,13 +1,17 @@
 // ignore_for_file: deprecated_member_use
 
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
-import 'package:mini_project/pages/HomePage.dart';
+import 'package:mini_project/pages/LottoPage.dart';
 import 'package:mini_project/pages/OrderPage.dart';
 import 'package:mini_project/pages/profile.dart';
 import 'package:mini_project/pages/walletPage.dart';
+import 'package:mini_project/pages/HomePage.dart';
 
 class LottoPage extends StatefulWidget {
-  const LottoPage({super.key});
+  int userId;
+  LottoPage({super.key, required this.userId});
 
   @override
   State<LottoPage> createState() => _LottoPageState();
@@ -16,6 +20,13 @@ class LottoPage extends StatefulWidget {
 class _LottoPageState extends State<LottoPage> {
   int _selectedIndex = 2; // Track the selected index
 
+  @override
+  void initState() {
+    super.initState();
+    // Log the userId to see its value
+    log('LottoPage initialized with userId: ${widget.userId}');
+  }
+
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index; // Update the selected index
@@ -23,30 +34,47 @@ class _LottoPageState extends State<LottoPage> {
 
     // Navigate to different pages based on the selected index
     switch (index) {
-      // case 0:
-      //   Navigator.push(
-      //       context, MaterialPageRoute(builder: (context) => const Homepage()));
-      //   break;
+      case 0:
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => Homepage(userId: widget.userId)));
+        break;
       case 1:
-        Navigator.push(context,
-            MaterialPageRoute(builder: (context) => const Walletpage()));
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => Walletpage(userId: widget.userId)));
         break;
       case 2:
-        Navigator.push(context,
-            MaterialPageRoute(builder: (context) => const LottoPage()));
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => LottoPage(
+                      userId: widget.userId,
+                    )));
         break;
       case 3:
-        Navigator.push(context,
-            MaterialPageRoute(builder: (context) => const OrderPage()));
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => OrderPage(
+                      userId: widget.userId,
+                    )));
         break;
       case 4:
         Navigator.push(
-            context, MaterialPageRoute(builder: (context) => ProfilePage()));
+            context,
+            MaterialPageRoute(
+                builder: (context) => ProfilePage(
+                      userId: widget.userId,
+                    )));
         break;
     }
   }
+
   void _logout() {
-    Navigator.pop(context);  
+    Navigator.pop(context);
   }
 
   @override
@@ -60,6 +88,13 @@ class _LottoPageState extends State<LottoPage> {
             fontWeight: FontWeight.bold,
             color: Colors.white,
           ),
+        ),
+             leading: IconButton(
+          icon:
+              const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
         ),
         actions: [
           PopupMenuButton<String>(
@@ -112,7 +147,6 @@ class _LottoPageState extends State<LottoPage> {
           ),
         ],
       ),
-      
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
@@ -153,8 +187,8 @@ class _LottoPageState extends State<LottoPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 SizedBox(
-                  width: 390,  
-                  height: 250, 
+                  width: 390,
+                  height: 250,
                   child: Card(
                     color: const Color.fromRGBO(213, 96, 97, 1),
                     shape: RoundedRectangleBorder(
@@ -192,16 +226,20 @@ class _LottoPageState extends State<LottoPage> {
                                   style: const TextStyle(color: Colors.black),
                                   decoration: InputDecoration(
                                     enabledBorder: OutlineInputBorder(
-                                      borderSide: const BorderSide(color: Colors.grey),
+                                      borderSide:
+                                          const BorderSide(color: Colors.grey),
                                       borderRadius: BorderRadius.circular(5),
                                     ),
                                     focusedBorder: OutlineInputBorder(
-                                      borderSide: const BorderSide(color: Colors.white),
+                                      borderSide:
+                                          const BorderSide(color: Colors.white),
                                       borderRadius: BorderRadius.circular(5),
                                     ),
                                     filled: true,
-                                    fillColor: const Color.fromRGBO(217, 217, 217, 1),
-                                    contentPadding: const EdgeInsets.symmetric(vertical: 10),
+                                    fillColor:
+                                        const Color.fromRGBO(217, 217, 217, 1),
+                                    contentPadding: const EdgeInsets.symmetric(
+                                        vertical: 10),
                                   ),
                                 ),
                               );
@@ -210,15 +248,17 @@ class _LottoPageState extends State<LottoPage> {
                           const SizedBox(height: 20),
                           SizedBox(
                             child: FilledButton(
-                              onPressed: Search,  
+                              onPressed: Search,
                               style: ButtonStyle(
-                                backgroundColor: MaterialStateProperty.all(const Color.fromRGBO(217, 217, 217, 1)), 
+                                backgroundColor: MaterialStateProperty.all(
+                                    const Color.fromRGBO(217, 217, 217, 1)),
                               ),
-                              child: const Text('ค้นหา',
+                              child: const Text(
+                                'ค้นหา',
                                 style: TextStyle(
-                                  color: Colors.black, 
-                                  fontSize: 20, 
-                                ), 
+                                  color: Colors.black,
+                                  fontSize: 20,
+                                ),
                               ),
                             ),
                           )
@@ -229,10 +269,9 @@ class _LottoPageState extends State<LottoPage> {
                 ),
               ],
             ),
-            
             const SizedBox(height: 20),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20.0),  
+              padding: const EdgeInsets.symmetric(horizontal: 20.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -246,28 +285,29 @@ class _LottoPageState extends State<LottoPage> {
                     ),
                   ),
                   FilledButton(
-                    onPressed: () {},  
+                    onPressed: () {},
                     style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all(const Color.fromRGBO(177, 36, 24, 1)), 
+                      backgroundColor: MaterialStateProperty.all(
+                          const Color.fromRGBO(177, 36, 24, 1)),
                     ),
-                     child: const Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            Icons.sync, 
+                    child: const Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.sync,
+                          color: Colors.white,
+                          size: 20.0,
+                        ),
+                        SizedBox(width: 4),
+                        Text(
+                          'สุ่ม',
+                          style: TextStyle(
                             color: Colors.white,
-                            size: 20.0,
+                            fontSize: 20,
                           ),
-                          SizedBox(width: 4),
-                          Text(
-                            'สุ่ม',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 20,
-                            ),
-                          ),
-                        ],
-                      ),
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               ),
@@ -295,11 +335,14 @@ class _LottoPageState extends State<LottoPage> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
                                         Row(
                                           children: [
-                                            Image.asset('assets/images/flying-money.png', width: 30),
+                                            Image.asset(
+                                                'assets/images/flying-money.png',
+                                                width: 30),
                                             const Text(
                                               'สลากกินแบ่ง Je’ Mild ',
                                               style: TextStyle(
@@ -313,7 +356,8 @@ class _LottoPageState extends State<LottoPage> {
                                         Row(
                                           children: [
                                             Padding(
-                                              padding: const EdgeInsets.only(left: 30.0),
+                                              padding: const EdgeInsets.only(
+                                                  left: 30.0),
                                               child: ClipOval(
                                                 child: Image.asset(
                                                   'assets/images/logoMild.jpeg',
@@ -327,11 +371,15 @@ class _LottoPageState extends State<LottoPage> {
                                               width: 160,
                                               height: 50,
                                               child: Padding(
-                                                padding: const EdgeInsets.only(left: 15.0),
+                                                padding: const EdgeInsets.only(
+                                                    left: 15.0),
                                                 child: Card(
-                                                  color: const Color.fromRGBO(254, 248, 195, 1.0),
+                                                  color: const Color.fromRGBO(
+                                                      254, 248, 195, 1.0),
                                                   shape: RoundedRectangleBorder(
-                                                    borderRadius: BorderRadius.circular(5),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            5),
                                                   ),
                                                   child: const Center(
                                                     child: Text(
@@ -339,7 +387,8 @@ class _LottoPageState extends State<LottoPage> {
                                                       style: TextStyle(
                                                         fontSize: 19,
                                                         color: Colors.black,
-                                                        fontWeight: FontWeight.bold,
+                                                        fontWeight:
+                                                            FontWeight.bold,
                                                       ),
                                                     ),
                                                   ),
@@ -351,7 +400,8 @@ class _LottoPageState extends State<LottoPage> {
                                         Row(
                                           children: [
                                             Padding(
-                                              padding: const EdgeInsets.only(left: 10.0),
+                                              padding: const EdgeInsets.only(
+                                                  left: 10.0),
                                               child: Row(
                                                 children: [
                                                   const Column(
@@ -361,7 +411,8 @@ class _LottoPageState extends State<LottoPage> {
                                                         style: TextStyle(
                                                           color: Colors.black,
                                                           fontSize: 18,
-                                                          fontWeight: FontWeight.bold,
+                                                          fontWeight:
+                                                              FontWeight.bold,
                                                         ),
                                                       ),
                                                       Text(
@@ -369,7 +420,8 @@ class _LottoPageState extends State<LottoPage> {
                                                         style: TextStyle(
                                                           color: Colors.black,
                                                           fontSize: 18,
-                                                          fontWeight: FontWeight.bold,
+                                                          fontWeight:
+                                                              FontWeight.bold,
                                                         ),
                                                       ),
                                                     ],
@@ -378,7 +430,10 @@ class _LottoPageState extends State<LottoPage> {
                                                   Column(
                                                     children: [
                                                       Padding(
-                                                        padding: const EdgeInsets.only(left: 20.0),
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .only(
+                                                                left: 20.0),
                                                         child: ClipOval(
                                                           child: Image.asset(
                                                             'assets/images/signature.png',
@@ -394,11 +449,13 @@ class _LottoPageState extends State<LottoPage> {
                                               ),
                                             ),
                                             const Padding(
-                                              padding: EdgeInsets.only(left: 5.0),
+                                              padding:
+                                                  EdgeInsets.only(left: 5.0),
                                               child: Text(
                                                 '1 สิงหาคม 2567',
                                                 style: TextStyle(
-                                                  color: Color.fromRGBO(0, 91, 228, 1),
+                                                  color: Color.fromRGBO(
+                                                      0, 91, 228, 1),
                                                   fontSize: 18,
                                                   fontWeight: FontWeight.bold,
                                                 ),
@@ -412,63 +469,68 @@ class _LottoPageState extends State<LottoPage> {
                                 ),
                               ),
                             ),
-                          const Align(
-                            alignment: Alignment.centerRight,
-                            child: SizedBox(
-                              width: 50,
-                              height: 170,
-                              child: Card(
-                                color: Colors.white,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.only(
-                                    topRight: Radius.circular(15), // ขอบมุมขวาบน
-                                    bottomRight: Radius.circular(15), // ขอบมุมขวาล่าง
+                            const Align(
+                              alignment: Alignment.centerRight,
+                              child: SizedBox(
+                                width: 50,
+                                height: 170,
+                                child: Card(
+                                  color: Colors.white,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.only(
+                                      topRight:
+                                          Radius.circular(15), // ขอบมุมขวาบน
+                                      bottomRight:
+                                          Radius.circular(15), // ขอบมุมขวาล่าง
+                                    ),
                                   ),
-                                ),
-                                child: Center(
-                                  child: RotatedBox(
-                                    quarterTurns: 3,
-                                    child: Text(
-                                      'เจ๊มายพารวย',
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold,
+                                  child: Center(
+                                    child: RotatedBox(
+                                      quarterTurns: 3,
+                                      child: Text(
+                                        'เจ๊มายพารวย',
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold,
+                                        ),
                                       ),
                                     ),
                                   ),
                                 ),
                               ),
                             ),
-                          ),
                           ],
                         ),
                       ),
                     ),
                   ),
-                 SizedBox(
-  height: 65,
-  width: 65,
-  child: FilledButton(
-    onPressed: () {},  
-    style: ButtonStyle(
-      backgroundColor: MaterialStateProperty.all(const Color.fromRGBO(213, 96, 97, 1)),
-      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-        RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(32.5), // ทำให้ปุ่มกลม
-        ),
-      ),
-    ),
-    child: const Center(  // ใช้ Center เพื่อให้อไอคอนอยู่ตรงกลาง
-      child: Icon(
-        Icons.shopping_basket, 
-        color: Colors.white,
-        size: 24,
-      ), 
-    ),
-  ),
-),
-
+                  SizedBox(
+                    height: 65,
+                    width: 65,
+                    child: FilledButton(
+                      onPressed: () {},
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all(
+                            const Color.fromRGBO(213, 96, 97, 1)),
+                        shape:
+                            MaterialStateProperty.all<RoundedRectangleBorder>(
+                          RoundedRectangleBorder(
+                            borderRadius:
+                                BorderRadius.circular(32.5), // ทำให้ปุ่มกลม
+                          ),
+                        ),
+                      ),
+                      child: const Center(
+                        // ใช้ Center เพื่อให้อไอคอนอยู่ตรงกลาง
+                        child: Icon(
+                          Icons.shopping_basket,
+                          color: Colors.white,
+                          size: 24,
+                        ),
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -477,7 +539,6 @@ class _LottoPageState extends State<LottoPage> {
       ),
     );
   }
- void Search(){
 
-  }
+  void Search() {}
 }

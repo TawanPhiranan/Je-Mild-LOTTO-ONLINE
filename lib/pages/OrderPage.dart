@@ -1,13 +1,20 @@
+<<<<<<< HEAD
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
+=======
+import 'dart:developer';
+>>>>>>> ce4407fdc7294bac8bb731c8dae6c24826cf9e4d
 
 import 'package:flutter/material.dart';
-import 'package:mini_project/pages/HomePage.dart';
+import 'package:mini_project/pages/LoginPage.dart';
 import 'package:mini_project/pages/LottoPage.dart';
+import 'package:mini_project/pages/OrderPage.dart';
 import 'package:mini_project/pages/profile.dart';
 import 'package:mini_project/pages/walletPage.dart';
+import 'package:mini_project/pages/HomePage.dart';
 
 class OrderPage extends StatefulWidget {
-  const OrderPage({super.key});
+  int userId;
+  OrderPage({super.key, required this.userId});
 
   @override
   State<OrderPage> createState() => _OrderPageState();
@@ -16,34 +23,37 @@ class OrderPage extends StatefulWidget {
 class _OrderPageState extends State<OrderPage> {
   int _selectedIndex = 3; // Track the selected index
   int _Index = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    // Log the userId to see its value
+    log('OrderPage initialized with userId: ${widget.userId}');
+  }
+  
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index; // Update the selected index
     });
 
     // Navigate to different pages based on the selected index
-    switch (index) {
-      // case 0:
-      //   Navigator.push(
-      //       context, MaterialPageRoute(builder: (context) => const Homepage()));
-      //   break;
-      case 1:
-        Navigator.push(context,
-            MaterialPageRoute(builder: (context) => const Walletpage()));
-        break;
-      case 2:
-        Navigator.push(context,
-            MaterialPageRoute(builder: (context) => const LottoPage()));
-        break;
-      case 3:
-        Navigator.push(context,
-            MaterialPageRoute(builder: (context) => const OrderPage()));
-        break;
-      case 4:
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => ProfilePage()));
-        break;
-    }
+     switch (index) {
+    case 0:
+      Navigator.push(context, MaterialPageRoute(builder: (context) => Homepage(userId: widget.userId )));
+      break;
+    case 1:
+      Navigator.push(context, MaterialPageRoute(builder: (context) => Walletpage(userId: widget.userId )));
+      break;
+    case 2:
+      Navigator.push(context, MaterialPageRoute(builder: (context) => LottoPage(userId: widget.userId,)));
+      break;
+    case 3:
+      Navigator.push(context, MaterialPageRoute(builder: (context) => OrderPage(userId: widget.userId,)));
+      break;
+    case 4:
+      Navigator.push(context, MaterialPageRoute(builder: (context) => ProfilePage(userId: widget.userId,)));
+      break;
+  }
   }
 
   @override
@@ -58,6 +68,63 @@ class _OrderPageState extends State<OrderPage> {
           ),
         ),
         backgroundColor: const Color.fromARGB(255, 211, 39, 24),
+             leading: IconButton(
+          icon:
+              const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
+                actions: [
+          PopupMenuButton<String>(
+            icon: const Icon(
+              Icons.more_vert,
+              color: Colors.white,
+            ),
+            onSelected: (value) {
+              if (value == 'Logout') {
+                showDialog(
+                  context: context,
+                  builder: (context) => SimpleDialog(
+                    children: [
+                      const Padding(
+                        padding: EdgeInsets.all(16.0),
+                        child: Text(
+                          'คุณต้องการออกจากระบบใช่หรือไม่?',
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          TextButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            child: const Text('ไม่'),
+                          ),
+                          FilledButton(
+                            onPressed: Logout,
+                            child: const Text('ใช่'),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                );
+              }
+            },
+            itemBuilder: (context) => [
+              const PopupMenuItem<String>(
+                value: 'Logout',
+                child: Text('ออกจากระบบ'),
+              ),
+            ],
+          ),
+        ],
       ),
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
@@ -1598,5 +1665,13 @@ class _OrderPageState extends State<OrderPage> {
         ),
       ),
     );
+  }
+  void Logout() {
+     Navigator.push(
+                context,
+                MaterialPageRoute(
+                builder: (context) => Loginpage(),
+                )
+     );
   }
 }

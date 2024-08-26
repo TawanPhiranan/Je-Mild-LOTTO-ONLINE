@@ -1,13 +1,20 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:mini_project/config/config.dart';
+import 'package:mini_project/models/response/users_login_post_res.dart';
+import 'package:mini_project/pages/LoginPage.dart';
 import 'package:mini_project/pages/LottoPage.dart';
 import 'package:mini_project/pages/OrderPage.dart';
 import 'package:mini_project/pages/profile.dart';
 import 'package:mini_project/pages/walletPage.dart';
+import 'package:mini_project/pages/HomePage.dart';
+import 'package:http/http.dart' as http;
 
 class Homepage extends StatefulWidget {
   //รับ userID
   int userId;
-  Homepage ({super.key, required this.userId});
+  Homepage({super.key, required this.userId});
 
   @override
   State<Homepage> createState() => _HomepageState();
@@ -15,32 +22,63 @@ class Homepage extends StatefulWidget {
 
 class _HomepageState extends State<Homepage> {
   int _selectedIndex = 0; // Track the selected index
+
+  late UsersLoginPostResponse users;
   
-  void _onItemTapped(int index) {
-  setState(() {
-    _selectedIndex = index; // Update the selected index
-  });
-
-  // Navigate to different pages based on the selected index
-  switch (index) {
-    case 0:
-      // Navigator.push(context, MaterialPageRoute(builder: (context) => Homepage()));
-      break;
-    case 1:
-      Navigator.push(context, MaterialPageRoute(builder: (context) => Walletpage()));
-      break;
-    case 2:
-      Navigator.push(context, MaterialPageRoute(builder: (context) => LottoPage()));
-      break;
-    case 3:
-      Navigator.push(context, MaterialPageRoute(builder: (context) => OrderPage()));
-      break;
-    // case 4:
-    //   Navigator.push(context, MaterialPageRoute(builder: (context) => ProfilePage()));
-    //   break;
+  @override
+  void initState() {
+    super.initState();
+    // Log the userId to see its value
+    log('Homepage initialized with userId: ${widget.userId}');
   }
-}
+  // UsersLoginPostResponse users = usersLoginPostResponseFromJson(value.body);
+  
 
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index; // Update the selected index
+    });
+
+    // Navigate to different pages based on the selected index
+    switch (index) {
+      case 0:
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => Homepage(userId: widget.userId)));
+        break;
+      case 1:
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => Walletpage(userId: widget.userId)));
+        break;
+      case 2:
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => LottoPage(
+                      userId: widget.userId,
+                    )));
+        break;
+      case 3:
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => OrderPage(
+                      userId: widget.userId,
+                    )));
+        break;
+      case 4:
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => ProfilePage(
+                      userId: widget.userId,
+                    )));
+        break;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -58,6 +96,57 @@ class _HomepageState extends State<Homepage> {
             Navigator.of(context).pop();
           },
         ),
+       actions: [
+          PopupMenuButton<String>(
+            icon: const Icon(
+              Icons.more_vert,
+              color: Colors.white,
+            ),
+            onSelected: (value) {
+              log(value);
+              if (value == 'Logout') {
+                showDialog(
+                  context: context,
+                  builder: (context) => SimpleDialog(
+                    children: [
+                      const Padding(
+                        padding: EdgeInsets.all(16.0),
+                        child: Text(
+                          'คุณต้องการออกจากระบบใช่หรือไม่?',
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          TextButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            child: const Text('ไม่'),
+                          ),
+                          FilledButton(
+                            onPressed: Logout,
+                            child: const Text('ใช่'),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                );
+              }
+            },
+            itemBuilder: (context) => [
+              const PopupMenuItem<String>(
+                value: 'Logout',
+                child: Text('ออกจากระบบ'),
+              ),
+            ],
+          ),
+        ],
       ),
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
@@ -184,11 +273,11 @@ class _HomepageState extends State<Homepage> {
                       Column(
                         children: [
                           FilledButton(
-                            onPressed: () {},
+                            onPressed: Lotto,
                             style: FilledButton.styleFrom(
                               backgroundColor:
                                   const Color.fromRGBO(245, 210, 99, 1),
-                              fixedSize: const Size(180, 110),
+                              fixedSize: const Size(175, 110),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(16),
                               ),
@@ -205,7 +294,7 @@ class _HomepageState extends State<Homepage> {
                                   'Lotto',
                                   style: TextStyle(
                                       color: Color.fromRGBO(77, 77, 77, 1),
-                                      fontSize: 22,
+                                      fontSize: 20,
                                       fontWeight: FontWeight.bold),
                                 ),
                               ],
@@ -217,11 +306,11 @@ class _HomepageState extends State<Homepage> {
                       Column(
                         children: [
                           FilledButton(
-                            onPressed: () {},
+                            onPressed: CheckPage,
                             style: FilledButton.styleFrom(
                               backgroundColor:
                                   const Color.fromRGBO(245, 210, 99, 1),
-                              fixedSize: const Size(180, 110),
+                              fixedSize: const Size(175, 110),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(
                                     16), // ปรับความโค้งของมุม
@@ -239,7 +328,7 @@ class _HomepageState extends State<Homepage> {
                                   'เช็คผลรางวัล',
                                   style: TextStyle(
                                       color: Color.fromRGBO(77, 77, 77, 1),
-                                      fontSize: 22,
+                                      fontSize: 20,
                                       fontWeight: FontWeight.bold),
                                 ),
                               ],
@@ -456,5 +545,27 @@ class _HomepageState extends State<Homepage> {
         ),
       ),
     );
+  }
+  void Logout() {
+     Navigator.push(
+                context,
+                MaterialPageRoute(
+                builder: (context) => Loginpage(),
+                )
+     );
+  }
+  void Lotto() {
+     Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => LottoPage(userId: widget.userId),
+        ));
+  }
+  void CheckPage() {
+     Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => OrderPage(userId: widget.userId),
+        ));
   }
 }

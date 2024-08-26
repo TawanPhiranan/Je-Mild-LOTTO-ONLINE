@@ -3,7 +3,8 @@ import 'package:mini_project/pages/AdminLottoDraw.dart';
 import 'package:mini_project/pages/LogoPage.dart';
 
 class Adiminhomepage extends StatefulWidget {
-  const Adiminhomepage({super.key});
+  int userId;
+  Adiminhomepage({super.key, required this.userId});
 
   @override
   State<Adiminhomepage> createState() => _AdiminhomepageState();
@@ -337,7 +338,7 @@ class _AdiminhomepageState extends State<Adiminhomepage> {
                   Padding(
                     padding: const EdgeInsets.fromLTRB(10, 20, 10, 10),
                     child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
                         Column(
                           children: [
@@ -414,7 +415,6 @@ class _AdiminhomepageState extends State<Adiminhomepage> {
       ),
     );
   }
-
   void reset() {
     Navigator.push(
       context,

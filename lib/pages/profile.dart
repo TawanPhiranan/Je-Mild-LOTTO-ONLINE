@@ -3,52 +3,79 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:mini_project/config/config.dart';
+import 'package:mini_project/config/internal_config.dart';
+import 'package:mini_project/pages/HomePage.dart';
+import 'package:mini_project/pages/LoginPage.dart';
 import 'package:mini_project/pages/LottoPage.dart';
 import 'package:mini_project/pages/OrderPage.dart';
+import 'package:mini_project/pages/profile.dart';
+import 'package:mini_project/pages/walletPage.dart';
+import 'package:mini_project/pages/HomePage.dart';
 import 'package:mini_project/pages/editProfilePage.dart';
 import 'package:http/http.dart' as http;
-import 'package:mini_project/pages/walletPage.dart';
 
 class ProfilePage extends StatefulWidget {
-
-  ProfilePage({super.key}); 
+  int userId;
+  ProfilePage({super.key, required this.userId});
 
   @override
   State<ProfilePage> createState() => _ProfilePageState();
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-  int _selectedIndex = 4; // Track the selected index
+  int _selectedIndex = 4;
+
+  @override
+  void initState() {
+    super.initState();
+    log('ProfilePage initialized with userId: ${widget.userId}');
+  }
 
   void _onItemTapped(int index) {
     setState(() {
-      _selectedIndex = index; // Update the selected index
+      _selectedIndex = index;
     });
 
-    // Navigate to different pages based on the selected index
     switch (index) {
-      // case 0:
-      //   Navigator.push(
-      //       context, MaterialPageRoute(builder: (context) => const Homepage()));
-      //   break;
+      case 0:
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => Homepage(userId: widget.userId)));
+        break;
       case 1:
-        Navigator.push(context,
-            MaterialPageRoute(builder: (context) => const Walletpage()));
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => Walletpage(userId: widget.userId)));
         break;
       case 2:
-        Navigator.push(context,
-            MaterialPageRoute(builder: (context) => const LottoPage()));
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => LottoPage(
+                      userId: widget.userId,
+                    )));
         break;
       case 3:
-        Navigator.push(context,
-            MaterialPageRoute(builder: (context) => const OrderPage()));
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => OrderPage(
+                      userId: widget.userId,
+                    )));
         break;
       case 4:
-        // Navigator.push(
-        //     context, MaterialPageRoute(builder: (context) => ProfilePage()));
-        // break;
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => ProfilePage(
+                      userId: widget.userId,
+                    )));
+        break;
     }
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -60,6 +87,13 @@ class _ProfilePageState extends State<ProfilePage> {
             fontWeight: FontWeight.bold,
             color: Colors.white,
           ),
+        ),
+        leading: IconButton(
+          icon:
+              const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
         ),
         actions: [
           PopupMenuButton<String>(
@@ -84,8 +118,12 @@ class _ProfilePageState extends State<ProfilePage> {
                           ),
                         ),
                       ),
+<<<<<<< HEAD
                       
                         Row(
+=======
+                      Row(
+>>>>>>> ce4407fdc7294bac8bb731c8dae6c24826cf9e4d
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
                           TextButton(
@@ -95,7 +133,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             child: const Text('ไม่'),
                           ),
                           FilledButton(
-                            onPressed: () {},
+                            onPressed: Logout,
                             child: const Text('ใช่'),
                           ),
                         ],
@@ -119,19 +157,19 @@ class _ProfilePageState extends State<ProfilePage> {
           BottomNavigationBarItem(
             icon: Icon(
               Icons.home,
-            ), // ไอคอนสำหรับแท็บ "Home"
+            ),
             label: 'Home',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.wallet_rounded), // ไอคอนสำหรับแท็บ "Home"
+            icon: Icon(Icons.wallet_rounded),
             label: 'Wallet',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.casino), // ไอคอนสำหรับแท็บ "Home"
+            icon: Icon(Icons.casino),
             label: 'Lotto',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.receipt), // ไอคอนสำหรับแท็บ "Home"
+            icon: Icon(Icons.receipt),
             label: 'Order',
           ),
           BottomNavigationBarItem(
@@ -142,8 +180,8 @@ class _ProfilePageState extends State<ProfilePage> {
         unselectedItemColor: const Color.fromARGB(255, 199, 199, 199),
         selectedItemColor: Colors.white,
         backgroundColor: const Color.fromRGBO(177, 36, 24, 1),
-        currentIndex: _selectedIndex, // Set the current index
-        onTap: _onItemTapped, // Handle tap
+        currentIndex: _selectedIndex,
+        onTap: _onItemTapped,
         type: BottomNavigationBarType.fixed,
       ),
       body: SingleChildScrollView(
@@ -308,7 +346,7 @@ class _ProfilePageState extends State<ProfilePage> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => const EditProfilepage(),
+        builder: (context) => EditProfilepage(userId: widget.userId),
       ),
     );
   }
@@ -316,6 +354,54 @@ class _ProfilePageState extends State<ProfilePage> {
   void _editProfileImage() {}
 
   void _deleteAccount() async {
-   
+    var value = await Configuration.getConfig();
+    var url = value['apiEndpoint'];
+    try {
+      http.delete(
+        Uri.parse('$url/delete/${widget.userId}'),
+        headers: {"Content-Type": "application/json; charset=utf-8"},
+      );
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text('สำเร็จ'),
+          content: const Text('ลบข้อมูลเรียบร้อย'),
+          actions: [
+            FilledButton(
+                onPressed: () {
+                  Navigator.popUntil(
+                    context,
+                    (route) => route.isFirst,
+                  );
+                },
+                child: const Text('ปิด'))
+          ],
+        ),
+      );
+      log(widget.userId.toString()+"KK");
+    } catch (err) {
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text('ผิดพลาด'),
+          content: Text('ลบข้อมูลไม่สำเร็จ $err'),
+          actions: [
+            FilledButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: const Text('ปิด'))
+          ],
+        ),
+      );
+    }
+  }
+
+  void Logout() {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => Loginpage(),
+        ));
   }
 }

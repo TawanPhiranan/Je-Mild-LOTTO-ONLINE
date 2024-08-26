@@ -1,12 +1,15 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
-import 'package:mini_project/pages/HomePage.dart';
+import 'package:mini_project/pages/LoginPage.dart';
 import 'package:mini_project/pages/LottoPage.dart';
 import 'package:mini_project/pages/OrderPage.dart';
 import 'package:mini_project/pages/profile.dart';
+import 'package:mini_project/pages/walletPage.dart';
+import 'package:mini_project/pages/HomePage.dart';
 
 class Walletpage extends StatefulWidget {
-  const Walletpage({super.key});
+  int userId;
+  Walletpage({super.key, required this.userId});
 
   @override
   State<Walletpage> createState() => _WalletpageState();
@@ -16,34 +19,36 @@ class Walletpage extends StatefulWidget {
 class _WalletpageState extends State<Walletpage> {
   int _selectedIndex = 1; // Track the selected index
 
+  @override
+  void initState() {
+    super.initState();
+    // Log the userId to see its value
+    log('Walletpage initialized with userId: ${widget.userId}');
+  }
+
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index; // Update the selected index
     });
 
     // Navigate to different pages based on the selected index
-    switch (index) {
-      // case 0:
-      //   Navigator.push(
-      //       context, MaterialPageRoute(builder: (context) => const Homepage()));
-      //   break;
-      case 1:
-        Navigator.push(context,
-            MaterialPageRoute(builder: (context) => const Walletpage()));
-        break;
-      case 2:
-        Navigator.push(context,
-            MaterialPageRoute(builder: (context) => const LottoPage()));
-        break;
-      case 3:
-        Navigator.push(context,
-            MaterialPageRoute(builder: (context) => const OrderPage()));
-        break;
-      // case 4:
-      //   Navigator.push(
-      //       context, MaterialPageRoute(builder: (context) => ProfilePage()));
-      //   break;
-    }
+     switch (index) {
+    case 0:
+      Navigator.push(context, MaterialPageRoute(builder: (context) => Homepage(userId: widget.userId )));
+      break;
+    case 1:
+      Navigator.push(context, MaterialPageRoute(builder: (context) => Walletpage(userId: widget.userId )));
+      break;
+    case 2:
+      Navigator.push(context, MaterialPageRoute(builder: (context) => LottoPage(userId: widget.userId,)));
+      break;
+    case 3:
+      Navigator.push(context, MaterialPageRoute(builder: (context) => OrderPage(userId: widget.userId,)));
+      break;
+    case 4:
+      Navigator.push(context, MaterialPageRoute(builder: (context) => ProfilePage(userId: widget.userId,)));
+      break;
+  }
   }
 
   @override
@@ -56,16 +61,58 @@ class _WalletpageState extends State<Walletpage> {
               fontWeight: FontWeight.bold,
               color: Colors.white,
             )),
+                 leading: IconButton(
+          icon:
+              const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
         actions: [
           PopupMenuButton<String>(
-            icon: const Icon(Icons.more_vert,
-                color: Colors.white), // เปลี่ยนสีไอคอน
+            icon: const Icon(
+              Icons.more_vert,
+              color: Colors.white,
+            ),
             onSelected: (value) {
-              log(value);
+              if (value == 'Logout') {
+                showDialog(
+                  context: context,
+                  builder: (context) => SimpleDialog(
+                    children: [
+                      const Padding(
+                        padding: EdgeInsets.all(16.0),
+                        child: Text(
+                          'คุณต้องการออกจากระบบใช่หรือไม่?',
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          TextButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            child: const Text('ไม่'),
+                          ),
+                          FilledButton(
+                            onPressed: Logout,
+                            child: const Text('ใช่'),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                );
+              }
             },
             itemBuilder: (context) => [
               const PopupMenuItem<String>(
-                value: 'logOut',
+                value: 'Logout',
                 child: Text('ออกจากระบบ'),
               ),
             ],
@@ -339,5 +386,13 @@ class _WalletpageState extends State<Walletpage> {
         ),
       ),
     );
+  }
+  void Logout() {
+     Navigator.push(
+                context,
+                MaterialPageRoute(
+                builder: (context) => Loginpage(),
+                )
+     );
   }
 }

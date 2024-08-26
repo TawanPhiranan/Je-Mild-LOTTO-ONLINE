@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:mini_project/models/request/users_login_post_req.dart';
 import 'package:mini_project/models/response/users_login_post_res.dart';
+import 'package:mini_project/pages/AdminHomePage.dart';
 import 'package:mini_project/pages/ForgetpwdPage.dart';
 import 'package:mini_project/pages/HomePage.dart';
 import 'package:http/http.dart' as http;
@@ -164,7 +165,7 @@ class _LoginpageState extends State<Loginpage> {
           builder: (context) => Forgetpwdpage(),
         ));
   }
-
+  
   void login() async {
     try {
       var data = UsersLoginPostRequest(
@@ -177,11 +178,20 @@ class _LoginpageState extends State<Loginpage> {
       setState(() {
         text = '';
       });
-      Navigator.push(
+      if (users.users.typeId == 1){
+        Navigator.push(
           context,
           MaterialPageRoute(
             builder: (context) => Homepage(userId: users.users.userId),
           ));
+      }else if (users.users.typeId == 2) {
+         Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => Adiminhomepage(userId: users.users.userId),
+          ));
+      }
+      
     } catch (eeee) {
       log(eeee.toString());
       setState(() {
