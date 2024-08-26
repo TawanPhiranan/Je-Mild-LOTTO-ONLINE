@@ -13,6 +13,7 @@ import 'package:mini_project/pages/OrderPage.dart';
 import 'package:mini_project/pages/profile.dart';
 
 void main() {
+
   runApp(const MyApp());
 }
 
@@ -24,7 +25,6 @@ class MyApp extends StatelessWidget {
     return  MaterialApp(
       title: 'Flutter Demo',
       home: Loginpage(),
-      
     );
   }
 }

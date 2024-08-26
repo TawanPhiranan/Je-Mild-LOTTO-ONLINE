@@ -743,7 +743,6 @@ class _OrderPageState extends State<OrderPage> {
                   ),
                 ),
               ] else if (_Index == 1) ...[
-                // ตัวอย่างสำหรับมุมมองที่ 1
                 const SizedBox(
                   width: 390,
                   height: 240,
@@ -1020,7 +1019,7 @@ class _OrderPageState extends State<OrderPage> {
                     ElevatedButton(
                       onPressed: () {
                         setState(() {
-                          _Index = 0; // เปลี่ยนเป็นมุมมองที่ต้องการ
+                          _Index = 0; // หน้าที่จะไป
                         });
                       },
                       // ignore: sort_child_properties_last
@@ -1053,7 +1052,7 @@ class _OrderPageState extends State<OrderPage> {
                     ElevatedButton(
                       onPressed: () {
                         setState(() {
-                          _Index = 1; // เปลี่ยนเป็นมุมมองที่ต้องการ
+                          _Index = 1; // เปลี่ยนเป็นหน้าที่ต้องการ
                         });
                       },
 
@@ -1092,205 +1091,562 @@ class _OrderPageState extends State<OrderPage> {
                     children: [
                       Expanded(
                         child: SizedBox(
-                          height: 170,
-                          child: Card(
-                            color: const Color.fromRGBO(217, 217, 217, 1),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(15),
-                            ),
-                            child: Stack(
-                              children: [
-                                Align(
-                                  alignment: Alignment.topLeft,
+                          height: 130,
+                          child: Stack(
+                            children: [
+                              Positioned(
+                                top: 0,
+                                left: 0,
+                                right: 0,
+                                bottom: 0,
+                                child: Card(
+                                  color:
+                                      const Color.fromRGBO(254, 248, 195, 1.0),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(20),
+                                  ),
                                   child: Padding(
                                     padding: const EdgeInsets.all(5.0),
-                                    child: Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                    child: Stack(
                                       children: [
-                                        Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Row(
-                                              children: [
-                                                Image.asset(
-                                                    'assets/images/flying-money.png',
-                                                    width: 30),
-                                                const Text(
-                                                  'สลากกินแบ่ง Je’ Mild ',
-                                                  style: TextStyle(
-                                                    color: Colors.black,
-                                                    fontSize: 15,
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
-                                                ),
-                                              ],
+                                        Positioned(
+                                          bottom: 5, 
+                                          left: 5, 
+                                          child: const Text(
+                                            'คุณถูกรางวัล 1 ใบ',
+                                            style: TextStyle(
+                                              color: Colors.black,
+                                              fontSize: 15,
+                                              fontWeight: FontWeight.bold,
                                             ),
-                                            Row(
-                                              children: [
-                                                Padding(
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                          left: 30.0),
-                                                  child: ClipOval(
-                                                    child: Image.asset(
-                                                      'assets/images/logoMild.jpeg',
-                                                      width: 60,
-                                                      height: 60,
-                                                      fit: BoxFit.cover,
-                                                    ),
-                                                  ),
-                                                ),
-                                                SizedBox(
-                                                  width: 160,
-                                                  height: 50,
-                                                  child: Padding(
-                                                    padding:
-                                                        const EdgeInsets.only(
-                                                            left: 15.0),
-                                                    child: Card(
-                                                      color:
-                                                          const Color.fromRGBO(
-                                                              254,
-                                                              248,
-                                                              195,
-                                                              1.0),
-                                                      shape:
-                                                          RoundedRectangleBorder(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(5),
-                                                      ),
-                                                      child: const Center(
-                                                        child: Text(
-                                                          '4  0  7  0  4  1',
-                                                          style: TextStyle(
-                                                            fontSize: 19,
-                                                            color: Colors.black,
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                            Row(
-                                              children: [
-                                                Padding(
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                          left: 10.0),
-                                                  child: Row(
-                                                    children: [
-                                                      const Column(
-                                                        children: [
-                                                          Text(
-                                                            '120',
-                                                            style: TextStyle(
-                                                              color:
-                                                                  Colors.black,
-                                                              fontSize: 16,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold,
-                                                            ),
-                                                          ),
-                                                          Text(
-                                                            'บาท',
-                                                            style: TextStyle(
-                                                              color:
-                                                                  Colors.black,
-                                                              fontSize: 16,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold,
-                                                            ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                      const SizedBox(height: 5),
-                                                      Column(
-                                                        children: [
-                                                          Padding(
-                                                            padding:
-                                                                const EdgeInsets
-                                                                    .only(
-                                                                    left: 5.0),
-                                                            child: ClipOval(
-                                                              child:
-                                                                  Image.asset(
-                                                                'assets/images/signature.png',
-                                                                width: 50,
-                                                                height: 50,
-                                                                fit: BoxFit
-                                                                    .cover,
-                                                              ),
-                                                            ),
-                                                          ),
-                                                        ],
-                                                      )
-                                                    ],
-                                                  ),
-                                                ),
-                                                const Padding(
-                                                  padding: EdgeInsets.only(
-                                                      left: 5.0),
-                                                  child: Text(
-                                                    '1 สิงหาคม 2567',
-                                                    style: TextStyle(
-                                                      color: Color.fromRGBO(
-                                                          0, 91, 228, 1),
-                                                      fontSize: 18,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                    ),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ],
+                                          ),
                                         ),
                                       ],
                                     ),
                                   ),
                                 ),
-                                const Align(
-                                  alignment: Alignment.centerRight,
-                                  child: SizedBox(
-                                    width: 50,
-                                    height: 170,
-                                    child: Card(
-                                      color: Colors.white,
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.only(
-                                          topRight: Radius.circular(
-                                              15), // ขอบมุมขวาบน
-                                          bottomRight: Radius.circular(
-                                              15), // ขอบมุมขวาล่าง
-                                        ),
-                                      ),
-                                      child: Center(
-                                        child: RotatedBox(
-                                          quarterTurns: 3,
-                                          child: Text(
-                                            'เจ๊มายพารวย',
+                              ),
+                              Positioned(
+                                top: 0,
+                                left: 0,
+                                right: 0,
+                                height: 90,
+                                child: Card(
+                                  color: const Color.fromRGBO(217, 217, 217, 1),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(15),
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(5.0),
+                                    child: Column(
+                                      children: [
+                                        Align(
+                                          alignment: Alignment.centerLeft,
+                                          child: const Text(
+                                            'สลากกินแบ่ง Je’ Mild ',
                                             style: TextStyle(
                                               color: Colors.black,
-                                              fontSize: 16,
+                                              fontSize: 15,
                                               fontWeight: FontWeight.bold,
                                             ),
                                           ),
                                         ),
-                                      ),
+                                        const SizedBox(height: 10),
+                                        Center(
+                                          child: const Text(
+                                            '1 สิงหาคม 2567',
+                                            style: TextStyle(
+                                              color: Color.fromRGBO(0, 0, 0, 1),
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                   ),
                                 ),
-                              ],
-                            ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+
+                Padding(
+                  padding: const EdgeInsets.all(5.0),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: SizedBox(
+                          height: 198, 
+                          child: Stack(
+                            children: [
+                              Positioned(
+                                top: -5.0,
+                                left: -5.0,
+                                right: -5.0,
+                                bottom: -27.0,
+                                child: Card(
+                                  color: const Color.fromRGBO(254, 248, 195,
+                                      1.0), 
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(
+                                        30), 
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(5.0),
+                                    child: Stack(
+                                      children: [
+                                        Positioned(
+                                          bottom: 45, 
+                                          left: 5, 
+                                          child: const Text(
+                                            'คุณถูกรางวัล 1 ใบ',
+                                            style: TextStyle(
+                                              color: Colors.black,
+                                              fontSize: 15,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                        ),
+                                        Positioned(
+                                          bottom: 30,
+                                          left: 5,
+                                          child: const Text(
+                                            'รับเงินรางวัล 100,000 บาท',
+                                            style: TextStyle(
+                                              color: Colors.black,
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                        ),
+                                        Positioned(
+                                          bottom: 18.5,
+                                          right: 10,
+                                          child: ElevatedButton(
+                                            onPressed: () {
+                                              showDialog(
+                                                context: context,
+                                                builder:
+                                                    (BuildContext context) {
+                                                  return Dialog(
+                                                    shape:
+                                                        RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              200),
+                                                    ),
+                                                    child: Container(
+                                                      width: 800,
+                                                      height: 200,
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              20),
+                                                      color: Color.fromARGB(
+                                                          255, 63, 60, 61),
+                                                      child: Column(
+                                                        mainAxisSize:
+                                                            MainAxisSize.min,
+                                                        children: [
+                                                          const SizedBox(
+                                                              height: 20,
+                                                              width: 70),
+                                                          const Text(
+                                                            'คุณต้องการขึ้นเงินรางวัลใช่หรือไม่',
+                                                            textAlign:
+                                                                TextAlign.start,
+                                                            style: TextStyle(
+                                                                fontSize: 22,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                                color: Colors
+                                                                    .white),
+                                                          ),
+                                                          const SizedBox(
+                                                              height: 30),
+                                                          Row(
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .spaceBetween,
+                                                            children: [
+                                                              TextButton(
+                                                                onPressed: () {
+                                                                  Navigator.of(
+                                                                          context)
+                                                                      .pop();
+                                                                },
+                                                                style: TextButton
+                                                                    .styleFrom(
+                                                                  backgroundColor:
+                                                                      const Color
+                                                                          .fromARGB(
+                                                                          255,
+                                                                          98,
+                                                                          96,
+                                                                          95),
+                                                                  foregroundColor:
+                                                                      Colors
+                                                                          .white,
+                                                                  padding: const EdgeInsets
+                                                                      .symmetric(
+                                                                      horizontal:
+                                                                          28),
+                                                                  shape:
+                                                                      RoundedRectangleBorder(
+                                                                    borderRadius:
+                                                                        BorderRadius.circular(
+                                                                            10),
+                                                                  ),
+                                                                ),
+                                                                child:
+                                                                    const Text(
+                                                                  'ไม่',
+                                                                  style: TextStyle(
+                                                                      fontSize:
+                                                                          18),
+                                                                ),
+                                                              ),
+                                                              TextButton(
+                                                                onPressed: () {
+                                                                  Navigator.of(
+                                                                          context)
+                                                                      .pop();
+                                                                      //ข้อความเมื่อกดคำว่าใช่
+                                                                  // ScaffoldMessenger.of(
+                                                                  //         context)
+                                                                  // //     .showSnackBar(
+                                                                  //   SnackBar(
+                                                                  //       content:
+                                                                  //           Text('การขึ้นเงินรางวัลเสร็จสิ้น')),
+                                                                  // );
+                                                                },
+                                                                style: TextButton
+                                                                    .styleFrom(
+                                                                  backgroundColor:
+                                                                      const Color
+                                                                          .fromARGB(
+                                                                          255,
+                                                                          98,
+                                                                          96,
+                                                                          95),
+                                                                  foregroundColor:
+                                                                      Colors
+                                                                          .white,
+                                                                  padding: const EdgeInsets
+                                                                      .symmetric(
+                                                                      horizontal:
+                                                                          28),
+                                                                  shape:
+                                                                      RoundedRectangleBorder(
+                                                                    borderRadius:
+                                                                        BorderRadius.circular(
+                                                                            10),
+                                                                  ),
+                                                                ),
+                                                                child:
+                                                                    const Text(
+                                                                  'ใช่',
+                                                                  style: TextStyle(
+                                                                      fontSize:
+                                                                          18),
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  );
+                                                },
+                                              );
+                                            },
+                                            style: ButtonStyle(
+                                              backgroundColor:
+                                                  MaterialStateProperty.all<
+                                                          Color>(
+                                                      Color.fromARGB(
+                                                          255, 222, 219, 34)),
+                                              shape: MaterialStateProperty.all<
+                                                  RoundedRectangleBorder>(
+                                                RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(20),
+                                                ),
+                                              ),
+                                            ),
+                                            child: const Text(
+                                              'ขึ้นเงินรางวัล',
+                                              style: TextStyle(
+                                                color: Color.fromARGB(
+                                                    255, 18, 17, 17),
+                                                fontSize: 17,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Positioned.fill(
+                                top: -10,
+                                left: -10,
+                                right: -10,
+                                bottom: 40,
+                                child: Padding(
+                                  padding: const EdgeInsets.all(5.0),
+                                  child: Stack(
+                                    children: [
+                                      Card(
+                                        color: const Color.fromRGBO(
+                                            217, 217, 217, 1),
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(15),
+                                        ),
+                                        child: Stack(
+                                          children: [
+                                            Align(
+                                              alignment: Alignment.topLeft,
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.all(5.0),
+                                                child: Row(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Column(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                        Row(
+                                                          children: [
+                                                            Image.asset(
+                                                              'assets/images/flying-money.png',
+                                                              width: 30,
+                                                            ),
+                                                            const Text(
+                                                              'สลากกินแบ่ง Je’ Mild ',
+                                                              style: TextStyle(
+                                                                color: Colors
+                                                                    .black,
+                                                                fontSize: 15,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                        Row(
+                                                          children: [
+                                                            Padding(
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                      .only(
+                                                                      left:
+                                                                          30.0),
+                                                              child: ClipOval(
+                                                                child:
+                                                                    Image.asset(
+                                                                  'assets/images/logoMild.jpeg',
+                                                                  width: 60,
+                                                                  height: 60,
+                                                                  fit: BoxFit
+                                                                      .cover,
+                                                                ),
+                                                              ),
+                                                            ),
+                                                            SizedBox(
+                                                              width: 160,
+                                                              height: 50,
+                                                              child: Padding(
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                        .only(
+                                                                        left:
+                                                                            15.0),
+                                                                child: Card(
+                                                                  color: const Color
+                                                                      .fromRGBO(
+                                                                      254,
+                                                                      248,
+                                                                      195,
+                                                                      1.0),
+                                                                  shape:
+                                                                      RoundedRectangleBorder(
+                                                                    borderRadius:
+                                                                        BorderRadius
+                                                                            .circular(5),
+                                                                  ),
+                                                                  child:
+                                                                      const Center(
+                                                                    child: Text(
+                                                                      '4  0  7  0  4  1',
+                                                                      style:
+                                                                          TextStyle(
+                                                                        fontSize:
+                                                                            19,
+                                                                        color: Colors
+                                                                            .black,
+                                                                        fontWeight:
+                                                                            FontWeight.bold,
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                        Row(
+                                                          children: [
+                                                            Padding(
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                      .only(
+                                                                      left:
+                                                                          10.0),
+                                                              child: Row(
+                                                                children: [
+                                                                  const Column(
+                                                                    children: [
+                                                                      Text(
+                                                                        '120',
+                                                                        style:
+                                                                            TextStyle(
+                                                                          color:
+                                                                              Colors.black,
+                                                                          fontSize:
+                                                                              16,
+                                                                          fontWeight:
+                                                                              FontWeight.bold,
+                                                                        ),
+                                                                      ),
+                                                                      Text(
+                                                                        'บาท',
+                                                                        style:
+                                                                            TextStyle(
+                                                                          color:
+                                                                              Colors.black,
+                                                                          fontSize:
+                                                                              16,
+                                                                          fontWeight:
+                                                                              FontWeight.bold,
+                                                                        ),
+                                                                      ),
+                                                                    ],
+                                                                  ),
+                                                                  const SizedBox(
+                                                                      height:
+                                                                          5),
+                                                                  Column(
+                                                                    children: [
+                                                                      Padding(
+                                                                        padding: const EdgeInsets
+                                                                            .only(
+                                                                            left:
+                                                                                5.0),
+                                                                        child:
+                                                                            ClipOval(
+                                                                          child:
+                                                                              Image.asset(
+                                                                            'assets/images/signature.png',
+                                                                            width:
+                                                                                50,
+                                                                            height:
+                                                                                50,
+                                                                            fit:
+                                                                                BoxFit.cover,
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                    ],
+                                                                  )
+                                                                ],
+                                                              ),
+                                                            ),
+                                                            const Padding(
+                                                              padding: EdgeInsets
+                                                                  .only(
+                                                                      left:
+                                                                          5.0),
+                                                              child: Text(
+                                                                '1 สิงหาคม 2567',
+                                                                style:
+                                                                    TextStyle(
+                                                                  color: Color
+                                                                      .fromRGBO(
+                                                                          0,
+                                                                          91,
+                                                                          228,
+                                                                          1),
+                                                                  fontSize: 18,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold,
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                            Align(
+                                              alignment: Alignment
+                                                  .topRight, // ปรับตำแหน่งให้ติดด้านบน
+                                              child: SizedBox(
+                                                width: 50,
+                                                height: 170,
+                                                child: Card(
+                                                  color: Colors.white,
+                                                  shape: RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.only(
+                                                      topRight: Radius.circular(
+                                                          15), // ขอบมุมขวาบน
+                                                      bottomRight: Radius.circular(
+                                                          15), // ขอบมุมขวาล่าง
+                                                    ),
+                                                  ),
+                                                  child: Center(
+                                                    child: RotatedBox(
+                                                      quarterTurns: 3,
+                                                      child: Text(
+                                                        'เจ๊มายพารวย',
+                                                        style: TextStyle(
+                                                          color: const Color
+                                                              .fromARGB(
+                                                              255, 222, 3, 3),
+                                                          fontSize: 16,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       ),
