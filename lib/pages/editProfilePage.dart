@@ -1,21 +1,41 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:mini_project/config/config.dart';
+import 'package:http/http.dart' as http;
+import 'package:mini_project/models/response/edit_userId_get_res.dart';
 
 class EditProfilepage extends StatefulWidget {
-  const EditProfilepage({super.key});
+  int userId;
+  EditProfilepage({super.key, required this.userId});
 
   @override
   State<EditProfilepage> createState() => _EditProfilepageState();
 }
 
 class _EditProfilepageState extends State<EditProfilepage> {
+
+  late EditUserIdGetResponse edituser;
+
+  TextEditingController fullnameCtl = TextEditingController();
+  TextEditingController phoneCtl = TextEditingController();
+  TextEditingController emailCtl = TextEditingController();
+  TextEditingController imageCtl = TextEditingController();
+
+
+  @override
+  void initState() {
+    super.initState();
+    // Log the userId to see its value
+    log('EditProfilepage initialized with userId: ${widget.userId}');
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color.fromRGBO(177, 36, 24, 1),
-        title: const Text('EDIT',
+        title: const Text('Edit',
             style: TextStyle(
               fontWeight: FontWeight.bold,
               color: Colors.white,
@@ -35,8 +55,30 @@ class _EditProfilepageState extends State<EditProfilepage> {
             ],
           ),
         ],
+        leading: IconButton(
+          icon:
+              const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
       ),
-      body: SingleChildScrollView(
+      body:
+        // FutureBuilder(
+          // future: loadData,
+          // builder: (context, snapshot) {
+          //   if (snapshot.connectionState != ConnectionState.done) {
+          //     return const Center(
+          //       child: CircularProgressIndicator(),
+          //     );
+          //   }
+          //   //ดึงค่าข้อมูล
+          //   fullnameCtl.text = customer.fullname;
+          //   phoneCtl.text = customer.phone;
+          //   emailCtl.text = customer.email;
+          //   imageCtl.text = customer.image;
+          //   return 
+            SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0), // Padding รอบ ๆ TextField
           child: Column(
@@ -195,6 +237,12 @@ class _EditProfilepageState extends State<EditProfilepage> {
           ),
         ),
       ),
-      );
+    ); 
   }
+  // Future<void> loadDataAsync() async {
+  //   var config = await Configuration.getConfig();
+  //   var url = config['apiEndpoint'];
+  //   var data = await http.get(Uri.parse('$url/customers/${widget.userId}'));
+  //   edituser = editUserIdGetResponseFromJson(data.body);
+  // }
 }

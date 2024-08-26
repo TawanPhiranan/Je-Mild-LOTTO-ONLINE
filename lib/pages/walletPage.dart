@@ -1,12 +1,14 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
-import 'package:mini_project/pages/HomePage.dart';
 import 'package:mini_project/pages/LottoPage.dart';
 import 'package:mini_project/pages/OrderPage.dart';
 import 'package:mini_project/pages/profile.dart';
+import 'package:mini_project/pages/walletPage.dart';
+import 'package:mini_project/pages/HomePage.dart';
 
 class Walletpage extends StatefulWidget {
-  const Walletpage({super.key});
+  int userId;
+  Walletpage({super.key, required this.userId});
 
   @override
   State<Walletpage> createState() => _WalletpageState();
@@ -16,34 +18,36 @@ class Walletpage extends StatefulWidget {
 class _WalletpageState extends State<Walletpage> {
   int _selectedIndex = 1; // Track the selected index
 
+  @override
+  void initState() {
+    super.initState();
+    // Log the userId to see its value
+    log('Walletpage initialized with userId: ${widget.userId}');
+  }
+
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index; // Update the selected index
     });
 
     // Navigate to different pages based on the selected index
-    switch (index) {
-      // case 0:
-      //   Navigator.push(
-      //       context, MaterialPageRoute(builder: (context) => const Homepage()));
-      //   break;
-      case 1:
-        Navigator.push(context,
-            MaterialPageRoute(builder: (context) => const Walletpage()));
-        break;
-      case 2:
-        Navigator.push(context,
-            MaterialPageRoute(builder: (context) => const LottoPage()));
-        break;
-      case 3:
-        Navigator.push(context,
-            MaterialPageRoute(builder: (context) => const OrderPage()));
-        break;
-      // case 4:
-      //   Navigator.push(
-      //       context, MaterialPageRoute(builder: (context) => ProfilePage()));
-      //   break;
-    }
+     switch (index) {
+    case 0:
+      Navigator.push(context, MaterialPageRoute(builder: (context) => Homepage(userId: widget.userId )));
+      break;
+    case 1:
+      Navigator.push(context, MaterialPageRoute(builder: (context) => Walletpage(userId: widget.userId )));
+      break;
+    case 2:
+      Navigator.push(context, MaterialPageRoute(builder: (context) => LottoPage(userId: widget.userId,)));
+      break;
+    case 3:
+      Navigator.push(context, MaterialPageRoute(builder: (context) => OrderPage(userId: widget.userId,)));
+      break;
+    case 4:
+      Navigator.push(context, MaterialPageRoute(builder: (context) => ProfilePage(userId: widget.userId,)));
+      break;
+  }
   }
 
   @override
