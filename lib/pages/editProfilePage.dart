@@ -344,12 +344,6 @@ class _EditProfilepageState extends State<EditProfilepage> {
     var data = await http.put(Uri.parse('$url/edit/${widget.userId}'));
     edituser = editUserIdGetResponseFromJson(data.body);
   }
-  // Future<void> loadDataAsync() async {
-  //   var config = await Configuration.getConfig();
-  //   var url = config['apiEndpoint'];
-  //   var data = await http.get(Uri.parse('$url/customers/${widget.userId}'));
-  //   edituser = editUserIdGetResponseFromJson(data.body);
-  // }
     void Logout() {
      Navigator.push(
                 context,
