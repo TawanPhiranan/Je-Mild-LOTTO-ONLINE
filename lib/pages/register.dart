@@ -1,10 +1,14 @@
 // import 'dart:convert';
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:mini_project/config/config.dart';
+import 'package:mini_project/config/internal_config.dart';
+import 'package:mini_project/models/request/user_Register_post_req.dart';
 import 'package:mini_project/pages/Loginpage.dart';
 import 'package:http/http.dart' as http;
+import 'package:mini_project/pages/LogoPage.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -20,6 +24,7 @@ class _RegisterPageState extends State<RegisterPage> {
   var passwordCtl = TextEditingController();
   var confirmpassCtl = TextEditingController();
   var AmountmoneyCtl = TextEditingController();
+  int amount = 0;
 
   String url = '';
   @override
@@ -205,10 +210,9 @@ class _RegisterPageState extends State<RegisterPage> {
                   SizedBox(
                     width: double.infinity,
                     child: FilledButton(
-                      onPressed: login ,
+                      onPressed: register,
                       style: FilledButton.styleFrom(
-                        backgroundColor:
-                            const Color.fromRGBO(177, 36, 24, 1),
+                        backgroundColor: const Color.fromRGBO(177, 36, 24, 1),
                       ),
                       child: const Text(
                         'ลงทะเบียน',
@@ -229,11 +233,121 @@ class _RegisterPageState extends State<RegisterPage> {
     );
   }
 
-  void login() {
-     Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => Loginpage(),
-        ));
+  void register() {
+    if (fullnameCtl.text.isEmpty ||
+        phoneCtl.text.isEmpty ||
+        emailCtl.text.isEmpty ||
+        passwordCtl.text.isEmpty ||
+        confirmpassCtl.text.isEmpty ||
+        AmountmoneyCtl.text.isEmpty) {
+      log("----");
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text('กรุณากรอกข้อมูลให้ครบ'),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () {
+                     Navigator.of(context).pop(); // ปิด dialog
+                  },
+                  child: const Text('ตกลง'),
+                ),
+              ],
+            );
+          },
+        );
+      return;
+    }
+
+    var data = UserResgisterPostRequest(
+      username: fullnameCtl.text,
+      phone: phoneCtl.text,
+      email: emailCtl.text,
+      password: passwordCtl.text,
+      confirmPassword: confirmpassCtl.text,
+      amount: int.tryParse(AmountmoneyCtl.text) ?? 0,
+    );
+
+    http
+        .post(Uri.parse("$API_ENDPOINT/register"),
+            headers: {"Content-Type": "application/json"},
+            body: userResgisterPostRequestToJson(data))
+        .then((response) {
+      if (response.statusCode == 201) {
+        // ลงทะเบียนสำเร็จ
+        log("Insert OK");
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text('สมัครสมาชิกสำเร็จ'),
+              content: Text('คุณได้ลงทะเบียนเรียบร้อยแล้ว'),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => Logopage(),
+                        ));
+                  },
+                  child: const Text('ตกลง'),
+                ),
+              ],
+            );
+          },
+        );
+      } else {
+        // ตรวจสอบสถานะการตอบกลับ
+        String errorMessage;
+        if (response.statusCode == 409) {
+          errorMessage = "อีเมล หรือ เบอร์โทรศัพท์ ถูกใช้แล้ว : กรุณาลองอีกครั้ง";
+        } 
+        else if(response.statusCode == 400) {
+          errorMessage = 'ยืนยันรหัสผ่านไม่ถูกต้อง : กรุณาลองอีกครั้ง';
+        }
+        else{
+          errorMessage = 'เกิดข้อผิดพลาด : กรุณาลองอีกครั้ง';
+        }
+        log("Insert Error ${response.statusCode}: $errorMessage");
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text('สมัครสมาชิกไม่สำเร็จ'),
+              content: Text(errorMessage),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop(); // ปิด dialog
+                  },
+                  child: const Text('ตกลง'),
+                )
+              ],
+            );
+          },
+        );
+      }
+    }).catchError((error) {
+      log("Insert Error $error");
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('สมัครสมาชิกไม่สำเร็จ'),
+            content: Text('เกิดข้อผิดพลาด: กรุณาลองอีกครั้ง'),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop(); // ปิด dialog
+                },
+                child: const Text('ตกลง'),
+              )
+            ],
+          );
+        },
+      );
+    });
   }
 }

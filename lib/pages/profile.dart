@@ -41,7 +41,7 @@ class _ProfilePageState extends State<ProfilePage> {
         break;
       case 3:
         Navigator.push(context,
-            MaterialPageRoute(builder: (context) => const Orderpage()));
+            MaterialPageRoute(builder: (context) => const OrderPage()));
         break;
       case 4:
         // Navigator.push(
@@ -84,6 +84,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           ),
                         ),
                       ),
+                      
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [

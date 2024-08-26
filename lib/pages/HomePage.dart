@@ -33,7 +33,7 @@ class _HomepageState extends State<Homepage> {
       Navigator.push(context, MaterialPageRoute(builder: (context) => LottoPage()));
       break;
     case 3:
-      Navigator.push(context, MaterialPageRoute(builder: (context) => Orderpage()));
+      Navigator.push(context, MaterialPageRoute(builder: (context) => OrderPage()));
       break;
     // case 4:
     //   Navigator.push(context, MaterialPageRoute(builder: (context) => ProfilePage()));

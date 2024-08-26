@@ -3,7 +3,8 @@ import 'package:mini_project/pages/AdminLottoDraw.dart';
 import 'package:mini_project/pages/LogoPage.dart';
 
 class Adiminhomepage extends StatefulWidget {
-  const Adiminhomepage({super.key});
+  int userId;
+  Adiminhomepage({super.key, required this.userId});
 
   @override
   State<Adiminhomepage> createState() => _AdiminhomepageState();
