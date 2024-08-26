@@ -85,7 +85,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         ),
                       ),
                       
-                      Row(
+                        Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
                           TextButton(
