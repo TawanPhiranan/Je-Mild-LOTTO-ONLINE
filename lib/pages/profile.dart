@@ -3,6 +3,9 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:mini_project/config/config.dart';
+import 'package:mini_project/config/internal_config.dart';
+import 'package:mini_project/pages/HomePage.dart';
+import 'package:mini_project/pages/LoginPage.dart';
 import 'package:mini_project/pages/LottoPage.dart';
 import 'package:mini_project/pages/OrderPage.dart';
 import 'package:mini_project/pages/profile.dart';
@@ -20,21 +23,19 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-  int _selectedIndex = 4; // Track the selected index
+  int _selectedIndex = 4;
 
   @override
   void initState() {
     super.initState();
-    // Log the userId to see its value
     log('ProfilePage initialized with userId: ${widget.userId}');
   }
 
   void _onItemTapped(int index) {
     setState(() {
-      _selectedIndex = index; // Update the selected index
+      _selectedIndex = index;
     });
 
-    // Navigate to different pages based on the selected index
     switch (index) {
       case 0:
         Navigator.push(
@@ -127,7 +128,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             child: const Text('ไม่'),
                           ),
                           FilledButton(
-                            onPressed: () {},
+                            onPressed: Logout,
                             child: const Text('ใช่'),
                           ),
                         ],
@@ -151,19 +152,19 @@ class _ProfilePageState extends State<ProfilePage> {
           BottomNavigationBarItem(
             icon: Icon(
               Icons.home,
-            ), 
+            ),
             label: 'Home',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.wallet_rounded), 
+            icon: Icon(Icons.wallet_rounded),
             label: 'Wallet',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.casino), 
+            icon: Icon(Icons.casino),
             label: 'Lotto',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.receipt), 
+            icon: Icon(Icons.receipt),
             label: 'Order',
           ),
           BottomNavigationBarItem(
@@ -174,8 +175,8 @@ class _ProfilePageState extends State<ProfilePage> {
         unselectedItemColor: const Color.fromARGB(255, 199, 199, 199),
         selectedItemColor: Colors.white,
         backgroundColor: const Color.fromRGBO(177, 36, 24, 1),
-        currentIndex: _selectedIndex, // Set the current index
-        onTap: _onItemTapped, // Handle tap
+        currentIndex: _selectedIndex,
+        onTap: _onItemTapped,
         type: BottomNavigationBarType.fixed,
       ),
       body: SingleChildScrollView(
@@ -340,12 +341,62 @@ class _ProfilePageState extends State<ProfilePage> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) =>  EditProfilepage(userId : widget.userId),
+        builder: (context) => EditProfilepage(userId: widget.userId),
       ),
     );
   }
 
   void _editProfileImage() {}
 
-  void _deleteAccount() async {}
+  void _deleteAccount() async {
+    var value = await Configuration.getConfig();
+    var url = value['apiEndpoint'];
+    try {
+      http.delete(
+        Uri.parse('$url/delete/${widget.userId}'),
+        headers: {"Content-Type": "application/json; charset=utf-8"},
+      );
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text('สำเร็จ'),
+          content: const Text('ลบข้อมูลเรียบร้อย'),
+          actions: [
+            FilledButton(
+                onPressed: () {
+                  Navigator.popUntil(
+                    context,
+                    (route) => route.isFirst,
+                  );
+                },
+                child: const Text('ปิด'))
+          ],
+        ),
+      );
+      log(widget.userId.toString()+"KK");
+    } catch (err) {
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text('ผิดพลาด'),
+          content: Text('ลบข้อมูลไม่สำเร็จ $err'),
+          actions: [
+            FilledButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: const Text('ปิด'))
+          ],
+        ),
+      );
+    }
+  }
+
+  void Logout() {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => Loginpage(),
+        ));
+  }
 }

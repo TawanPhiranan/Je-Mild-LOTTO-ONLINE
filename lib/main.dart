@@ -6,6 +6,7 @@ import 'package:mini_project/pages/AdminLottoDraw.dart';
 import 'package:mini_project/pages/AdminProfile.dart';
 import 'package:mini_project/pages/AdminRandomNumber.dart';
 import 'package:mini_project/pages/HomePage.dart';
+import 'package:mini_project/pages/LoginPage.dart';
 import 'package:mini_project/pages/LogoPage.dart';
 import 'package:mini_project/pages/LottoPage.dart';
 import 'package:mini_project/pages/OrderPage.dart';
@@ -22,7 +23,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return  MaterialApp(
       title: 'Flutter Demo',
-      home: Logopage(),
+      home: Loginpage(),
     );
   }
 }

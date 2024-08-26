@@ -89,6 +89,13 @@ class _LottoPageState extends State<LottoPage> {
             color: Colors.white,
           ),
         ),
+             leading: IconButton(
+          icon:
+              const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
         actions: [
           PopupMenuButton<String>(
             icon: const Icon(

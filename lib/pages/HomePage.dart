@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:mini_project/config/config.dart';
 import 'package:mini_project/models/response/users_login_post_res.dart';
+import 'package:mini_project/pages/LoginPage.dart';
 import 'package:mini_project/pages/LottoPage.dart';
 import 'package:mini_project/pages/OrderPage.dart';
 import 'package:mini_project/pages/profile.dart';
@@ -31,6 +32,7 @@ class _HomepageState extends State<Homepage> {
     log('Homepage initialized with userId: ${widget.userId}');
   }
   // UsersLoginPostResponse users = usersLoginPostResponseFromJson(value.body);
+  
 
   void _onItemTapped(int index) {
     setState(() {
@@ -94,6 +96,57 @@ class _HomepageState extends State<Homepage> {
             Navigator.of(context).pop();
           },
         ),
+       actions: [
+          PopupMenuButton<String>(
+            icon: const Icon(
+              Icons.more_vert,
+              color: Colors.white,
+            ),
+            onSelected: (value) {
+              log(value);
+              if (value == 'Logout') {
+                showDialog(
+                  context: context,
+                  builder: (context) => SimpleDialog(
+                    children: [
+                      const Padding(
+                        padding: EdgeInsets.all(16.0),
+                        child: Text(
+                          'คุณต้องการออกจากระบบใช่หรือไม่?',
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          TextButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            child: const Text('ไม่'),
+                          ),
+                          FilledButton(
+                            onPressed: Logout,
+                            child: const Text('ใช่'),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                );
+              }
+            },
+            itemBuilder: (context) => [
+              const PopupMenuItem<String>(
+                value: 'Logout',
+                child: Text('ออกจากระบบ'),
+              ),
+            ],
+          ),
+        ],
       ),
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
@@ -220,7 +273,7 @@ class _HomepageState extends State<Homepage> {
                       Column(
                         children: [
                           FilledButton(
-                            onPressed: () {},
+                            onPressed: Lotto,
                             style: FilledButton.styleFrom(
                               backgroundColor:
                                   const Color.fromRGBO(245, 210, 99, 1),
@@ -253,7 +306,7 @@ class _HomepageState extends State<Homepage> {
                       Column(
                         children: [
                           FilledButton(
-                            onPressed: () {},
+                            onPressed: CheckPage,
                             style: FilledButton.styleFrom(
                               backgroundColor:
                                   const Color.fromRGBO(245, 210, 99, 1),
@@ -492,5 +545,27 @@ class _HomepageState extends State<Homepage> {
         ),
       ),
     );
+  }
+  void Logout() {
+     Navigator.push(
+                context,
+                MaterialPageRoute(
+                builder: (context) => Loginpage(),
+                )
+     );
+  }
+  void Lotto() {
+     Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => LottoPage(userId: widget.userId),
+        ));
+  }
+  void CheckPage() {
+     Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => OrderPage(userId: widget.userId),
+        ));
   }
 }
