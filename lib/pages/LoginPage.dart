@@ -167,6 +167,8 @@ class _LoginpageState extends State<Loginpage> {
   }
 
   void login() async {
+    log(phoneCtl.text);
+    log(passwordCtl.text);
     try {
       var data = UsersLoginPostRequest(
           phone: phoneCtl.text, password: passwordCtl.text);
@@ -195,7 +197,7 @@ class _LoginpageState extends State<Loginpage> {
             ));
       }
     } catch (eeee) {
-      log(eeee.toString());
+      log(eeee.toString()+'eiei');
       setState(() {
         text = 'phone no or password incorrect';
       });

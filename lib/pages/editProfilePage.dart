@@ -137,12 +137,10 @@ class _EditProfilepageState extends State<EditProfilepage> {
                       ),
                     ),
                     const Text('เบอร์โทรศัพท์'),
-                    TextField(
-                      controller: phoneCtl,
-                    ),
                     const SizedBox(
                         height: 8.0), // เพิ่มช่องว่างระหว่าง Text และ TextField
-                    const TextField(
+                    TextField(
+                      controller: phoneCtl,
                       decoration: InputDecoration(
                           filled: true, // Enables the background color
                           fillColor: Color.fromRGBO(217, 217, 217, 1),
@@ -161,12 +159,10 @@ class _EditProfilepageState extends State<EditProfilepage> {
                     )),
                     const SizedBox(height: 10),
                     const Text('ชื่อ - สกุล'),
-                    TextField(
-                      controller: fullnameCtl,
-                    ),
                     const SizedBox(
                         height: 8.0), // เพิ่มช่องว่างระหว่าง Text และ TextField
-                    const TextField(
+                    TextField(
+                      controller: fullnameCtl,
                       decoration: InputDecoration(
                           filled: true, // Enables the background color
                           fillColor: Color.fromRGBO(217, 217, 217, 1),
@@ -179,12 +175,10 @@ class _EditProfilepageState extends State<EditProfilepage> {
                     ),
                     const SizedBox(height: 10),
                     const Text('อีเมล'),
-                    TextField(
-                      controller: emailCtl,
-                    ),
                     const SizedBox(
                         height: 8.0), // เพิ่มช่องว่างระหว่าง Text และ TextField
-                    const TextField(
+                    TextField(
+                      controller: emailCtl,
                       decoration: InputDecoration(
                           filled: true, // Enables the background color
                           fillColor: Color.fromRGBO(217, 217, 217, 1),
@@ -290,22 +284,24 @@ class _EditProfilepageState extends State<EditProfilepage> {
 
   //จัดการโปรไฟล์
   void update() async {
-    var json = {
-      "username": fullnameCtl.text,
-      "phone": phoneCtl.text,
-      "email": emailCtl.text,
-    };
-    var config = await Configuration.getConfig();
-    var url = config['apiEndpoint'];
+  var json = {
+    "username": fullnameCtl.text,
+    "phone": phoneCtl.text,
+    "email": emailCtl.text,
+  };
+  var config = await Configuration.getConfig();
+  var url = config['apiEndpoint'];
 
-    try {
-      var res = await http.put(Uri.parse('$url/edit/${widget.userId}'),
-          headers: {"Content-Type": "application/json; charset=utf-8"},
-          body: jsonEncode(json));
+  try {
+    var res = await http.put(
+      Uri.parse('$url/edit/${widget.userId}'),
+      headers: {"Content-Type": "application/json; charset=utf-8"},
+      body: jsonEncode(json),
+    );
+    
+    if (res.statusCode == 200) {
       log(res.body);
       var result = jsonDecode(res.body);
-      // Need to know json's property by reading from API Tester
-      log(result['message']);
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
@@ -313,49 +309,63 @@ class _EditProfilepageState extends State<EditProfilepage> {
           content: const Text('บันทึกข้อมูลเรียบร้อย'),
           actions: [
             FilledButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                child: const Text('ปิด'))
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Text('ปิด'),
+            ),
           ],
         ),
       );
-    } catch (err) {
-      showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-          title: const Text('ผิดพลาด'),
-          content: Text('บันทึกข้อมูลไม่สำเร็จ ' + err.toString()),
-          actions: [
-            FilledButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                child: const Text('ปิด'))
-          ],
-        ),
-      );
+    } else {
+      throw Exception('Failed to update data: ${res.statusCode}');
     }
+  } catch (err) {
+    log('Error: $err');
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('ผิดพลาด'),
+        content: Text('บันทึกข้อมูลไม่สำเร็จ: ' + err.toString()),
+        actions: [
+          FilledButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: const Text('ปิด'),
+          ),
+        ],
+      ),
+    );
   }
+}
 
-  Future<void> loadDataAsync() async {
+
+Future<void> loadDataAsync() async {
+  try {
     var config = await Configuration.getConfig();
     var url = config['apiEndpoint'];
-    var data = await http.put(Uri.parse('$url/edit/${widget.userId}'));
-    edituser = editUserIdGetResponseFromJson(data.body);
+    var response = await http.get(Uri.parse('$url/users/${widget.userId}'));
+    if (response.statusCode == 200) {
+      // ถ้าการเรียก API สำเร็จ
+      edituser = editUserIdGetResponseFromJson(response.body);
+      log(edituser.email);
+    } else {
+      // ถ้า API ส่งสถานะที่ไม่ใช่ 200
+      log('Error: ${response.statusCode}');
+    }
+  } catch (e) {
+    // จัดการข้อผิดพลาดเมื่อเกิดปัญหาในการเรียก API
+    log('Error: $e');
   }
-  // Future<void> loadDataAsync() async {
-  //   var config = await Configuration.getConfig();
-  //   var url = config['apiEndpoint'];
-  //   var data = await http.get(Uri.parse('$url/customers/${widget.userId}'));
-  //   edituser = editUserIdGetResponseFromJson(data.body);
-  // }
-    void Logout() {
-     Navigator.push(
-                context,
-                MaterialPageRoute(
-                builder: (context) => Loginpage(),
-                )
-     );
+}
+
+
+  void Logout() {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => Loginpage(),
+        ));
   }
 }
