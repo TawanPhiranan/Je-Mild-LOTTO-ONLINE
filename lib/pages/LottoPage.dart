@@ -3,6 +3,7 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:mini_project/pages/LogoPage.dart';
 import 'package:mini_project/pages/LottoPage.dart';
 import 'package:mini_project/pages/OrderPage.dart';
 import 'package:mini_project/pages/profile.dart';
@@ -73,10 +74,6 @@ class _LottoPageState extends State<LottoPage> {
     }
   }
 
-  void _logout() {
-    Navigator.pop(context);
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -128,7 +125,7 @@ class _LottoPageState extends State<LottoPage> {
                             child: const Text('ไม่'),
                           ),
                           FilledButton(
-                            onPressed: _logout,
+                            onPressed: Logout,
                             child: const Text('ใช่'),
                           ),
                         ],
@@ -541,4 +538,13 @@ class _LottoPageState extends State<LottoPage> {
   }
 
   void Search() {}
+
+  void Logout() {
+     Navigator.push(
+                context,
+                MaterialPageRoute(
+                builder: (context) => Logopage(),
+                )
+     );
+  }
 }

@@ -7,6 +7,7 @@ import 'package:mini_project/config/internal_config.dart';
 import 'package:mini_project/models/response/edit_userId_get_res.dart';
 import 'package:mini_project/pages/HomePage.dart';
 import 'package:mini_project/pages/LoginPage.dart';
+import 'package:mini_project/pages/LogoPage.dart';
 import 'package:mini_project/pages/LottoPage.dart';
 import 'package:mini_project/pages/OrderPage.dart';
 import 'package:mini_project/pages/profile.dart';
@@ -207,7 +208,8 @@ class _ProfilePageState extends State<ProfilePage> {
                         const CircleAvatar(
                           radius: 100,
                           backgroundImage:
-                              AssetImage('assets/profile_image.png'),
+                              AssetImage('assets/images/profile.jpg'),
+                              //  Image.asset('assets/imag')
                         ),
                         Positioned(
                           bottom: 0,
@@ -434,7 +436,7 @@ class _ProfilePageState extends State<ProfilePage> {
     Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => Loginpage(),
+          builder: (context) => Logopage(),
         ));
   }
 }

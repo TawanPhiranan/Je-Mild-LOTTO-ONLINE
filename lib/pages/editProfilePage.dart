@@ -6,6 +6,7 @@ import 'package:mini_project/config/config.dart';
 import 'package:http/http.dart' as http;
 import 'package:mini_project/models/response/edit_userId_get_res.dart';
 import 'package:mini_project/pages/LoginPage.dart';
+import 'package:mini_project/pages/LogoPage.dart';
 
 class EditProfilepage extends StatefulWidget {
   int userId;
@@ -365,7 +366,7 @@ Future<void> loadDataAsync() async {
     Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => Loginpage(),
+          builder: (context) => Logopage(),
         ));
   }
 }
