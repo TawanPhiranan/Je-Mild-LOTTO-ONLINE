@@ -10,6 +10,7 @@ import 'package:mini_project/pages/LoginPage.dart';
 import 'package:mini_project/pages/LogoPage.dart';
 import 'package:mini_project/pages/LottoPage.dart';
 import 'package:mini_project/pages/OrderPage.dart';
+import 'package:mini_project/pages/editProfilePage.dart';
 import 'package:mini_project/pages/profile.dart';
 
 void main() {

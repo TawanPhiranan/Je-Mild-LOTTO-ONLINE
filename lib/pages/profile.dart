@@ -1,9 +1,10 @@
 // ignore_for_file: deprecated_member_use
-
+import 'dart:convert';
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:mini_project/config/config.dart';
 import 'package:mini_project/config/internal_config.dart';
+import 'package:mini_project/models/response/edit_userId_get_res.dart';
 import 'package:mini_project/pages/HomePage.dart';
 import 'package:mini_project/pages/LoginPage.dart';
 import 'package:mini_project/pages/LottoPage.dart';
@@ -25,10 +26,14 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   int _selectedIndex = 4;
 
+  late EditUserIdGetResponse user;
+  late Future<void> loadData;
+  String url = '';
+
   @override
   void initState() {
     super.initState();
-    log('ProfilePage initialized with userId: ${widget.userId}');
+    loadData = loadDataAsync();
   }
 
   void _onItemTapped(int index) {
@@ -78,6 +83,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
+    log('ProfilePage initialized with userId: ${widget.userId}');
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color.fromRGBO(177, 36, 24, 1),
@@ -179,162 +185,194 @@ class _ProfilePageState extends State<ProfilePage> {
         onTap: _onItemTapped,
         type: BottomNavigationBarType.fixed,
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 40),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              const SizedBox(height: 40),
-              Center(
-                child: Stack(
-                  children: [
-                    const CircleAvatar(
-                      radius: 100,
-                      backgroundImage: AssetImage('assets/profile_image.png'),
+      body: FutureBuilder(
+        future: loadData,
+        builder: (context, snapshot) {
+          // Loading...
+          if (snapshot.connectionState != ConnectionState.done) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+          return SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 40),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  const SizedBox(height: 40),
+                  Center(
+                    child: Stack(
+                      children: [
+                        const CircleAvatar(
+                          radius: 100,
+                          backgroundImage:
+                              AssetImage('assets/profile_image.png'),
+                        ),
+                        Positioned(
+                          bottom: 0,
+                          right: 0,
+                          child: GestureDetector(
+                            onTap: () {
+                              _editProfileImage();
+                            },
+                            child: CircleAvatar(
+                              radius: 25,
+                              backgroundColor: Colors.grey[800],
+                              child: const Icon(
+                                Icons.camera_alt,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                    Positioned(
-                      bottom: 0,
-                      right: 0,
-                      child: GestureDetector(
-                        onTap: () {
-                          _editProfileImage();
-                        },
-                        child: CircleAvatar(
-                          radius: 25,
-                          backgroundColor: Colors.grey[800],
-                          child: const Icon(
-                            Icons.camera_alt,
-                            color: Colors.white,
+                  ),
+                  const SizedBox(height: 10),
+                  Text(
+                    user.username,
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 5),
+                  Text(
+                    user.email,
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.grey[600],
+                    ),
+                  ),
+                  const SizedBox(height: 50),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Container(
+                          alignment: Alignment.centerLeft,
+                          child: const Text(
+                            'ชื่อ-นามสกุล',
+                            style: TextStyle(
+                              fontSize: 20,
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 10),
-              const Text(
-                'น้องมาย แจกจริง',
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const SizedBox(height: 5),
-              Text(
-                'น้องมาย@gmail.com',
-                style: TextStyle(
-                  fontSize: 16,
-                  color: Colors.grey[600],
-                ),
-              ),
-              const SizedBox(height: 50),
-              Row(
-                children: [
-                  Expanded(
-                    child: Container(
-                      alignment: Alignment.centerLeft,
-                      child: const Text(
-                        'ชื่อ-นามสกุล',
-                        style: TextStyle(
-                          fontSize: 20,
+                      const SizedBox(width: 30),
+                      Expanded(
+                        child: Container(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            user.username,
+                            style: TextStyle(
+                              fontSize: 20,
+                              color: Colors.grey[600],
+                            ),
+                          ),
                         ),
                       ),
-                    ),
+                    ],
                   ),
-                  const SizedBox(width: 30),
-                  Expanded(
-                    child: Container(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        'น้องมาย แจกจริง',
-                        style: TextStyle(
-                          fontSize: 20,
-                          color: Colors.grey[600],
+                  const SizedBox(height: 30),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Container(
+                          alignment: Alignment.centerLeft,
+                          child: const Text(
+                            'เบอร์โทรศัพท์',
+                            style: TextStyle(
+                              fontSize: 20,
+                            ),
+                          ),
                         ),
                       ),
+                      const SizedBox(width: 30),
+                      Expanded(
+                        child: Container(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            user.phone,
+                            style: TextStyle(
+                              fontSize: 20,
+                              color: Colors.grey[600],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 70),
+                  Center(
+                    child: Column(
+                      children: [
+                        SizedBox(
+                          width: double.infinity,
+                          child: FilledButton(
+                            onPressed: _editPage,
+                            style: ButtonStyle(
+                              backgroundColor: MaterialStateProperty.all(
+                                const Color.fromRGBO(213, 96, 97, 1),
+                              ),
+                            ),
+                            child: const Text(
+                              'จัดการโปรไฟล์',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 20,
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 20),
+                        SizedBox(
+                          width: double.infinity,
+                          child: FilledButton(
+                            onPressed: _deleteAccount,
+                            style: ButtonStyle(
+                              backgroundColor:
+                                  MaterialStateProperty.all(Colors.grey),
+                            ),
+                            child: const Text(
+                              'ลบบัญชีผู้ใช้',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 20,
+                              ),
+                            ),
+                          ),
+                        )
+                      ],
                     ),
                   ),
                 ],
               ),
-              const SizedBox(height: 30),
-              Row(
-                children: [
-                  Expanded(
-                    child: Container(
-                      alignment: Alignment.centerLeft,
-                      child: const Text(
-                        'เบอร์โทรศัพท์',
-                        style: TextStyle(
-                          fontSize: 20,
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 30),
-                  Expanded(
-                    child: Container(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        '0123456789',
-                        style: TextStyle(
-                          fontSize: 20,
-                          color: Colors.grey[600],
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 70),
-              Center(
-                child: Column(
-                  children: [
-                    SizedBox(
-                      width: double.infinity,
-                      child: FilledButton(
-                        onPressed: _editPage,
-                        style: ButtonStyle(
-                          backgroundColor: MaterialStateProperty.all(
-                            const Color.fromRGBO(213, 96, 97, 1),
-                          ),
-                        ),
-                        child: const Text(
-                          'จัดการโปรไฟล์',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 20,
-                          ),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 20),
-                    SizedBox(
-                      width: double.infinity,
-                      child: FilledButton(
-                        onPressed: _deleteAccount,
-                        style: ButtonStyle(
-                          backgroundColor:
-                              MaterialStateProperty.all(Colors.grey),
-                        ),
-                        child: const Text(
-                          'ลบบัญชีผู้ใช้',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 20,
-                          ),
-                        ),
-                      ),
-                    )
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
+            ),
+          );
+        },
       ),
     );
+  }
+
+  //ดึงข้อมูลออกมาโชว์ โดยใช้เส้นเดียวกับ Edit
+  Future<void> loadDataAsync() async {
+    try {
+      var config = await Configuration.getConfig();
+      var url = config['apiEndpoint'];
+      var response = await http.get(Uri.parse('$url/users/${widget.userId}'));
+      if (response.statusCode == 200) {
+        // ถ้าการเรียก API สำเร็จ
+        user = editUserIdGetResponseFromJson(response.body);
+        log(user.email);
+      } else {
+        // ถ้า API ส่งสถานะที่ไม่ใช่ 200
+        log('Error: ${response.statusCode}');
+      }
+    } catch (e) {
+      // จัดการข้อผิดพลาดเมื่อเกิดปัญหาในการเรียก API
+      log('Error: $e');
+    }
   }
 
   void _editPage() {
@@ -373,7 +411,7 @@ class _ProfilePageState extends State<ProfilePage> {
           ],
         ),
       );
-      log(widget.userId.toString()+"KK");
+      log(widget.userId.toString() + "KK");
     } catch (err) {
       showDialog(
         context: context,
