@@ -165,7 +165,7 @@ class _LoginpageState extends State<Loginpage> {
           builder: (context) => Forgetpwdpage(),
         ));
   }
-  
+
   void login() async {
     try {
       var data = UsersLoginPostRequest(
@@ -173,25 +173,27 @@ class _LoginpageState extends State<Loginpage> {
       var value = await http.post(Uri.parse('$API_ENDPOINT/login'),
           headers: {"Content-Type": "application/json; charset=utf-8"},
           body: usersLoginPostRequestToJson(data));
+          log('Response Body: ${value.body}');
       UsersLoginPostResponse users = usersLoginPostResponseFromJson(value.body);
-      log(users.users.email);
+      // log(users.users.email);
+      // log('Response Body: ${value.body}');
+
       setState(() {
         text = '';
       });
-      if (users.users.typeId == 1){
+      if (users.user.typeId == 1) {
         Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => Homepage(userId: users.users.userId),
-          ));
-      }else if (users.users.typeId == 2) {
-         Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => Adiminhomepage(userId: users.users.userId),
-          ));
+            context,
+            MaterialPageRoute(
+              builder: (context) => Homepage(userId: users.user.userId),
+            ));
+      } else if (users.user.typeId == 2) {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => Adiminhomepage(userId: users.user.userId),
+            ));
       }
-      
     } catch (eeee) {
       log(eeee.toString());
       setState(() {
