@@ -1,14 +1,17 @@
 // ignore_for_file: deprecated_member_use
 
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:mini_project/config/config.dart';
 import 'package:mini_project/pages/LogoPage.dart';
 import 'package:mini_project/pages/LottoPage.dart';
 import 'package:mini_project/pages/OrderPage.dart';
 import 'package:mini_project/pages/profile.dart';
 import 'package:mini_project/pages/walletPage.dart';
 import 'package:mini_project/pages/HomePage.dart';
+import 'package:http/http.dart' as http;
 
 class LottoPage extends StatefulWidget {
   int userId;
@@ -20,6 +23,7 @@ class LottoPage extends StatefulWidget {
 
 class _LottoPageState extends State<LottoPage> {
   int _selectedIndex = 2; // Track the selected index
+  String _randomNumbers = 'กำลังสุ่ม...'; // เก็บค่าตัวเลขที่สุ่มได้
 
   @override
   void initState() {
@@ -86,7 +90,7 @@ class _LottoPageState extends State<LottoPage> {
             color: Colors.white,
           ),
         ),
-             leading: IconButton(
+        leading: IconButton(
           icon:
               const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white),
           onPressed: () {
@@ -266,6 +270,7 @@ class _LottoPageState extends State<LottoPage> {
                 ),
               ],
             ),
+            //เเนะนำ Lotto
             const SizedBox(height: 20),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20.0),
@@ -282,7 +287,7 @@ class _LottoPageState extends State<LottoPage> {
                     ),
                   ),
                   FilledButton(
-                    onPressed: () {},
+                    onPressed: fetchRandomNumbers,
                     style: ButtonStyle(
                       backgroundColor: MaterialStateProperty.all(
                           const Color.fromRGBO(177, 36, 24, 1)),
@@ -310,226 +315,253 @@ class _LottoPageState extends State<LottoPage> {
               ),
             ),
             const SizedBox(height: 10),
-            Padding(
-              padding: const EdgeInsets.all(5.0),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: SizedBox(
-                      height: 170,
-                      child: Card(
-                        color: const Color.fromRGBO(217, 217, 217, 1),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(15),
-                        ),
-                        child: Stack(
-                          children: [
-                            Align(
-                              alignment: Alignment.topLeft,
-                              child: Padding(
-                                padding: const EdgeInsets.all(10.0),
-                                child: Row(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Column(
+            //วนลูปเเสดง 10 รายการ
+            ListView.builder(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              itemCount: 10,
+              itemBuilder: (context, index) {
+                return Padding(
+                  padding: const EdgeInsets.all(5.0),
+                  child: Row(
+                    children: [
+                      //ใบ Lotto
+                      Expanded(
+                        child: SizedBox(
+                          height: 170,
+                          child: Card(
+                            color: const Color.fromRGBO(217, 217, 217, 1),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+                            child: Stack(
+                              children: [
+                                Align(
+                                  alignment: Alignment.topLeft,
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(10.0),
+                                    child: Row(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                        Row(
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
                                           children: [
-                                            Image.asset(
-                                                'assets/images/flying-money.png',
-                                                width: 30),
-                                            const Text(
-                                              'สลากกินแบ่ง Je’ Mild ',
-                                              style: TextStyle(
-                                                color: Colors.black,
-                                                fontSize: 15,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        Row(
-                                          children: [
-                                            Padding(
-                                              padding: const EdgeInsets.only(
-                                                  left: 30.0),
-                                              child: ClipOval(
-                                                child: Image.asset(
-                                                  'assets/images/logoMild.jpeg',
-                                                  width: 60,
-                                                  height: 60,
-                                                  fit: BoxFit.cover,
-                                                ),
-                                              ),
-                                            ),
-                                            SizedBox(
-                                              width: 160,
-                                              height: 50,
-                                              child: Padding(
-                                                padding: const EdgeInsets.only(
-                                                    left: 15.0),
-                                                child: Card(
-                                                  color: const Color.fromRGBO(
-                                                      254, 248, 195, 1.0),
-                                                  shape: RoundedRectangleBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            5),
+                                            Row(
+                                              children: [
+                                                Image.asset(
+                                                    'assets/images/flying-money.png',
+                                                    width: 30),
+                                                const Text(
+                                                  'สลากกินแบ่ง Je’ Mild ',
+                                                  style: TextStyle(
+                                                    color: Colors.black,
+                                                    fontSize: 15,
+                                                    fontWeight: FontWeight.bold,
                                                   ),
-                                                  child: const Center(
-                                                    child: Text(
-                                                      '4  0  7  0  4  1',
-                                                      style: TextStyle(
-                                                        fontSize: 19,
-                                                        color: Colors.black,
-                                                        fontWeight:
-                                                            FontWeight.bold,
+                                                ),
+                                              ],
+                                            ),
+                                            Row(
+                                              children: [
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          left: 30.0),
+                                                  child: ClipOval(
+                                                    child: Image.asset(
+                                                      'assets/images/logoMild.jpeg',
+                                                      width: 60,
+                                                      height: 60,
+                                                      fit: BoxFit.cover,
+                                                    ),
+                                                  ),
+                                                ),
+                                                SizedBox(
+                                                  width: 160,
+                                                  height: 50,
+                                                  child: Padding(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            left: 15.0),
+                                                    child: Card(
+                                                      color:
+                                                          const Color.fromRGBO(
+                                                              254,
+                                                              248,
+                                                              195,
+                                                              1.0),
+                                                      shape:
+                                                          RoundedRectangleBorder(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(5),
+                                                      ),
+                                                      child: Center(
+                                                        child: Text(
+                                                          _randomNumbers,
+                                                          style: TextStyle(
+                                                            fontSize: 19,
+                                                            color: Colors.black,
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                          ),
+                                                        ),
                                                       ),
                                                     ),
                                                   ),
                                                 ),
-                                              ),
+                                              ],
                                             ),
-                                          ],
-                                        ),
-                                        Row(
-                                          children: [
-                                            Padding(
-                                              padding: const EdgeInsets.only(
-                                                  left: 10.0),
-                                              child: Row(
-                                                children: [
-                                                  const Column(
+                                            Row(
+                                              children: [
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          left: 10.0),
+                                                  child: Row(
                                                     children: [
-                                                      Text(
-                                                        '120',
-                                                        style: TextStyle(
-                                                          color: Colors.black,
-                                                          fontSize: 18,
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                        ),
+                                                      const Column(
+                                                        children: [
+                                                          Text(
+                                                            '120',
+                                                            style: TextStyle(
+                                                              color:
+                                                                  Colors.black,
+                                                              fontSize: 18,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                            ),
+                                                          ),
+                                                          Text(
+                                                            'บาท',
+                                                            style: TextStyle(
+                                                              color:
+                                                                  Colors.black,
+                                                              fontSize: 18,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                            ),
+                                                          ),
+                                                        ],
                                                       ),
-                                                      Text(
-                                                        'บาท',
-                                                        style: TextStyle(
-                                                          color: Colors.black,
-                                                          fontSize: 18,
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                        ),
-                                                      ),
+                                                      const SizedBox(
+                                                          height: 10),
+                                                      Column(
+                                                        children: [
+                                                          Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .only(
+                                                                    left: 20.0),
+                                                            child: ClipOval(
+                                                              child:
+                                                                  Image.asset(
+                                                                'assets/images/signature.png',
+                                                                width: 50,
+                                                                height: 50,
+                                                                fit: BoxFit
+                                                                    .cover,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      )
                                                     ],
                                                   ),
-                                                  const SizedBox(height: 10),
-                                                  Column(
-                                                    children: [
-                                                      Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .only(
-                                                                left: 20.0),
-                                                        child: ClipOval(
-                                                          child: Image.asset(
-                                                            'assets/images/signature.png',
-                                                            width: 50,
-                                                            height: 50,
-                                                            fit: BoxFit.cover,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  )
-                                                ],
-                                              ),
-                                            ),
-                                            const Padding(
-                                              padding:
-                                                  EdgeInsets.only(left: 5.0),
-                                              child: Text(
-                                                '1 สิงหาคม 2567',
-                                                style: TextStyle(
-                                                  color: Color.fromRGBO(
-                                                      0, 91, 228, 1),
-                                                  fontSize: 18,
-                                                  fontWeight: FontWeight.bold,
                                                 ),
-                                              ),
+                                                const Padding(
+                                                  padding: EdgeInsets.only(
+                                                      left: 5.0),
+                                                  child: Text(
+                                                    '1 สิงหาคม 2567',
+                                                    style: TextStyle(
+                                                      color: Color.fromRGBO(
+                                                          0, 91, 228, 1),
+                                                      fontSize: 18,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
                                             ),
                                           ],
                                         ),
                                       ],
                                     ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                            const Align(
-                              alignment: Alignment.centerRight,
-                              child: SizedBox(
-                                width: 50,
-                                height: 170,
-                                child: Card(
-                                  color: Colors.white,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.only(
-                                      topRight:
-                                          Radius.circular(15), // ขอบมุมขวาบน
-                                      bottomRight:
-                                          Radius.circular(15), // ขอบมุมขวาล่าง
-                                    ),
                                   ),
-                                  child: Center(
-                                    child: RotatedBox(
-                                      quarterTurns: 3,
-                                      child: Text(
-                                        'เจ๊มายพารวย',
-                                        style: TextStyle(
-                                          color: Colors.black,
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.bold,
+                                ),
+                                const Align(
+                                  alignment: Alignment.centerRight,
+                                  child: SizedBox(
+                                    width: 50,
+                                    height: 170,
+                                    child: Card(
+                                      color: Colors.white,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.only(
+                                          topRight: Radius.circular(
+                                              15), // ขอบมุมขวาบน
+                                          bottomRight: Radius.circular(
+                                              15), // ขอบมุมขวาล่าง
+                                        ),
+                                      ),
+                                      child: Center(
+                                        child: RotatedBox(
+                                          quarterTurns: 3,
+                                          child: Text(
+                                            'เจ๊มายพารวย',
+                                            style: TextStyle(
+                                              color: Colors.black,
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
                                         ),
                                       ),
                                     ),
                                   ),
                                 ),
-                              ),
+                              ],
                             ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 65,
-                    width: 65,
-                    child: FilledButton(
-                      onPressed: () {},
-                      style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all(
-                            const Color.fromRGBO(213, 96, 97, 1)),
-                        shape:
-                            MaterialStateProperty.all<RoundedRectangleBorder>(
-                          RoundedRectangleBorder(
-                            borderRadius:
-                                BorderRadius.circular(32.5), // ทำให้ปุ่มกลม
                           ),
                         ),
                       ),
-                      child: const Center(
-                        // ใช้ Center เพื่อให้อไอคอนอยู่ตรงกลาง
-                        child: Icon(
-                          Icons.shopping_basket,
-                          color: Colors.white,
-                          size: 24,
+                      //ตะกร้า
+                      SizedBox(
+                        height: 65,
+                        width: 65,
+                        child: FilledButton(
+                          onPressed: () {},
+                          style: ButtonStyle(
+                            backgroundColor: MaterialStateProperty.all(
+                              const Color.fromRGBO(213, 96, 97, 1),
+                            ),
+                            shape: MaterialStateProperty.all<
+                                RoundedRectangleBorder>(
+                              RoundedRectangleBorder(
+                                borderRadius:
+                                    BorderRadius.circular(32.5), // ทำให้ปุ่มกลม
+                              ),
+                            ),
+                          ),
+                          child: Center(
+                            child: Icon(
+                              Icons.shopping_basket,
+                              color: Colors.white,
+                              size: 24,
+                            ),
+                          ),
                         ),
-                      ),
-                    ),
+                      )
+                    ],
                   ),
-                ],
-              ),
+                );
+              },
             ),
           ],
         ),
@@ -539,12 +571,41 @@ class _LottoPageState extends State<LottoPage> {
 
   void Search() {}
 
+  // เมธอดสำหรับเรียก API และอัปเดตค่าตัวเลข
+  Future<void> fetchRandomNumbers() async {
+    try {
+      var config = await Configuration.getConfig();
+      var url = config['apiEndpoint'];
+      final response = await http.get(Uri.parse('$url/admin/random?type=1'));
+
+      if (response.statusCode == 200) {
+        // แปลง JSON ที่ได้รับให้เป็น Map
+        final data = json.decode(response.body);
+        
+        // ดึง array ของตัวเลขจากคีย์ 'winningNumbers'
+        List<dynamic> numbers = data['winningNumbers'];
+        
+        // รวมตัวเลขเป็นสตริงโดยแยกด้วยช่องว่าง
+        setState(() {
+          _randomNumbers = numbers.join('  ');
+        });
+      } else {
+        setState(() {
+          _randomNumbers = 'การสุ่มล้มเหลว';
+        });
+      }
+    } catch (e) {
+      setState(() {
+        _randomNumbers = 'เกิดข้อผิดพลาด: $e';
+      });
+    }
+  }
+
   void Logout() {
-     Navigator.push(
-                context,
-                MaterialPageRoute(
-                builder: (context) => Logopage(),
-                )
-     );
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => Logopage(),
+        ));
   }
 }
