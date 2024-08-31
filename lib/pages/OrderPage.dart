@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:mini_project/pages/LoginPage.dart';
+import 'package:mini_project/pages/LogoPage.dart';
 import 'package:mini_project/pages/LottoPage.dart';
 import 'package:mini_project/pages/OrderPage.dart';
 import 'package:mini_project/pages/profile.dart';
@@ -1666,7 +1667,7 @@ class _OrderPageState extends State<OrderPage> {
      Navigator.push(
                 context,
                 MaterialPageRoute(
-                builder: (context) => Loginpage(),
+                builder: (context) =>Logopage(),
                 )
      );
   }
