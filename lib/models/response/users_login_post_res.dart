@@ -19,7 +19,7 @@ class UsersLoginPostResponse {
 
     factory UsersLoginPostResponse.fromJson(Map<String, dynamic> json) => UsersLoginPostResponse(
         message: json["message"],
-        user: User.fromJson(json["user"]),
+        user: User.fromJson(json["Users"]),
     );
 
     Map<String, dynamic> toJson() => {
