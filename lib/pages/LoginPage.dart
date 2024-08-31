@@ -175,11 +175,9 @@ class _LoginpageState extends State<Loginpage> {
       var value = await http.post(Uri.parse('$API_ENDPOINT/login'),
           headers: {"Content-Type": "application/json; charset=utf-8"},
           body: usersLoginPostRequestToJson(data));
-          log('Response Body: ${value.body}');
+          // log('Response Body: ${value.body}');
       UsersLoginPostResponse users = usersLoginPostResponseFromJson(value.body);
       // log(users.users.email);
-      // log('Response Body: ${value.body}');
-
       setState(() {
         text = '';
       });

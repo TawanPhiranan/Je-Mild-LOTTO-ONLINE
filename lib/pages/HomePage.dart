@@ -10,7 +10,7 @@ import 'package:mini_project/pages/OrderPage.dart';
 import 'package:mini_project/pages/profile.dart';
 import 'package:mini_project/pages/walletPage.dart';
 import 'package:mini_project/pages/HomePage.dart';
-import 'package:http/http.dart' as http;
+
 
 class Homepage extends StatefulWidget {
   //รับ userID
