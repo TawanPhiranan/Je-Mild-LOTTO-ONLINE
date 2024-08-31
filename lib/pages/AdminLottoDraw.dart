@@ -1,6 +1,11 @@
+import 'dart:convert';
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:mini_project/config/config.dart';
 import 'package:mini_project/pages/AdminAllRandom.dart';
 import 'package:mini_project/pages/AdminRandomNumber.dart';
+import 'package:http/http.dart' as http;
 
 class Adminlottodraw extends StatefulWidget {
   const Adminlottodraw({super.key});
@@ -10,6 +15,16 @@ class Adminlottodraw extends StatefulWidget {
 }
 
 class _AdminlottodrawState extends State<Adminlottodraw> {
+  late Future<void> loadData;
+  // late Future<void> sendRandomType;
+
+  @override
+  void initState() {
+    super.initState();
+    // loadData = loadDataAsync();
+    // loadData = sendRandomType();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -165,21 +180,94 @@ class _AdminlottodrawState extends State<Adminlottodraw> {
     );
   }
 
-  void AllRandom() {
+  Future<Map<String, dynamic>> sendRandomType(String type) async {
+    try {
+      var config = await Configuration.getConfig();
+      var url = config['apiEndpoint'];
+      var response = await http.get(Uri.parse('$url/admin/random?type=$type'));
+
+      if (response.statusCode == 200) {
+        // ถ้าการเรียก API สำเร็จ
+        final dataRandom = json.decode(response.body);
+        print(dataRandom);
+        return dataRandom; // ส่งกลับข้อมูลที่ได้รับ
+      } else {
+        // ถ้า API ส่งสถานะที่ไม่ใช่ 200
+        log('Error: ${response.statusCode}');
+        return {}; // ส่งกลับข้อมูลว่างเมื่อเกิดข้อผิดพลาด
+      }
+    } catch (e) {
+      // จัดการข้อผิดพลาดเมื่อเกิดปัญหาในการเรียก API
+      log('Error: $e');
+      return {}; // ส่งกลับข้อมูลว่างเมื่อเกิดข้อผิดพลาด
+    }
+  }
+
+  Future<void> AllRandom() async {
+    const type = '1';
+    final dataRandom =
+        await sendRandomType(type); // รอให้ส่งข้อมูลเสร็จและเก็บผลลัพธ์
+
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => const Adminallrandom(),
+        builder: (context) =>
+            Adminallrandom(dataRandom: dataRandom), // ใช้ dataRandom ที่ได้รับ
       ),
     );
   }
 
-  void RandomNumber() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => const Adminrandomnumber(),
-      ),
+  Future<void> RandomNumber() async {
+  const type = '2';
+  try {
+    final dataRandom = await sendRandomType(type);
+
+    if (dataRandom.isEmpty) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text("เลขที่ขายออกทั้งหมด"),
+            content: Text("คำสั่งซื้อวันนี้น้อยเกินไป"),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop(); // Close the dialog
+                },
+                child: Text("ปิด"),
+              ),
+            ],
+          );
+        },
+      );
+    } else {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => Adminrandomnumber(dataRandom: dataRandom),
+        ),
+      );
+    }
+  } catch (error) {
+    // Handle error if sending the request fails
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("เกิดข้อผิดพลาด"),
+          content: Text("ไม่สามารถดึงข้อมูลได้: $error"),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+              },
+              child: Text("ปิด"),
+            ),
+          ],
+        );
+      },
     );
   }
+}
+
 }
