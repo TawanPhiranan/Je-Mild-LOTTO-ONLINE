@@ -778,39 +778,12 @@ class _OrderPageState extends State<OrderPage> {
                                 ),
                               ),
                             ),
-                            SizedBox(
-                              height: 65,
-                              width: 65,
-                              child: FilledButton(
-                                onPressed: () {},
-                                style: ButtonStyle(
-                                  backgroundColor: MaterialStateProperty.all(
-                                      const Color.fromRGBO(213, 96, 97, 1)),
-                                ),
-                                child: const Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Icon(
-                                      Icons.shopping_basket,
-                                      color: Colors.white,
-                                      size: 20.0,
-                                    ),
-                                    Text(
-                                      'สั่งซื้อ',
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 13,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
+                            
                           ],
                         ),
                       ),
                     ] else if (_Index == 1) ...[
-                      const SizedBox(
+                       SizedBox(
                         width: 390,
                         height: 240,
                         child: Card(
@@ -824,7 +797,7 @@ class _OrderPageState extends State<OrderPage> {
                             child: Column(
                               children: [
                                 Text(
-                                  "2 สิงหาคม 2567",
+                                  draws[0].drawDate,
                                   style: TextStyle(
                                     color: Colors.white,
                                     fontSize: 20,
@@ -854,7 +827,7 @@ class _OrderPageState extends State<OrderPage> {
                                     padding: EdgeInsets.symmetric(
                                         vertical: 5, horizontal: 70),
                                     child: Text(
-                                      "407041",
+                                      draws[4].winningNumber,
                                       style: TextStyle(
                                         fontSize: 38,
                                         fontWeight: FontWeight.bold,
@@ -869,7 +842,7 @@ class _OrderPageState extends State<OrderPage> {
                           ),
                         ),
                       ),
-                      const Row(
+                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           SizedBox(
@@ -909,7 +882,7 @@ class _OrderPageState extends State<OrderPage> {
                                         padding: EdgeInsets.symmetric(
                                             vertical: 5, horizontal: 20),
                                         child: Text(
-                                          "848197",
+                                          draws[3].winningNumber,
                                           style: TextStyle(
                                             fontSize: 16,
                                             fontWeight: FontWeight.bold,
@@ -960,7 +933,7 @@ class _OrderPageState extends State<OrderPage> {
                                         padding: EdgeInsets.symmetric(
                                             vertical: 5, horizontal: 20),
                                         child: Text(
-                                          "903093",
+                                          draws[2].winningNumber,
                                           style: TextStyle(
                                             fontSize: 16,
                                             fontWeight: FontWeight.bold,
@@ -976,7 +949,7 @@ class _OrderPageState extends State<OrderPage> {
                           ),
                         ],
                       ),
-                      const Row(
+                      Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           SizedBox(
@@ -1016,7 +989,7 @@ class _OrderPageState extends State<OrderPage> {
                                         padding: EdgeInsets.symmetric(
                                             vertical: 5, horizontal: 20),
                                         child: Text(
-                                          "504956",
+                                          draws[1].winningNumber,
                                           style: TextStyle(
                                             fontSize: 16,
                                             fontWeight: FontWeight.bold,
@@ -1067,7 +1040,7 @@ class _OrderPageState extends State<OrderPage> {
                                         padding: EdgeInsets.symmetric(
                                             vertical: 5, horizontal: 20),
                                         child: Text(
-                                          "505561",
+                                          draws[0].winningNumber,
                                           style: TextStyle(
                                             fontSize: 16,
                                             fontWeight: FontWeight.bold,
