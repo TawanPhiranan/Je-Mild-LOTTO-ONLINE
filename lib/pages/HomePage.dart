@@ -4,12 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:mini_project/config/config.dart';
 import 'package:mini_project/models/response/users_login_post_res.dart';
 import 'package:mini_project/pages/LoginPage.dart';
+import 'package:mini_project/pages/LogoPage.dart';
 import 'package:mini_project/pages/LottoPage.dart';
 import 'package:mini_project/pages/OrderPage.dart';
 import 'package:mini_project/pages/profile.dart';
 import 'package:mini_project/pages/walletPage.dart';
 import 'package:mini_project/pages/HomePage.dart';
-import 'package:http/http.dart' as http;
+
 
 class Homepage extends StatefulWidget {
   //รับ userID
@@ -24,15 +25,12 @@ class _HomepageState extends State<Homepage> {
   int _selectedIndex = 0; // Track the selected index
 
   late UsersLoginPostResponse users;
-  
+
   @override
   void initState() {
     super.initState();
-    // Log the userId to see its value
-    log('Homepage initialized with userId: ${widget.userId}');
   }
   // UsersLoginPostResponse users = usersLoginPostResponseFromJson(value.body);
-  
 
   void _onItemTapped(int index) {
     setState(() {
@@ -82,6 +80,7 @@ class _HomepageState extends State<Homepage> {
 
   @override
   Widget build(BuildContext context) {
+    log('Homepage initialized with userId: ${widget.userId}');
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color.fromRGBO(177, 36, 24, 1),
@@ -89,14 +88,8 @@ class _HomepageState extends State<Homepage> {
           'Je’ Mild',
           style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
         ),
-        leading: IconButton(
-          icon:
-              const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white),
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-        ),
-       actions: [
+        automaticallyImplyLeading: false, // ปิดปุ่มกลับอัตโนมัติ
+        actions: [
           PopupMenuButton<String>(
             icon: const Icon(
               Icons.more_vert,
@@ -183,7 +176,7 @@ class _HomepageState extends State<Homepage> {
       body: SingleChildScrollView(
         child: Center(
           child: Padding(
-            padding: const EdgeInsets.fromLTRB(10, 30, 10, 10),
+            padding: const EdgeInsets.fromLTRB(10, 30, 10, 30),
             child: Column(
               children: [
                 SizedBox(
@@ -277,7 +270,7 @@ class _HomepageState extends State<Homepage> {
                             style: FilledButton.styleFrom(
                               backgroundColor:
                                   const Color.fromRGBO(245, 210, 99, 1),
-                              fixedSize: const Size(175, 110),
+                              fixedSize: const Size(165, 110),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(16),
                               ),
@@ -294,7 +287,7 @@ class _HomepageState extends State<Homepage> {
                                   'Lotto',
                                   style: TextStyle(
                                       color: Color.fromRGBO(77, 77, 77, 1),
-                                      fontSize: 20,
+                                      fontSize: 16,
                                       fontWeight: FontWeight.bold),
                                 ),
                               ],
@@ -310,7 +303,7 @@ class _HomepageState extends State<Homepage> {
                             style: FilledButton.styleFrom(
                               backgroundColor:
                                   const Color.fromRGBO(245, 210, 99, 1),
-                              fixedSize: const Size(175, 110),
+                              fixedSize: const Size(165, 110),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(
                                     16), // ปรับความโค้งของมุม
@@ -328,7 +321,7 @@ class _HomepageState extends State<Homepage> {
                                   'เช็คผลรางวัล',
                                   style: TextStyle(
                                       color: Color.fromRGBO(77, 77, 77, 1),
-                                      fontSize: 20,
+                                      fontSize: 16,
                                       fontWeight: FontWeight.bold),
                                 ),
                               ],
@@ -546,23 +539,25 @@ class _HomepageState extends State<Homepage> {
       ),
     );
   }
+
   void Logout() {
-     Navigator.push(
-                context,
-                MaterialPageRoute(
-                builder: (context) => Loginpage(),
-                )
-     );
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => Logopage(),
+        ));
   }
+
   void Lotto() {
-     Navigator.push(
+    Navigator.push(
         context,
         MaterialPageRoute(
           builder: (context) => LottoPage(userId: widget.userId),
         ));
   }
+
   void CheckPage() {
-     Navigator.push(
+    Navigator.push(
         context,
         MaterialPageRoute(
           builder: (context) => OrderPage(userId: widget.userId),

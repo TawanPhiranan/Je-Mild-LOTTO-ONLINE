@@ -242,21 +242,21 @@ class _RegisterPageState extends State<RegisterPage> {
         AmountmoneyCtl.text.isEmpty) {
       log("----");
       showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              title: Text('กรุณากรอกข้อมูลให้ครบ'),
-              actions: <Widget>[
-                TextButton(
-                  onPressed: () {
-                     Navigator.of(context).pop(); // ปิด dialog
-                  },
-                  child: const Text('ตกลง'),
-                ),
-              ],
-            );
-          },
-        );
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('กรุณากรอกข้อมูลให้ครบ'),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop(); // ปิด dialog
+                },
+                child: const Text('ตกลง'),
+              ),
+            ],
+          );
+        },
+      );
       return;
     }
 
@@ -302,12 +302,11 @@ class _RegisterPageState extends State<RegisterPage> {
         // ตรวจสอบสถานะการตอบกลับ
         String errorMessage;
         if (response.statusCode == 409) {
-          errorMessage = "อีเมล หรือ เบอร์โทรศัพท์ ถูกใช้แล้ว : กรุณาลองอีกครั้ง";
-        } 
-        else if(response.statusCode == 400) {
+          errorMessage =
+              "อีเมล หรือ เบอร์โทรศัพท์ ถูกใช้แล้ว : กรุณาลองอีกครั้ง";
+        } else if (response.statusCode == 400) {
           errorMessage = 'ยืนยันรหัสผ่านไม่ถูกต้อง : กรุณาลองอีกครั้ง';
-        }
-        else{
+        } else {
           errorMessage = 'เกิดข้อผิดพลาด : กรุณาลองอีกครั้ง';
         }
         log("Insert Error ${response.statusCode}: $errorMessage");
@@ -349,6 +348,5 @@ class _RegisterPageState extends State<RegisterPage> {
         },
       );
     });
-    
   }
 }

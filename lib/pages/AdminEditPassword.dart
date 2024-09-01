@@ -177,11 +177,11 @@ class _AdmineditpasswordState extends State<Admineditpassword> {
   }
 
   void _changePassword() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => const Adminprofile(),
-      ),
-    );
+    // Navigator.push(
+    //   context,
+    //   MaterialPageRoute(
+    //     builder: (context) => const Adminprofile(),
+    //   ),
+    // );
   }
 }

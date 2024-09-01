@@ -1,5 +1,8 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:mini_project/pages/AdminLottoDraw.dart';
+import 'package:mini_project/pages/AdminProfile.dart';
 import 'package:mini_project/pages/LogoPage.dart';
 
 class Adiminhomepage extends StatefulWidget {
@@ -11,8 +14,35 @@ class Adiminhomepage extends StatefulWidget {
 }
 
 class _AdiminhomepageState extends State<Adiminhomepage> {
+  int _selectedIndex = 0;
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index; // Update the selected index
+    });
+
+    // Navigate to different pages based on the selected index
+    switch (index) {
+      case 0:
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => Adiminhomepage(userId: widget.userId)));
+        break;
+      case 1:
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => Adminprofile(
+                      userId: widget.userId,
+                    )));
+        break;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    log('Adiminhomepage initialized with userId: ${widget.userId}');
     // คำนวณความสูงของหน้าจอ
     final screenHeight = MediaQuery.of(context).size.height;
 
@@ -23,6 +53,7 @@ class _AdiminhomepageState extends State<Adiminhomepage> {
           'Je’ Mild',
           style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
         ),
+        automaticallyImplyLeading: false, // ปิดปุ่มกลับอัตโนมัติ
         actions: [
           PopupMenuButton<String>(
             icon: Icon(
@@ -55,7 +86,7 @@ class _AdiminhomepageState extends State<Adiminhomepage> {
                             child: const Text('ไม่'),
                           ),
                           FilledButton(
-                            onPressed: () {},
+                            onPressed: Logout,
                             child: const Text('ใช่'),
                           ),
                         ],
@@ -73,6 +104,26 @@ class _AdiminhomepageState extends State<Adiminhomepage> {
             ],
           ),
         ],
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.home,
+            ),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.account_circle),
+            label: 'Profile',
+          ),
+        ],
+        unselectedItemColor: const Color.fromARGB(255, 199, 199, 199),
+        selectedItemColor: Colors.white,
+        backgroundColor: const Color.fromRGBO(177, 36, 24, 1),
+        currentIndex: _selectedIndex, // Set the current index
+        onTap: _onItemTapped, // Handle tap
+        type: BottomNavigationBarType.fixed,
       ),
       body: Column(
         children: [
@@ -108,10 +159,10 @@ class _AdiminhomepageState extends State<Adiminhomepage> {
             child: SingleChildScrollView(
               child: Column(
                 children: [
-                  const SizedBox(height: 10),
+                  const SizedBox(height: 20),
                   SizedBox(
-                    width: 390,
-                    height: 530,
+                    width: 360,
+                    height: 500,
                     child: Container(
                       decoration: BoxDecoration(
                         color: const Color.fromRGBO(213, 96, 97, 1),
@@ -126,7 +177,7 @@ class _AdiminhomepageState extends State<Adiminhomepage> {
                               "1 สิงหาคม 2567",
                               style: TextStyle(
                                 color: Colors.white,
-                                fontSize: 22,
+                                fontSize: 20,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
@@ -134,7 +185,7 @@ class _AdiminhomepageState extends State<Adiminhomepage> {
                               "รางวัลที่ 1",
                               style: TextStyle(
                                 color: Colors.white,
-                                fontSize: 36,
+                                fontSize: 34,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
@@ -142,7 +193,7 @@ class _AdiminhomepageState extends State<Adiminhomepage> {
                               "รางวัลละ 100,000 บาท",
                               style: TextStyle(
                                 color: Color.fromRGBO(75, 9, 9, 1),
-                                fontSize: 16,
+                                fontSize: 14,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
@@ -157,7 +208,7 @@ class _AdiminhomepageState extends State<Adiminhomepage> {
                                 child: Text(
                                   "407041",
                                   style: TextStyle(
-                                    fontSize: 48,
+                                    fontSize: 44,
                                     fontWeight: FontWeight.bold,
                                     color: Colors.black,
                                   ),
@@ -184,7 +235,7 @@ class _AdiminhomepageState extends State<Adiminhomepage> {
                                       "รางวัลละ 70,000 บาท",
                                       style: TextStyle(
                                         color: Color.fromRGBO(75, 9, 9, 1),
-                                        fontSize: 16,
+                                        fontSize: 14,
                                         fontWeight: FontWeight.bold,
                                       ),
                                     ),
@@ -222,7 +273,7 @@ class _AdiminhomepageState extends State<Adiminhomepage> {
                                       "รางวัลละ 50,000 บาท",
                                       style: TextStyle(
                                         color: Color.fromRGBO(75, 9, 9, 1),
-                                        fontSize: 16,
+                                        fontSize: 14,
                                         fontWeight: FontWeight.bold,
                                       ),
                                     ),
@@ -266,7 +317,7 @@ class _AdiminhomepageState extends State<Adiminhomepage> {
                                       "รางวัลละ 25,000 บาท",
                                       style: TextStyle(
                                         color: Color.fromRGBO(75, 9, 9, 1),
-                                        fontSize: 16,
+                                        fontSize: 14,
                                         fontWeight: FontWeight.bold,
                                       ),
                                     ),
@@ -304,7 +355,7 @@ class _AdiminhomepageState extends State<Adiminhomepage> {
                                       "รางวัลละ 10,000 บาท",
                                       style: TextStyle(
                                         color: Color.fromRGBO(75, 9, 9, 1),
-                                        fontSize: 16,
+                                        fontSize: 14,
                                         fontWeight: FontWeight.bold,
                                       ),
                                     ),
@@ -336,7 +387,7 @@ class _AdiminhomepageState extends State<Adiminhomepage> {
                   ),
                   const SizedBox(height: 10),
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(10, 20, 10, 10),
+                    padding: const EdgeInsets.fromLTRB(15, 20, 15, 20),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
@@ -347,7 +398,7 @@ class _AdiminhomepageState extends State<Adiminhomepage> {
                               style: FilledButton.styleFrom(
                                 backgroundColor:
                                     const Color.fromRGBO(177, 36, 24, 1),
-                                fixedSize: const Size(180, 110),
+                                fixedSize: const Size(170, 100),
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(16),
                                 ),
@@ -375,7 +426,7 @@ class _AdiminhomepageState extends State<Adiminhomepage> {
                               style: FilledButton.styleFrom(
                                 backgroundColor:
                                     const Color.fromRGBO(108, 108, 108, 1),
-                                fixedSize: const Size(180, 110),
+                                fixedSize: const Size(170, 100),
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(16),
                                 ),
@@ -415,6 +466,7 @@ class _AdiminhomepageState extends State<Adiminhomepage> {
       ),
     );
   }
+
   void reset() {
     Navigator.push(
       context,
@@ -422,5 +474,13 @@ class _AdiminhomepageState extends State<Adiminhomepage> {
         builder: (context) => const Logopage(),
       ),
     );
+  }
+
+  void Logout() {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => Logopage(),
+        ));
   }
 }

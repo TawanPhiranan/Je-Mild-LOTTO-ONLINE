@@ -10,25 +10,25 @@ String usersLoginPostResponseToJson(UsersLoginPostResponse data) => json.encode(
 
 class UsersLoginPostResponse {
     String message;
-    Users users;
+    User user;
 
     UsersLoginPostResponse({
         required this.message,
-        required this.users,
+        required this.user,
     });
 
     factory UsersLoginPostResponse.fromJson(Map<String, dynamic> json) => UsersLoginPostResponse(
         message: json["message"],
-        users: Users.fromJson(json["Users"]),
+        user: User.fromJson(json["Users"]),
     );
 
     Map<String, dynamic> toJson() => {
         "message": message,
-        "Users": users.toJson(),
+        "user": user.toJson(),
     };
 }
 
-class Users {
+class User {
     int userId;
     String username;
     String phone;
@@ -37,7 +37,7 @@ class Users {
     dynamic img;
     int typeId;
 
-    Users({
+    User({
         required this.userId,
         required this.username,
         required this.phone,
@@ -47,7 +47,7 @@ class Users {
         required this.typeId,
     });
 
-    factory Users.fromJson(Map<String, dynamic> json) => Users(
+    factory User.fromJson(Map<String, dynamic> json) => User(
         userId: json["userID"],
         username: json["username"],
         phone: json["phone"],
