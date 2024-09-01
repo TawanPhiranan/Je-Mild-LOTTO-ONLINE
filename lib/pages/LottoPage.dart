@@ -23,13 +23,13 @@ class LottoPage extends StatefulWidget {
 
 class _LottoPageState extends State<LottoPage> {
   int _selectedIndex = 2; // Track the selected index
-  String _randomNumbers = 'กำลังสุ่ม...'; // เก็บค่าตัวเลขที่สุ่มได้
+  List<String> _randomNumbers = [];
+  late Future<void> loadData;
 
   @override
   void initState() {
     super.initState();
-    // Log the userId to see its value
-    log('LottoPage initialized with userId: ${widget.userId}');
+    fetchRandomNumbers();
   }
 
   void _onItemTapped(int index) {
@@ -80,6 +80,7 @@ class _LottoPageState extends State<LottoPage> {
 
   @override
   Widget build(BuildContext context) {
+    log('LottoPage initialized with userId: ${widget.userId}');
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color.fromRGBO(177, 36, 24, 1),
@@ -316,10 +317,11 @@ class _LottoPageState extends State<LottoPage> {
             ),
             const SizedBox(height: 10),
             //วนลูปเเสดง 10 รายการ
+
             ListView.builder(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
-              itemCount: 10,
+              itemCount: _randomNumbers.length,
               itemBuilder: (context, index) {
                 return Padding(
                   padding: const EdgeInsets.all(5.0),
@@ -400,7 +402,7 @@ class _LottoPageState extends State<LottoPage> {
                                                       ),
                                                       child: Center(
                                                         child: Text(
-                                                          _randomNumbers,
+                                                          _randomNumbers[index],
                                                           style: TextStyle(
                                                             fontSize: 19,
                                                             color: Colors.black,
@@ -571,32 +573,31 @@ class _LottoPageState extends State<LottoPage> {
 
   void Search() {}
 
-  // เมธอดสำหรับเรียก API และอัปเดตค่าตัวเลข
+// เมธอดสำหรับเรียก API และสุ่มตัวเลข
   Future<void> fetchRandomNumbers() async {
     try {
       var config = await Configuration.getConfig();
       var url = config['apiEndpoint'];
-      final response = await http.get(Uri.parse('$url/admin/random?type=1'));
+      final response = await http.get(Uri.parse('$url/order/random'));
+      log(response.body);
 
       if (response.statusCode == 200) {
-        // แปลง JSON ที่ได้รับให้เป็น Map
-        final data = json.decode(response.body);
-        
-        // ดึง array ของตัวเลขจากคีย์ 'winningNumbers'
-        List<dynamic> numbers = data['winningNumbers'];
-        
-        // รวมตัวเลขเป็นสตริงโดยแยกด้วยช่องว่าง
+        // แปลง JSON เป็น Dart Map
+        final Map<String, dynamic> data = jsonDecode(response.body);
+        // ดึง List ของ numbers
+        final List<dynamic> numbers = data['winningNumbers'];
         setState(() {
-          _randomNumbers = numbers.join('  ');
+          // แปลง List ของ numbers เป็น List ของ String
+          _randomNumbers = numbers.map((item) => item.toString()).toList();
         });
       } else {
         setState(() {
-          _randomNumbers = 'การสุ่มล้มเหลว';
+          _randomNumbers = ['Error: ${response.statusCode}'];
         });
       }
     } catch (e) {
       setState(() {
-        _randomNumbers = 'เกิดข้อผิดพลาด: $e';
+        _randomNumbers = ['Error: $e'];
       });
     }
   }

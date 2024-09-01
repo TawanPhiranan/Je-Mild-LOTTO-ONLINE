@@ -377,4 +377,7 @@ class _AdminallrandomState extends State<Adminallrandom> {
           ),
         ));
   }
+  void inputnumber(){
+
+  }
 }

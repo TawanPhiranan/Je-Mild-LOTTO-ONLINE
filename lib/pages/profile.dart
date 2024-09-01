@@ -26,6 +26,7 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   int _selectedIndex = 4;
+  
 
   late EditUserIdGetResponse user;
   late Future<void> loadData;
@@ -203,38 +204,22 @@ class _ProfilePageState extends State<ProfilePage> {
                 children: [
                   const SizedBox(height: 40),
                   Center(
-                    child: Stack(
+                    child: const Stack(
                       children: [
-                        const CircleAvatar(
+                        CircleAvatar(
                           radius: 100,
                           backgroundImage:
                               AssetImage('assets/images/profile.jpg'),
                               //  Image.asset('assets/imag')
                         ),
-                        Positioned(
-                          bottom: 0,
-                          right: 0,
-                          child: GestureDetector(
-                            onTap: () {
-                              _editProfileImage();
-                            },
-                            child: CircleAvatar(
-                              radius: 25,
-                              backgroundColor: Colors.grey[800],
-                              child: const Icon(
-                                Icons.camera_alt,
-                                color: Colors.white,
-                              ),
-                            ),
-                          ),
-                        ),
+                       
                       ],
                     ),
                   ),
                   const SizedBox(height: 10),
                   Text(
                     user.username,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
                     ),
@@ -436,7 +421,7 @@ class _ProfilePageState extends State<ProfilePage> {
     Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => Logopage(),
+          builder: (context) => const Logopage(),
         ));
   }
 }
