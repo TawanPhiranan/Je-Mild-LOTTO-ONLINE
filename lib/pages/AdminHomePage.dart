@@ -462,7 +462,7 @@ class _AdiminhomepageState extends State<Adiminhomepage> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => const Adminlottodraw(),
+        builder: (context) => Adminlottodraw(userId: widget.userId),
       ),
     );
   }

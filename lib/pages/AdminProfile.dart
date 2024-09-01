@@ -163,29 +163,13 @@ class _AdminprofileState extends State<Adminprofile> {
                   const SizedBox(height: 40),
                   Center(
                     child: Stack(
-                      children: [
-                        const CircleAvatar(
+                      children: const [
+                        CircleAvatar(
                           radius: 100,
                           backgroundImage:
                               AssetImage('assets/images/admin.jpg'),
                         ),
-                        Positioned(
-                          bottom: 0,
-                          right: 0,
-                          child: GestureDetector(
-                            onTap: () {
-                              editProfileImage();
-                            },
-                            child: CircleAvatar(
-                              radius: 25,
-                              backgroundColor: Colors.grey[800],
-                              child: const Icon(
-                                Icons.camera_alt,
-                                color: Colors.white,
-                              ),
-                            ),
-                          ),
-                        ),
+                        
                       ],
                     ),
                   ),

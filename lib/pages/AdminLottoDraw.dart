@@ -6,9 +6,11 @@ import 'package:mini_project/config/config.dart';
 import 'package:mini_project/pages/AdminAllRandom.dart';
 import 'package:mini_project/pages/AdminRandomNumber.dart';
 import 'package:http/http.dart' as http;
+import 'package:mini_project/pages/LogoPage.dart';
 
 class Adminlottodraw extends StatefulWidget {
-  const Adminlottodraw({super.key});
+  int userId;
+  Adminlottodraw({super.key, required this.userId});
 
   @override
   State<Adminlottodraw> createState() => _AdminlottodrawState();
@@ -27,6 +29,7 @@ class _AdminlottodrawState extends State<Adminlottodraw> {
 
   @override
   Widget build(BuildContext context) {
+    log('userId: ${widget.userId}');
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color.fromRGBO(177, 36, 24, 1),
@@ -73,7 +76,7 @@ class _AdminlottodrawState extends State<Adminlottodraw> {
                             child: const Text('ไม่'),
                           ),
                           FilledButton(
-                            onPressed: () {},
+                            onPressed: Logout,
                             child: const Text('ใช่'),
                           ),
                         ],
@@ -180,6 +183,14 @@ class _AdminlottodrawState extends State<Adminlottodraw> {
     );
   }
 
+  void Logout() {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => Logopage(),
+        ));
+  }
+
   Future<Map<String, dynamic>> sendRandomType(String type) async {
     try {
       var config = await Configuration.getConfig();
@@ -212,23 +223,50 @@ class _AdminlottodrawState extends State<Adminlottodraw> {
       context,
       MaterialPageRoute(
         builder: (context) =>
-            Adminallrandom(dataRandom: dataRandom), // ใช้ dataRandom ที่ได้รับ
+            Adminallrandom(dataRandom: dataRandom, userId: widget.userId),
       ),
     );
   }
 
   Future<void> RandomNumber() async {
-  const type = '2';
-  try {
-    final dataRandom = await sendRandomType(type);
+    const type = '2';
+    try {
+      final dataRandom = await sendRandomType(type);
 
-    if (dataRandom.isEmpty) {
+      if (dataRandom.isEmpty) {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text("เลขที่ขายออกทั้งหมด"),
+              content: Text("คำสั่งซื้อวันนี้น้อยเกินไป"),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop(); // Close the dialog
+                  },
+                  child: Text("ปิด"),
+                ),
+              ],
+            );
+          },
+        );
+      } else {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => Adminrandomnumber(dataRandom: dataRandom, userId: widget.userId),
+          ),
+        );
+      }
+    } catch (error) {
+      // Handle error if sending the request fails
       showDialog(
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text("เลขที่ขายออกทั้งหมด"),
-            content: Text("คำสั่งซื้อวันนี้น้อยเกินไป"),
+            title: Text("เกิดข้อผิดพลาด"),
+            content: Text("ไม่สามารถดึงข้อมูลได้: $error"),
             actions: [
               TextButton(
                 onPressed: () {
@@ -240,34 +278,6 @@ class _AdminlottodrawState extends State<Adminlottodraw> {
           );
         },
       );
-    } else {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => Adminrandomnumber(dataRandom: dataRandom),
-        ),
-      );
     }
-  } catch (error) {
-    // Handle error if sending the request fails
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text("เกิดข้อผิดพลาด"),
-          content: Text("ไม่สามารถดึงข้อมูลได้: $error"),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop(); // Close the dialog
-              },
-              child: Text("ปิด"),
-            ),
-          ],
-        );
-      },
-    );
   }
-}
-
 }

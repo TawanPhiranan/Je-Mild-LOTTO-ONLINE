@@ -5,6 +5,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:mini_project/config/config.dart';
+import 'package:mini_project/models/request/user_buy_post_req.dart';
 import 'package:mini_project/pages/LogoPage.dart';
 import 'package:mini_project/pages/LottoPage.dart';
 import 'package:mini_project/pages/OrderPage.dart';
@@ -25,6 +26,8 @@ class _LottoPageState extends State<LottoPage> {
   int _selectedIndex = 2; // Track the selected index
   List<String> _randomNumbers = [];
   late Future<void> loadData;
+  String? selectedLottoNumber;
+  int failed = 0;
 
   @override
   void initState() {
@@ -323,6 +326,7 @@ class _LottoPageState extends State<LottoPage> {
               physics: const NeverScrollableScrollPhysics(),
               itemCount: _randomNumbers.length,
               itemBuilder: (context, index) {
+                final lottoNumber = _randomNumbers[index];
                 return Padding(
                   padding: const EdgeInsets.all(5.0),
                   child: Row(
@@ -402,8 +406,9 @@ class _LottoPageState extends State<LottoPage> {
                                                       ),
                                                       child: Center(
                                                         child: Text(
-                                                          _randomNumbers[index],
-                                                          style: TextStyle(
+                                                          lottoNumber,
+                                                          style:
+                                                              const TextStyle(
                                                             fontSize: 19,
                                                             color: Colors.black,
                                                             fontWeight:
@@ -418,76 +423,54 @@ class _LottoPageState extends State<LottoPage> {
                                             ),
                                             Row(
                                               children: [
-                                                Padding(
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                          left: 10.0),
-                                                  child: Row(
-                                                    children: [
-                                                      const Column(
-                                                        children: [
-                                                          Text(
-                                                            '120',
-                                                            style: TextStyle(
-                                                              color:
-                                                                  Colors.black,
-                                                              fontSize: 18,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold,
-                                                            ),
+                                                Row(
+                                                  children: [
+                                                    // Column สำหรับแสดงราคาและหน่วยเงิน
+                                                    const Column(
+                                                      children: [
+                                                        const Text(
+                                                          '120',
+                                                          style: TextStyle(
+                                                            color: Colors.black,
+                                                            fontSize: 18,
+                                                            fontWeight:
+                                                                FontWeight.bold,
                                                           ),
-                                                          Text(
-                                                            'บาท',
-                                                            style: TextStyle(
-                                                              color:
-                                                                  Colors.black,
-                                                              fontSize: 18,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold,
-                                                            ),
+                                                        ),
+                                                        Text(
+                                                          'บาท',
+                                                          style: TextStyle(
+                                                            color: Colors.black,
+                                                            fontSize: 18,
+                                                            fontWeight:
+                                                                FontWeight.bold,
                                                           ),
-                                                        ],
-                                                      ),
-                                                      const SizedBox(
-                                                          height: 10),
-                                                      Column(
-                                                        children: [
-                                                          Padding(
-                                                            padding:
-                                                                const EdgeInsets
-                                                                    .only(
-                                                                    left: 20.0),
-                                                            child: ClipOval(
-                                                              child:
-                                                                  Image.asset(
-                                                                'assets/images/signature.png',
-                                                                width: 50,
-                                                                height: 50,
-                                                                fit: BoxFit
-                                                                    .cover,
-                                                              ),
-                                                            ),
-                                                          ),
-                                                        ],
-                                                      )
-                                                    ],
-                                                  ),
-                                                ),
-                                                const Padding(
-                                                  padding: EdgeInsets.only(
-                                                      left: 5.0),
-                                                  child: Text(
-                                                    '1 สิงหาคม 2567',
-                                                    style: TextStyle(
-                                                      color: Color.fromRGBO(
-                                                          0, 91, 228, 1),
-                                                      fontSize: 18,
-                                                      fontWeight:
-                                                          FontWeight.bold,
+                                                        ),
+                                                      ],
                                                     ),
-                                                  ),
+                                                    const SizedBox(
+                                                        width:
+                                                            20), // เปลี่ยนจาก height เป็น width เพื่อให้ระยะห่างในแนวนอน
+                                                    // Column สำหรับแสดงรูปภาพ
+                                                    Column(
+                                                      children: [
+                                                        Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .only(
+                                                                  left: 20.0),
+                                                          child: ClipOval(
+                                                            child: Image.asset(
+                                                              'assets/images/signature.png',
+                                                              width: 50,
+                                                              height: 50,
+                                                              fit: BoxFit.cover,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ],
                                                 ),
                                               ],
                                             ),
@@ -538,7 +521,7 @@ class _LottoPageState extends State<LottoPage> {
                         height: 65,
                         width: 65,
                         child: FilledButton(
-                          onPressed: () {},
+                          onPressed: () => selectLottoNumber(lottoNumber),
                           style: ButtonStyle(
                             backgroundColor: MaterialStateProperty.all(
                               const Color.fromRGBO(213, 96, 97, 1),
@@ -551,7 +534,7 @@ class _LottoPageState extends State<LottoPage> {
                               ),
                             ),
                           ),
-                          child: Center(
+                          child: const Center(
                             child: Icon(
                               Icons.shopping_basket,
                               color: Colors.white,
@@ -602,11 +585,157 @@ class _LottoPageState extends State<LottoPage> {
     }
   }
 
+  void selectLottoNumber(String lottoNumber) {
+  // เก็บ context ปัจจุบันไว้
+  final currentContext = context;
+
+  showDialog(
+    context: currentContext,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: Text(
+          'ยืนยันการซื้อเลขนี้',
+          style: TextStyle(
+              color: Color.fromRGBO(0, 115, 85, 1),
+              fontWeight: FontWeight.bold),
+        ),
+        content: Text(
+          'คุณต้องการที่จะซื้อ Lotto $lottoNumber ใช่หรือไม่?',
+          style: TextStyle(fontSize: 18),
+        ),
+        actions: <Widget>[
+          TextButton(
+            child: Text('ไม่ใช่', style: TextStyle(fontWeight: FontWeight.bold)),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+          TextButton(
+            child: Text('ใช่', style: TextStyle(fontWeight: FontWeight.bold)),
+            onPressed: () async {
+              Navigator.of(context).pop();
+              setState(() {
+                selectedLottoNumber = lottoNumber;
+                log('Selected lotto number: $lottoNumber');
+              });
+
+              int result = await BuyLotto();
+
+              if (currentContext.mounted) {
+                if (result == 201) {
+                  showDialog(
+                    context: currentContext,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        title: Text('การซื้อสำเร็จ'),
+                        content: Text(
+                            'คุณได้ทำการซื้อเลข $lottoNumber เรียบร้อยแล้ว'),
+                        actions: <Widget>[
+                          TextButton(
+                            child: Text('ตกลง'),
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                } else if (result == 400) {
+                  showDialog(
+                    context: currentContext,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        title: Text('การไม่ซื้อสำเร็จ'),
+                        content: Text(
+                            'คุณได้ทำการซื้อเลข $lottoNumber ไปแล้ว ไม่สามารถซื้อซ้ำได้อีก T_T'),
+                        actions: <Widget>[
+                          TextButton(
+                            child: Text('ตกลง'),
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                } else if (result == 300) {
+                  showDialog(
+                    context: currentContext,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        title: Text('การไม่ซื้อสำเร็จ'),
+                        content: Text('ยอดเงินของคุณไม่พอ'),
+                        actions: <Widget>[
+                          TextButton(
+                            child: Text('ตกลง'),
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                } else {
+                  // คุณสามารถจัดการกรณีอื่น ๆ ที่นี่
+                }
+              }
+            },
+          ),
+        ],
+      );
+    },
+  );
+}
+
+
+// เมธอดสำหรับซื้อ Lotto
+  BuyLotto() async {
+    try {
+      if (selectedLottoNumber == null || selectedLottoNumber!.isEmpty) {
+        print('No lotto number selected');
+        return;
+      }
+
+      var config = await Configuration.getConfig();
+      var url = config['apiEndpoint'];
+
+      var data = UserBuyPostRequest(lottoNumber: selectedLottoNumber!).toJson();
+      print('Sending data: ${jsonEncode(data)}'); // ตรวจสอบข้อมูลที่ส่ง
+
+      final response = await http.post(
+        Uri.parse('$url/order/lottoBuy/${widget.userId}'),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode(data),
+      );
+
+      print(
+          'Response status: ${response.statusCode}'); // ตรวจสอบสถานะการตอบกลับ
+      print('Response body: ${response.body}'); // ตรวจสอบเนื้อหาการตอบกลับ
+
+      if (response.statusCode == 201) {
+        print('Lotto purchased successfully');
+        return response.statusCode; // การซื้อสำเร็จ
+      } else if (response.statusCode == 400) {
+        return response.statusCode; // ซื้อล็อตโต้ซ้ำ
+      } else if (response.statusCode == 300) {
+        return response.statusCode; // เงินไม่พอ
+      } else {
+        return response.statusCode; // กรณีอื่น ๆ
+      }
+    } catch (e) {
+      print('Error: $e');
+      failed = 3; // เกิดข้อผิดพลาด
+    }
+  }
+
   void Logout() {
     Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => Logopage(),
+          builder: (context) => const Logopage(),
         ));
   }
 }
