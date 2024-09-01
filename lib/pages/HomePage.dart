@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:mini_project/config/config.dart';
+import 'package:mini_project/models/response/admin_draws_get_res.dart';
 import 'package:mini_project/models/response/users_login_post_res.dart';
 import 'package:mini_project/pages/LoginPage.dart';
 import 'package:mini_project/pages/LogoPage.dart';
@@ -10,7 +11,7 @@ import 'package:mini_project/pages/OrderPage.dart';
 import 'package:mini_project/pages/profile.dart';
 import 'package:mini_project/pages/walletPage.dart';
 import 'package:mini_project/pages/HomePage.dart';
-
+import 'package:http/http.dart' as http;
 
 class Homepage extends StatefulWidget {
   //รับ userID
@@ -23,12 +24,14 @@ class Homepage extends StatefulWidget {
 
 class _HomepageState extends State<Homepage> {
   int _selectedIndex = 0; // Track the selected index
-
+  List<AdminDrawGetResponse> draws = [];
+  late Future<void> loadData;
   late UsersLoginPostResponse users;
 
   @override
   void initState() {
     super.initState();
+    loadData = loadDataAsync();
   }
   // UsersLoginPostResponse users = usersLoginPostResponseFromJson(value.body);
 
@@ -334,203 +337,218 @@ class _HomepageState extends State<Homepage> {
                 ),
                 //กรอบ 3
                 const SizedBox(height: 10),
-                SizedBox(
-                  width: 390,
-                  height: 530,
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: const Color.fromRGBO(213, 96, 97, 1),
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: const Padding(
-                      padding: EdgeInsets.all(20),
-                      child: Column(
-                        children: [
-                          //รางวัลที่ 1
-                          Text(
-                            "1 สิงหาคม 2567",
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 22,
-                                fontWeight: FontWeight.bold),
-                          ),
-                          Text(
-                            "รางวัลที่ 1",
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 36,
-                                fontWeight: FontWeight.bold),
-                          ),
-                          Text(
-                            "รางวัลละ 100,000 บาท",
-                            style: TextStyle(
-                                color: Color.fromRGBO(75, 9, 9, 1),
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold),
-                          ),
-                          SizedBox(height: 8),
-                          Card(
-                            color: Color.fromRGBO(217, 217, 217, 1),
-                            child: Padding(
-                              padding: EdgeInsets.symmetric(
-                                  vertical: 8, horizontal: 78),
-                              child: Text(
-                                "407041",
+                FutureBuilder(future: loadData,
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState != ConnectionState.done) {
+                      return const Center(
+                        child: Column(
+                          children: [
+                            CircularProgressIndicator(),
+                            SizedBox(height: 20), // เพิ่มระยะห่าง
+                            Text('Loading...'), // ข้อความเพิ่มเติม
+                          ],
+                        ),
+                      );
+                    }
+                    return SizedBox(
+                      width: 390,
+                      height: 530,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: const Color.fromRGBO(213, 96, 97, 1),
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: Padding(
+                          padding: EdgeInsets.all(20),
+                          child: Column(
+                            children: [
+                              //รางวัลที่ 1
+                              Text(
+                                draws[0].drawDate,
                                 style: TextStyle(
-                                    fontSize: 48,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black),
+                                    color: Colors.white,
+                                    fontSize: 22,
+                                    fontWeight: FontWeight.bold),
                               ),
-                            ),
-                          ),
-                          SizedBox(height: 10), // เว้นระยะห่าง
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              //รางวัลที่ 2
-                              Column(
+                              Text(
+                                "รางวัลที่ 1",
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 36,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              Text(
+                                "รางวัลละ 100,000 บาท",
+                                style: TextStyle(
+                                    color: Color.fromRGBO(75, 9, 9, 1),
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              SizedBox(height: 8),
+                              Card(
+                                color: Color.fromRGBO(217, 217, 217, 1),
+                                child: Padding(
+                                  padding: EdgeInsets.symmetric(
+                                      vertical: 8, horizontal: 78),
+                                  child: Text(
+                                    draws[4].winningNumber,
+                                    style: TextStyle(
+                                        fontSize: 48,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black),
+                                  ),
+                                ),
+                              ),
+                              SizedBox(height: 10), // เว้นระยะห่าง
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Text(
-                                    "รางวัลที่ 2",
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                  Text(
-                                    "รางวัลละ 70,000 บาท",
-                                    style: TextStyle(
-                                        color: Color.fromRGBO(75, 9, 9, 1),
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                  Card(
-                                    color: Color.fromRGBO(217, 217, 217, 1),
-                                    child: Padding(
-                                      padding: EdgeInsets.symmetric(
-                                          vertical: 10, horizontal: 20),
-                                      child: Text(
-                                        "596170",
+                                  //รางวัลที่ 2
+                                  Column(
+                                    children: [
+                                      Text(
+                                        "รางวัลที่ 2",
                                         style: TextStyle(
-                                            fontSize: 24,
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.black),
+                                            color: Colors.white,
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.bold),
                                       ),
-                                    ),
+                                      Text(
+                                        "รางวัลละ 70,000 บาท",
+                                        style: TextStyle(
+                                            color: Color.fromRGBO(75, 9, 9, 1),
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      Card(
+                                        color: Color.fromRGBO(217, 217, 217, 1),
+                                        child: Padding(
+                                          padding: EdgeInsets.symmetric(
+                                              vertical: 10, horizontal: 20),
+                                          child: Text(
+                                            draws[3].winningNumber,
+                                            style: TextStyle(
+                                                fontSize: 24,
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.black),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  //รางวัลที่ 3
+                                  Column(
+                                    children: [
+                                      Text(
+                                        "รางวัลที่ 3",
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      Text(
+                                        "รางวัลละ 50,000 บาท",
+                                        style: TextStyle(
+                                            color: Color.fromRGBO(75, 9, 9, 1),
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      Card(
+                                        color: Color.fromRGBO(217, 217, 217, 1),
+                                        child: Padding(
+                                          padding: EdgeInsets.symmetric(
+                                              vertical: 10, horizontal: 20),
+                                          child: Text(
+                                            draws[2].winningNumber,
+                                            style: TextStyle(
+                                                fontSize: 24,
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.black),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ],
                               ),
-                              //รางวัลที่ 3
-                              Column(
+                              SizedBox(height: 20),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Text(
-                                    "รางวัลที่ 3",
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                  Text(
-                                    "รางวัลละ 50,000 บาท",
-                                    style: TextStyle(
-                                        color: Color.fromRGBO(75, 9, 9, 1),
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                  Card(
-                                    color: Color.fromRGBO(217, 217, 217, 1),
-                                    child: Padding(
-                                      padding: EdgeInsets.symmetric(
-                                          vertical: 10, horizontal: 20),
-                                      child: Text(
-                                        "903093",
+                                  //รางวัลที่ 4
+                                  Column(
+                                    children: [
+                                      Text(
+                                        "รางวัลที่ 4",
                                         style: TextStyle(
-                                            fontSize: 24,
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.black),
+                                            color: Colors.white,
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.bold),
                                       ),
-                                    ),
+                                      Text(
+                                        "รางวัลละ 25,000 บาท",
+                                        style: TextStyle(
+                                            color: Color.fromRGBO(75, 9, 9, 1),
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      Card(
+                                        color: Color.fromRGBO(217, 217, 217, 1),
+                                        child: Padding(
+                                          padding: EdgeInsets.symmetric(
+                                              vertical: 10, horizontal: 20),
+                                          child: Text(
+                                            draws[1].winningNumber,
+                                            style: TextStyle(
+                                                fontSize: 24,
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.black),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  //รางวัลที่ 5
+                                  Column(
+                                    children: [
+                                      Text(
+                                        "รางวัลที่ 5",
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      Text(
+                                        "รางวัลละ 10,000 บาท",
+                                        style: TextStyle(
+                                            color: Color.fromRGBO(75, 9, 9, 1),
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      Card(
+                                        color: Color.fromRGBO(217, 217, 217, 1),
+                                        child: Padding(
+                                          padding: EdgeInsets.symmetric(
+                                              vertical: 10, horizontal: 20),
+                                          child: Text(
+                                            draws[0].winningNumber,
+                                            style: TextStyle(
+                                                fontSize: 24,
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.black),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ],
                               ),
                             ],
                           ),
-                          SizedBox(height: 20),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              //รางวัลที่ 4
-                              Column(
-                                children: [
-                                  Text(
-                                    "รางวัลที่ 4",
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                  Text(
-                                    "รางวัลละ 25,000 บาท",
-                                    style: TextStyle(
-                                        color: Color.fromRGBO(75, 9, 9, 1),
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                  Card(
-                                    color: Color.fromRGBO(217, 217, 217, 1),
-                                    child: Padding(
-                                      padding: EdgeInsets.symmetric(
-                                          vertical: 10, horizontal: 20),
-                                      child: Text(
-                                        "903093",
-                                        style: TextStyle(
-                                            fontSize: 24,
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.black),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              //รางวัลที่ 5
-                              Column(
-                                children: [
-                                  Text(
-                                    "รางวัลที่ 5",
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                  Text(
-                                    "รางวัลละ 10,000 บาท",
-                                    style: TextStyle(
-                                        color: Color.fromRGBO(75, 9, 9, 1),
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                  Card(
-                                    color: Color.fromRGBO(217, 217, 217, 1),
-                                    child: Padding(
-                                      padding: EdgeInsets.symmetric(
-                                          vertical: 10, horizontal: 20),
-                                      child: Text(
-                                        "040499",
-                                        style: TextStyle(
-                                            fontSize: 24,
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.black),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ],
+                        ),
                       ),
-                    ),
-                  ),
+                    );
+                  }
                 ),
               ],
             ),
@@ -562,5 +580,13 @@ class _HomepageState extends State<Homepage> {
         MaterialPageRoute(
           builder: (context) => OrderPage(userId: widget.userId),
         ));
+  }
+
+  Future<void> loadDataAsync() async {
+    var config = await Configuration.getConfig();
+    var url = config['apiEndpoint'];
+    var response = await http.get(Uri.parse('$url/admin/drawsNow'));
+
+    draws = adminDrawGetResponseFromJson(response.body);
   }
 }

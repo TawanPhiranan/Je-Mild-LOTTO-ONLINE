@@ -14,7 +14,6 @@ import 'package:mini_project/pages/editProfilePage.dart';
 import 'package:mini_project/pages/profile.dart';
 
 void main() {
-
   runApp(const MyApp());
 }
 
