@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
-=======
 import 'dart:developer';
->>>>>>> ce4407fdc7294bac8bb731c8dae6c24826cf9e4d
 
 import 'package:flutter/material.dart';
 import 'package:mini_project/pages/LoginPage.dart';
@@ -715,36 +711,9 @@ class _OrderPageState extends State<OrderPage> {
                           ),
                         ),
                       ),
-                      SizedBox(
-                        height: 65,
-                        width: 65,
-                        child: FilledButton(
-                          onPressed: () {},
-                          style: ButtonStyle(
-                            backgroundColor: MaterialStateProperty.all(
-                                const Color.fromRGBO(213, 96, 97, 1)),
-                          ),
-                          child: const Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(
-                                Icons.shopping_basket,
-                                color: Colors.white,
-                                size: 20.0,
-                              ),
-                              Text(
-                                'สั่งซื้อ',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 13,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
+                 
                     ],
-                  ),
+                  ),          
                 ),
               ] else if (_Index == 1) ...[
                 const SizedBox(
