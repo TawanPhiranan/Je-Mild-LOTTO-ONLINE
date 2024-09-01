@@ -8,7 +8,8 @@ import 'package:mini_project/pages/AdminRandomNumber.dart';
 import 'package:http/http.dart' as http;
 
 class Adminlottodraw extends StatefulWidget {
-  const Adminlottodraw({super.key});
+  int userId;
+  Adminlottodraw({super.key, required this.userId});
 
   @override
   State<Adminlottodraw> createState() => _AdminlottodrawState();

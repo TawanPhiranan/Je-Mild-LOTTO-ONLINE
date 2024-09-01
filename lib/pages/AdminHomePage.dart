@@ -1,9 +1,12 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:mini_project/config/config.dart';
 import 'package:mini_project/pages/AdminLottoDraw.dart';
 import 'package:mini_project/pages/AdminProfile.dart';
 import 'package:mini_project/pages/LogoPage.dart';
+import 'package:http/http.dart' as http;
+
 
 class Adiminhomepage extends StatefulWidget {
   int userId;
@@ -462,7 +465,7 @@ class _AdiminhomepageState extends State<Adiminhomepage> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => const Adminlottodraw(),
+        builder: (context) => Adminlottodraw(userId: widget.userId),
       ),
     );
   }
@@ -483,4 +486,27 @@ class _AdiminhomepageState extends State<Adiminhomepage> {
           builder: (context) => Logopage(),
         ));
   }
+
+
+  Future<void> loadDataAsync() async {
+    try {
+      var config = await Configuration.getConfig();
+      var url = config['apiEndpoint'];
+      var response = await http.get(Uri.parse('$url/users/${widget.userId}'));
+      if (response.statusCode == 200) {
+        // ถ้าการเรียก API สำเร็จ
+        admin = editUserIdGetResponseFromJson(response.body);
+        log(admin.email);
+      } else {
+        // ถ้า API ส่งสถานะที่ไม่ใช่ 200
+        log('Error: ${response.statusCode}');
+      }
+    } catch (e) {
+      // จัดการข้อผิดพลาดเมื่อเกิดปัญหาในการเรียก API
+      log('Error: $e');
+    }
+  }
+  
 }
+
+
