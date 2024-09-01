@@ -1,6 +1,8 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:mini_project/config/config.dart';
+import 'package:mini_project/models/response/Order_response.dart';
 import 'package:mini_project/pages/LoginPage.dart';
 import 'package:mini_project/pages/LogoPage.dart';
 import 'package:mini_project/pages/LottoPage.dart';
@@ -8,6 +10,7 @@ import 'package:mini_project/pages/OrderPage.dart';
 import 'package:mini_project/pages/profile.dart';
 import 'package:mini_project/pages/walletPage.dart';
 import 'package:mini_project/pages/HomePage.dart';
+import 'package:http/http.dart' as http;
 
 class OrderPage extends StatefulWidget {
   int userId;
@@ -20,6 +23,7 @@ class OrderPage extends StatefulWidget {
 class _OrderPageState extends State<OrderPage> {
   int _selectedIndex = 3; // Track the selected index
   int _Index = 0;
+  List<OrderResponse> oorder = [];
 
   @override
   void initState() {
@@ -27,30 +31,51 @@ class _OrderPageState extends State<OrderPage> {
     // Log the userId to see its value
     log('OrderPage initialized with userId: ${widget.userId}');
   }
-  
+
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index; // Update the selected index
     });
 
     // Navigate to different pages based on the selected index
-     switch (index) {
-    case 0:
-      Navigator.push(context, MaterialPageRoute(builder: (context) => Homepage(userId: widget.userId )));
-      break;
-    case 1:
-      Navigator.push(context, MaterialPageRoute(builder: (context) => Walletpage(userId: widget.userId )));
-      break;
-    case 2:
-      Navigator.push(context, MaterialPageRoute(builder: (context) => LottoPage(userId: widget.userId,)));
-      break;
-    case 3:
-      Navigator.push(context, MaterialPageRoute(builder: (context) => OrderPage(userId: widget.userId,)));
-      break;
-    case 4:
-      Navigator.push(context, MaterialPageRoute(builder: (context) => ProfilePage(userId: widget.userId,)));
-      break;
-  }
+    switch (index) {
+      case 0:
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => Homepage(userId: widget.userId)));
+        break;
+      case 1:
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => Walletpage(userId: widget.userId)));
+        break;
+      case 2:
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => LottoPage(
+                      userId: widget.userId,
+                    )));
+        break;
+      case 3:
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => OrderPage(
+                      userId: widget.userId,
+                    )));
+        break;
+      case 4:
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => ProfilePage(
+                      userId: widget.userId,
+                    )));
+        break;
+    }
   }
 
   @override
@@ -65,14 +90,14 @@ class _OrderPageState extends State<OrderPage> {
           ),
         ),
         backgroundColor: const Color.fromARGB(255, 211, 39, 24),
-             leading: IconButton(
+        leading: IconButton(
           icon:
               const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white),
           onPressed: () {
             Navigator.of(context).pop();
           },
         ),
-                actions: [
+        actions: [
           PopupMenuButton<String>(
             icon: const Icon(
               Icons.more_vert,
@@ -437,6 +462,7 @@ class _OrderPageState extends State<OrderPage> {
                   children: [
                     ElevatedButton(
                       onPressed: () {
+                        Order();
                         setState(() {
                           _Index = 0; // เปลี่ยนเป็นมุมมองที่ต้องการ
                         });
@@ -460,8 +486,9 @@ class _OrderPageState extends State<OrderPage> {
                           ),
                         ),
                         backgroundColor: _Index == 0
-                            ? Color.fromRGBO(202, 72, 74, 1) // สีเมื่อถูกเลือก
-                            : Color.fromRGBO(213, 96, 97, 1), // สีปกติ
+                            ? const Color.fromRGBO(
+                                202, 72, 74, 1) // สีเมื่อถูกเลือก
+                            : const Color.fromRGBO(213, 96, 97, 1), // สีปกติ
                         textStyle: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
@@ -494,8 +521,9 @@ class _OrderPageState extends State<OrderPage> {
                           ),
                         ),
                         backgroundColor: _Index == 1
-                            ? Color.fromRGBO(202, 72, 74, 1) // สีเมื่อถูกเลือก
-                            : Color.fromRGBO(213, 96, 97, 1), // สีปกติ
+                            ? const Color.fromRGBO(
+                                202, 72, 74, 1) // สีเมื่อถูกเลือก
+                            : const Color.fromRGBO(213, 96, 97, 1), // สีปกติ
                         textStyle: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
@@ -509,196 +537,72 @@ class _OrderPageState extends State<OrderPage> {
                   child: Row(
                     children: [
                       Expanded(
-                        child: SizedBox(
-                          height: 170,
-                          child: Card(
-                            color: const Color.fromRGBO(217, 217, 217, 1),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(15),
-                            ),
-                            child: Stack(
-                              children: [
-                                Align(
-                                  alignment: Alignment.topLeft,
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(5.0),
-                                    child: Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Row(
-                                              children: [
-                                                Image.asset(
-                                                    'assets/images/flying-money.png',
-                                                    width: 30),
-                                                const Text(
-                                                  'สลากกินแบ่ง Je’ Mild ',
-                                                  style: TextStyle(
-                                                    color: Colors.black,
-                                                    fontSize: 15,
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                            Row(
-                                              children: [
-                                                Padding(
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                          left: 30.0),
-                                                  child: ClipOval(
-                                                    child: Image.asset(
-                                                      'assets/images/logoMild.jpeg',
-                                                      width: 60,
-                                                      height: 60,
-                                                      fit: BoxFit.cover,
-                                                    ),
-                                                  ),
-                                                ),
-                                                SizedBox(
-                                                  width: 160,
-                                                  height: 50,
-                                                  child: Padding(
-                                                    padding:
-                                                        const EdgeInsets.only(
-                                                            left: 15.0),
-                                                    child: Card(
-                                                      color:
-                                                          const Color.fromRGBO(
-                                                              254,
-                                                              248,
-                                                              195,
-                                                              1.0),
-                                                      shape:
-                                                          RoundedRectangleBorder(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(5),
-                                                      ),
-                                                      child: const Center(
-                                                        child: Text(
-                                                          '4  0  7  0  4  1',
-                                                          style: TextStyle(
-                                                            fontSize: 19,
-                                                            color: Colors.black,
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                            Row(
-                                              children: [
-                                                Padding(
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                          left: 10.0),
-                                                  child: Row(
-                                                    children: [
-                                                      const Column(
-                                                        children: [
-                                                          Text(
-                                                            '120',
-                                                            style: TextStyle(
-                                                              color:
-                                                                  Colors.black,
-                                                              fontSize: 16,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold,
-                                                            ),
-                                                          ),
-                                                          Text(
-                                                            'บาท',
-                                                            style: TextStyle(
-                                                              color:
-                                                                  Colors.black,
-                                                              fontSize: 16,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold,
-                                                            ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                      const SizedBox(height: 5),
-                                                      Column(
-                                                        children: [
-                                                          Padding(
-                                                            padding:
-                                                                const EdgeInsets
-                                                                    .only(
-                                                                    left: 5.0),
-                                                            child: ClipOval(
-                                                              child:
-                                                                  Image.asset(
-                                                                'assets/images/signature.png',
-                                                                width: 50,
-                                                                height: 50,
-                                                                fit: BoxFit
-                                                                    .cover,
-                                                              ),
-                                                            ),
-                                                          ),
-                                                        ],
-                                                      )
-                                                    ],
-                                                  ),
-                                                ),
-                                                const Padding(
-                                                  padding: EdgeInsets.only(
-                                                      left: 5.0),
-                                                  child: Text(
-                                                    '1 สิงหาคม 2567',
-                                                    style: TextStyle(
-                                                      color: Color.fromRGBO(
-                                                          0, 91, 228, 1),
-                                                      fontSize: 18,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                    ),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ],
-                                        ),
-                                      ],
+                        child: Column(
+  children: oorder
+      .map((number) => SizedBox(
+            height: 170,
+            child: Card(
+              color: const Color.fromRGBO(217, 217, 217, 1),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(15),
+              ),
+              child: Stack(
+                children: [
+                  Align(
+                    alignment: Alignment.topLeft,
+                    child: Padding(
+                      padding: const EdgeInsets.all(5.0),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: [
+                                  Image.asset(
+                                    'assets/images/flying-money.png',
+                                    width: 30,
+                                  ),
+                                  const Text(
+                                    'สลากกินแบ่ง Je’ Mild ',
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.bold,
                                     ),
                                   ),
-                                ),
-                                const Align(
-                                  alignment: Alignment.centerRight,
-                                  child: SizedBox(
-                                    width: 50,
-                                    height: 170,
-                                    child: Card(
-                                      color: Colors.white,
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.only(
-                                          topRight: Radius.circular(
-                                              15), // ขอบมุมขวาบน
-                                          bottomRight: Radius.circular(
-                                              15), // ขอบมุมขวาล่าง
-                                        ),
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 30.0),
+                                    child: ClipOval(
+                                      child: Image.asset(
+                                        'assets/images/logoMild.jpeg',
+                                        width: 60,
+                                        height: 60,
+                                        fit: BoxFit.cover,
                                       ),
-                                      child: Center(
-                                        child: RotatedBox(
-                                          quarterTurns: 3,
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: 160,
+                                    height: 50,
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(left: 15.0),
+                                      child: Card(
+                                        color: const Color.fromRGBO(254, 248, 195, 1.0),
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(5),
+                                        ),
+                                        child: Center(
                                           child: Text(
-                                            'เจ๊มายพารวย',
+                                            number.lottoNumber, // Use number.lottoNumber here
                                             style: TextStyle(
+                                              fontSize: 19,
                                               color: Colors.black,
-                                              fontSize: 16,
                                               fontWeight: FontWeight.bold,
                                             ),
                                           ),
@@ -706,15 +610,111 @@ class _OrderPageState extends State<OrderPage> {
                                       ),
                                     ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 10.0),
+                                    child: Row(
+                                      children: [
+                                        const Column(
+                                          children: [
+                                            Text(
+                                              '120',
+                                              style: TextStyle(
+                                                color: Colors.black,
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                            Text(
+                                              'บาท',
+                                              style: TextStyle(
+                                                color: Colors.black,
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        const SizedBox(height: 5),
+                                        Column(
+                                          children: [
+                                            Padding(
+                                              padding: const EdgeInsets.only(left: 5.0),
+                                              child: ClipOval(
+                                                child: Image.asset(
+                                                  'assets/images/signature.png',
+                                                  width: 50,
+                                                  height: 50,
+                                                  fit: BoxFit.cover,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  const Padding(
+                                    padding: EdgeInsets.only(left: 5.0),
+                                    child: Text(
+                                      '1 สิงหาคม 2567',
+                                      style: TextStyle(
+                                        color: Color.fromRGBO(0, 91, 228, 1),
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  const Align(
+                    alignment: Alignment.centerRight,
+                    child: SizedBox(
+                      width: 50,
+                      height: 170,
+                      child: Card(
+                        color: Colors.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.only(
+                            topRight: Radius.circular(15), // ขอบมุมขวาบน
+                            bottomRight: Radius.circular(15), // ขอบมุมขวาล่าง
+                          ),
+                        ),
+                        child: Center(
+                          child: RotatedBox(
+                            quarterTurns: 3,
+                            child: Text(
+                              'เจ๊มายพารวย',
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                           ),
                         ),
                       ),
-                 
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ))
+      .toList(), // Convert Iterable to List
+),
+
+                      ),
                     ],
-                  ),          
+                  ),
                 ),
               ] else if (_Index == 1) ...[
                 const SizedBox(
@@ -992,6 +992,7 @@ class _OrderPageState extends State<OrderPage> {
                   children: [
                     ElevatedButton(
                       onPressed: () {
+                        Order();
                         setState(() {
                           _Index = 0; // หน้าที่จะไป
                         });
@@ -1015,8 +1016,9 @@ class _OrderPageState extends State<OrderPage> {
                           ),
                         ),
                         backgroundColor: _Index == 0
-                            ? Color.fromRGBO(202, 72, 74, 1) // สีเมื่อถูกเลือก
-                            : Color.fromRGBO(213, 96, 97, 1), // สีปกติ
+                            ? const Color.fromRGBO(
+                                202, 72, 74, 1) // สีเมื่อถูกเลือก
+                            : const Color.fromRGBO(213, 96, 97, 1), // สีปกติ
                         textStyle: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
@@ -1049,8 +1051,9 @@ class _OrderPageState extends State<OrderPage> {
                           ),
                         ),
                         backgroundColor: _Index == 1
-                            ? Color.fromRGBO(202, 72, 74, 1) // สีเมื่อถูกเลือก
-                            : Color.fromRGBO(213, 96, 97, 1), // สีปกติ
+                            ? const Color.fromRGBO(
+                                202, 72, 74, 1) // สีเมื่อถูกเลือก
+                            : const Color.fromRGBO(213, 96, 97, 1), // สีปกติ
                         textStyle: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
@@ -1079,14 +1082,15 @@ class _OrderPageState extends State<OrderPage> {
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(20),
                                   ),
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(5.0),
+                                  child: const Padding(
+                                    padding: EdgeInsets.all(5.0),
                                     child: Stack(
+                                      // ignore: prefer_const_literals_to_create_immutables
                                       children: [
                                         Positioned(
-                                          bottom: 5, 
-                                          left: 5, 
-                                          child: const Text(
+                                          bottom: 5,
+                                          left: 5,
+                                          child: Text(
                                             'คุณถูกรางวัล 1 ใบ',
                                             style: TextStyle(
                                               color: Colors.black,
@@ -1110,13 +1114,14 @@ class _OrderPageState extends State<OrderPage> {
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(15),
                                   ),
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(5.0),
+                                  child: const Padding(
+                                    padding: EdgeInsets.all(5.0),
                                     child: Column(
+                                      // ignore: prefer_const_literals_to_create_immutables
                                       children: [
                                         Align(
                                           alignment: Alignment.centerLeft,
-                                          child: const Text(
+                                          child: Text(
                                             'สลากกินแบ่ง Je’ Mild ',
                                             style: TextStyle(
                                               color: Colors.black,
@@ -1125,9 +1130,9 @@ class _OrderPageState extends State<OrderPage> {
                                             ),
                                           ),
                                         ),
-                                        const SizedBox(height: 10),
+                                        SizedBox(height: 10),
                                         Center(
-                                          child: const Text(
+                                          child: Text(
                                             '1 สิงหาคม 2567',
                                             style: TextStyle(
                                               color: Color.fromRGBO(0, 0, 0, 1),
@@ -1155,7 +1160,7 @@ class _OrderPageState extends State<OrderPage> {
                     children: [
                       Expanded(
                         child: SizedBox(
-                          height: 198, 
+                          height: 198,
                           child: Stack(
                             children: [
                               Positioned(
@@ -1164,20 +1169,19 @@ class _OrderPageState extends State<OrderPage> {
                                 right: -5.0,
                                 bottom: -27.0,
                                 child: Card(
-                                  color: const Color.fromRGBO(254, 248, 195,
-                                      1.0), 
+                                  color:
+                                      const Color.fromRGBO(254, 248, 195, 1.0),
                                   shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(
-                                        30), 
+                                    borderRadius: BorderRadius.circular(30),
                                   ),
                                   child: Padding(
                                     padding: const EdgeInsets.all(5.0),
                                     child: Stack(
                                       children: [
-                                        Positioned(
-                                          bottom: 45, 
-                                          left: 5, 
-                                          child: const Text(
+                                        const Positioned(
+                                          bottom: 45,
+                                          left: 5,
+                                          child: Text(
                                             'คุณถูกรางวัล 1 ใบ',
                                             style: TextStyle(
                                               color: Colors.black,
@@ -1186,10 +1190,10 @@ class _OrderPageState extends State<OrderPage> {
                                             ),
                                           ),
                                         ),
-                                        Positioned(
+                                        const Positioned(
                                           bottom: 30,
                                           left: 5,
-                                          child: const Text(
+                                          child: Text(
                                             'รับเงินรางวัล 100,000 บาท',
                                             style: TextStyle(
                                               color: Colors.black,
@@ -1220,8 +1224,9 @@ class _OrderPageState extends State<OrderPage> {
                                                       padding:
                                                           const EdgeInsets.all(
                                                               20),
-                                                      color: Color.fromARGB(
-                                                          255, 63, 60, 61),
+                                                      color:
+                                                          const Color.fromARGB(
+                                                              255, 63, 60, 61),
                                                       child: Column(
                                                         mainAxisSize:
                                                             MainAxisSize.min,
@@ -1290,14 +1295,14 @@ class _OrderPageState extends State<OrderPage> {
                                                                   Navigator.of(
                                                                           context)
                                                                       .pop();
-                                                                      //ข้อความเมื่อกดคำว่าใช่
-                                                                  // ScaffoldMessenger.of(
-                                                                  //         context)
-                                                                  // //     .showSnackBar(
-                                                                  //   SnackBar(
-                                                                  //       content:
-                                                                  //           Text('การขึ้นเงินรางวัลเสร็จสิ้น')),
-                                                                  // );
+                                                                  // ข้อความเมื่อกดคำว่าใช่
+                                                                  ScaffoldMessenger.of(
+                                                                          context)
+                                                                      .showSnackBar(
+                                                                    const SnackBar(
+                                                                        content:
+                                                                            Text('การขึ้นเงินรางวัลเสร็จสิ้น')),
+                                                                  );
                                                                 },
                                                                 style: TextButton
                                                                     .styleFrom(
@@ -1343,7 +1348,7 @@ class _OrderPageState extends State<OrderPage> {
                                               backgroundColor:
                                                   MaterialStateProperty.all<
                                                           Color>(
-                                                      Color.fromARGB(
+                                                      const Color.fromARGB(
                                                           255, 222, 219, 34)),
                                               shape: MaterialStateProperty.all<
                                                   RoundedRectangleBorder>(
@@ -1462,17 +1467,31 @@ class _OrderPageState extends State<OrderPage> {
                                                                   ),
                                                                   child:
                                                                       const Center(
-                                                                    child: Text(
-                                                                      '4  0  7  0  4  1',
-                                                                      style:
-                                                                          TextStyle(
-                                                                        fontSize:
-                                                                            19,
-                                                                        color: Colors
-                                                                            .black,
-                                                                        fontWeight:
-                                                                            FontWeight.bold,
-                                                                      ),
+                                                                    child:
+                                                                        Column(
+                                                                      mainAxisAlignment:
+                                                                          MainAxisAlignment
+                                                                              .center,
+                                                                      crossAxisAlignment:
+                                                                          CrossAxisAlignment
+                                                                              .start,
+                                                                      children: [
+                                                                        Padding(
+                                                                          padding:
+                                                                              EdgeInsets.symmetric(vertical: 4.0),
+                                                                          child:
+                                                                              Text(
+                                                                            'Test', // ข้อมูลที่ต้องการแสดง
+                                                                            style:
+                                                                                TextStyle(
+                                                                              fontSize: 19,
+                                                                              color: Colors.black,
+                                                                              fontWeight: FontWeight.bold,
+                                                                            ),
+                                                                          ),
+                                                                        ),
+                                                                        // เพิ่มจำนวน Padding และ Text ที่ต้องการแสดงตามจำนวนที่ต้องการ
+                                                                      ],
                                                                     ),
                                                                   ),
                                                                 ),
@@ -1577,7 +1596,7 @@ class _OrderPageState extends State<OrderPage> {
                                                 ),
                                               ),
                                             ),
-                                            Align(
+                                            const Align(
                                               alignment: Alignment
                                                   .topRight, // ปรับตำแหน่งให้ติดด้านบน
                                               child: SizedBox(
@@ -1600,8 +1619,7 @@ class _OrderPageState extends State<OrderPage> {
                                                       child: Text(
                                                         'เจ๊มายพารวย',
                                                         style: TextStyle(
-                                                          color: const Color
-                                                              .fromARGB(
+                                                          color: Color.fromARGB(
                                                               255, 222, 3, 3),
                                                           fontSize: 16,
                                                           fontWeight:
@@ -1636,12 +1654,22 @@ class _OrderPageState extends State<OrderPage> {
       ),
     );
   }
+
   void Logout() {
-     Navigator.push(
-                context,
-                MaterialPageRoute(
-                builder: (context) =>Logopage(),
-                )
-     );
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const Logopage(),
+        ));
+  }
+
+  void Order() async {
+    var config = await Configuration.getConfig();
+    var url = config['apiEndpoint'];
+    var response = await http.get(Uri.parse('$url/order/PurchasedLotto'));
+    // log(response.body);
+    oorder = orderResponseFromJson(response.body);
+    // orders = oorder;
+    // log("มายด์");
   }
 }
