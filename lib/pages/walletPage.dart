@@ -2,8 +2,6 @@ import 'dart:convert';
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:mini_project/config/config.dart';
-import 'package:mini_project/models/response/showMoney_get_res.dart';
-import 'package:mini_project/models/response/wallet_get%20_res.dart';
 import 'package:mini_project/models/request/%E0%B8%B5user_add_wthdraw_post_req.dart';
 import 'package:mini_project/pages/LoginPage.dart';
 import 'package:mini_project/pages/LogoPage.dart';
@@ -24,15 +22,11 @@ class Walletpage extends StatefulWidget {
 
 class _WalletpageState extends State<Walletpage> {
   int _selectedIndex = 1; // Track the selected index
-  late Future<void> loadData;
-  List<ShowMoneyGetResponse> showMoney = [];
-  List<WalletGetResponse> showTransaction = [];
-
 
   @override
   void initState() {
     super.initState();
-    loadData = loadDataAsync();
+    // Log the userId to see its value
     log('Walletpage initialized with userId: ${widget.userId}');
   }
 
@@ -182,241 +176,249 @@ class _WalletpageState extends State<Walletpage> {
         onTap: _onItemTapped, // Handle tap
         type: BottomNavigationBarType.fixed,
       ),
-      body: Center(
-        child: FutureBuilder(
-            future: loadData,
-            builder: (context, snapshot) {
-              if (snapshot.connectionState != ConnectionState.done) {
-                return const Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      CircularProgressIndicator(),
-                      SizedBox(height: 20), // เพิ่มระยะห่าง
-                      Text('Loading...'), // ข้อความเพิ่มเติม
+      body: Padding(
+        padding: const EdgeInsets.fromLTRB(10, 30, 10, 10),
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              SizedBox(
+                width: 390,
+                height: 200,
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: const Color.fromRGBO(213, 96, 97, 1),
+                    borderRadius: BorderRadius.circular(20),
+                    boxShadow: [
+                      //เเสงเเละเงา
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.3),
+                        spreadRadius: 3,
+                        blurRadius: 7,
+                        offset: const Offset(0, 3),
+                      ),
                     ],
                   ),
-                );
-              }
-              return Padding(
-                padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      SizedBox(
-                        width: 390,
-                        height: 200,
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: const Color.fromRGBO(213, 96, 97, 1),
-                            borderRadius: BorderRadius.circular(20),
-                            boxShadow: [
-                              //เเสงเเละเงา
-                              BoxShadow(
-                                color: Colors.black.withOpacity(0.3),
-                                spreadRadius: 3,
-                                blurRadius: 7,
-                                offset: const Offset(0, 3),
-                              ),
-                            ],
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.fromLTRB(20, 20, 20, 20),
-                            child: Column(
-                              children: [
-                                const Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      "ยอดเงินคงเหลือ",
-                                      style: TextStyle(
-                                          color: Colors.white, fontSize: 26),
-                                    ),
-                                    Icon(
-                                      Icons.wallet_rounded,
-                                      color: Colors.white,
-                                      size: 36,
-                                    ),
-                                  ],
-                                ),
-                                const SizedBox(height: 10),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    const Icon(
-                                      Icons.monetization_on_rounded,
-                                      color: Colors.white,
-                                      size: 36,
-                                    ),
-                                    Text(
-                                      showMoney[0].total.toString(),
-                                      style: const TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 40,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    const Text(
-                                      "บาท",
-                                      style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 30,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                  ],
-                                ),
-                                const SizedBox(height: 10),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      showMoney[0].username,
-                                      style: const TextStyle(
-                                          color: Colors.white, fontSize: 18),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 20),
-                      SizedBox(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  child: const Padding(
+                    padding: EdgeInsets.fromLTRB(20, 20, 20, 20),
+                    child: Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Expanded(
-                              child: FilledButton(
-                                  onPressed: () {
-                                    showWithAdd(context);
-                                  },
-                                  style: FilledButton.styleFrom(
-                                    backgroundColor:
-                                        const Color.fromRGBO(213, 96, 97, 1),
-                                    minimumSize: const Size.fromHeight(50),
-                                  ),
-                                  child: const Text(
-                                    'เติมเงิน',
-                                    style: TextStyle(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.bold),
-                                  )),
+                            Text(
+                              "ยอดเงินคงเหลือ",
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 26),
                             ),
-                            const SizedBox(width: 10),
-                            Expanded(
-                              child: FilledButton(
-                                  onPressed: () {
-                                    showWithdrawDialog(context);
-                                  },
-                                  style: FilledButton.styleFrom(
-                                    backgroundColor:
-                                        const Color.fromRGBO(213, 96, 97, 1),
-                                    minimumSize: const Size.fromHeight(50),
-                                  ),
-                                  child: const Text('ถอนเงิน',
-                                      style: TextStyle(
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.bold))),
+                            Icon(
+                              Icons.wallet_rounded,
+                              color: Colors.white,
+                              size: 36,
                             ),
                           ],
                         ),
-                      ),
-                      const SizedBox(height: 15),
-                      const Row(
-                        children: [
-                          Text('ประวัติการทำรายการ',
+                        SizedBox(height: 10),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Icon(
+                              Icons.monetization_on_rounded,
+                              color: Colors.white,
+                              size: 36,
+                            ),
+                            Text(
+                              "0.00",
                               style: TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                  color: Color.fromRGBO(177, 36, 24, 1))),
-                        ],
-                      ),
-                      const SizedBox(height: 8),
-                      Column(children: [
-                        SizedBox(
-                            width: double.infinity, // ทำให้การ์ดกว้างเต็มจอ
-                            child: Container(
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(
-                                    10), // มุมโค้งของสี่เหลี่ยม
-                                border: Border.all(
-                                  color: const Color.fromRGBO(
-                                      177, 36, 24, 1), // สีของเส้นขอบ
-                                  width: 2, // ความหนาของเส้นขอบ
-                                ),
-                              ),
-                              child: const Padding(
-                                  padding: EdgeInsets.all(
-                                      16.0), // กำหนด padding ภายในกล่อง
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment
-                                        .start, // Align content to the start
-                                    children: [
-                                      Column(
-                                        children: [
-                                          Row(
-                                            mainAxisAlignment: MainAxisAlignment
-                                                .end, // Align date to the right
-                                            children: [
-                                              Text(
-                                                '7 กรกฎาคม 2567',
-                                                style: TextStyle(
-                                                  color:
-                                                      Color.fromRGBO(84, 84, 84, 1),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ],
-                                      ),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Text(
-                                            'เงินเข้า',
-                                            style: TextStyle(
-                                              fontSize: 18,
-                                              color:
-                                                  Color.fromRGBO(84, 84, 84, 1),
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
-                                          Text(
-                                            '+ 100',
-                                            style: TextStyle(
-                                              fontSize: 18,
-                                              color: Color.fromARGB(
-                                                  255, 0, 255, 26),
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      Divider(
-                                        color:
-                                            Colors.grey, // Color of the divider
-                                        thickness:
-                                            1.0, // Thickness of the divider
-                                      ),
-                                      SizedBox(height: 8),
-                                    ],
-                                  )),
-                            )),
-                      ])
-                    ],
+                                  color: Colors.white,
+                                  fontSize: 40,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            Text(
+                              "บาท",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 30,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 10),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Text(
+                              "น้องมาย แจกจริง",
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 18),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-              );
-            }),
+              ),
+              const SizedBox(height: 20),
+              SizedBox(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    Expanded(
+                      child: FilledButton(
+                          onPressed: () {
+                            showWithdrawAdd(context);
+                          },
+                          style: FilledButton.styleFrom(
+                            backgroundColor:
+                                const Color.fromRGBO(213, 96, 97, 1),
+                            minimumSize: const Size.fromHeight(50),
+                          ),
+                          child: const Text(
+                            'เติมเงิน',
+                            style: TextStyle(
+                                fontSize: 20, fontWeight: FontWeight.bold),
+                          )),
+                    ),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: FilledButton(
+                          onPressed: () {
+                            showWithdrawDialog(context);
+                          },
+                          style: FilledButton.styleFrom(
+                            backgroundColor:
+                                const Color.fromRGBO(213, 96, 97, 1),
+                            minimumSize: const Size.fromHeight(50),
+                          ),
+                          child: const Text('ถอนเงิน',
+                              style: TextStyle(
+                                  fontSize: 20, fontWeight: FontWeight.bold))),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 15),
+              const Row(
+                children: [
+                  Text('ประวัติการทำรายการ',
+                      style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Color.fromRGBO(177, 36, 24, 1))),
+                ],
+              ),
+              const SizedBox(height: 8),
+              Column(children: [
+                SizedBox(
+                    width: double.infinity, // ทำให้การ์ดกว้างเต็มจอ
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius:
+                            BorderRadius.circular(10), // มุมโค้งของสี่เหลี่ยม
+                        border: Border.all(
+                          color: const Color.fromRGBO(
+                              177, 36, 24, 1), // สีของเส้นขอบ
+                          width: 2, // ความหนาของเส้นขอบ
+                        ),
+                      ),
+                      child: const Padding(
+                          padding:
+                              EdgeInsets.all(16.0), // กำหนด padding ภายในกล่อง
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment
+                                .start, // Align content to the start
+                            children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment
+                                    .end, // Align date to the right
+                                children: [
+                                  Text(
+                                    '7 กรกฎาคม 2567',
+                                    style: TextStyle(
+                                      color: Color.fromRGBO(84, 84, 84, 1),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    'เงินเข้า',
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                      color: Color.fromRGBO(84, 84, 84, 1),
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  Text(
+                                    '+ 100',
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                      color: Color.fromARGB(255, 0, 255, 26),
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Divider(
+                                color: Colors.grey, // Color of the divider
+                                thickness: 1.0, // Thickness of the divider
+                              ),
+                              SizedBox(height: 8),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment
+                                    .end, // Align date to the right
+                                children: [
+                                  Text(
+                                    '3 กรกฎาคม 2567',
+                                    style: TextStyle(
+                                      color: Color.fromRGBO(84, 84, 84, 1),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    'เงินออก',
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                      color: Color.fromRGBO(84, 84, 84, 1),
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  Text(
+                                    '- 100',
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                      color: Color.fromRGBO(255, 0, 0, 1),
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Divider(
+                                color: Colors.grey, // Color of the divider
+                                thickness: 1.0, // Thickness of the divider
+                              ),
+                              SizedBox(height: 8),
+                            ],
+                          )),
+                    )),
+              ])
+            ],
+          ),
+        ),
       ),
     );
   }
 
   //ใส่เงินที่ต้องการเติม
-  void showWithAdd(BuildContext context) {
+  void showWithdrawAdd(BuildContext context) {
     TextEditingController amountController = TextEditingController();
     showDialog(
       context: context,
@@ -593,8 +595,6 @@ class _WalletpageState extends State<Walletpage> {
                   Text('ตกลง', style: TextStyle(fontWeight: FontWeight.bold)),
               onPressed: () {
                 Navigator.of(context).pop();
-                // Refresh the page after closing the dialog
-                setState(() {});
               },
             ),
           ],
@@ -617,8 +617,6 @@ class _WalletpageState extends State<Walletpage> {
                   Text('ตกลง', style: TextStyle(fontWeight: FontWeight.bold)),
               onPressed: () {
                 Navigator.of(context).pop();
-                // Refresh the page after closing the dialog
-                setState(() {});
               },
             ),
           ],
@@ -631,19 +629,7 @@ class _WalletpageState extends State<Walletpage> {
     Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => const Logopage(),
+          builder: (context) => Logopage(),
         ));
-  }
-
-  Future<void> loadDataAsync() async {
-    var config = await Configuration.getConfig();
-    var url = config['apiEndpoint'];
-    var showMoneyResponse =
-        await http.get(Uri.parse('$url/wallet/total/${widget.userId}'));
-    var showTransactionResponse =
-        await http.get(Uri.parse('$url/wallet/transaction/${widget.userId}'));
-
-    showMoney = showMoneyGetResponseFromJson(showMoneyResponse.body);
-    showTransaction = walletGetResponseFromJson(showTransactionResponse.body);
   }
 }
