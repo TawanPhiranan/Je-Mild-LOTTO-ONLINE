@@ -28,11 +28,25 @@ class _LottoPageState extends State<LottoPage> {
   late Future<void> loadData;
   String? selectedLottoNumber;
   int failed = 0;
+  List<TextEditingController> _controllers = [];
+  late ScrollController _scrollController;
 
   @override
   void initState() {
     super.initState();
+    _controllers = List.generate(6, (_) => TextEditingController());
+    _scrollController = ScrollController();
+
     fetchRandomNumbers();
+  }
+
+  @override
+  void dispose() {
+    for (var controller in _controllers) {
+      controller.dispose();
+    }
+    _scrollController.dispose();
+    super.dispose();
   }
 
   void _onItemTapped(int index) {
@@ -84,6 +98,7 @@ class _LottoPageState extends State<LottoPage> {
   @override
   Widget build(BuildContext context) {
     log('LottoPage initialized with userId: ${widget.userId}');
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color.fromRGBO(177, 36, 24, 1),
@@ -221,34 +236,47 @@ class _LottoPageState extends State<LottoPage> {
                             ),
                           ),
                           const SizedBox(height: 20),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: List.generate(6, (index) {
-                              return SizedBox(
-                                width: 50,
-                                child: TextField(
-                                  textAlign: TextAlign.center,
-                                  style: const TextStyle(color: Colors.black),
-                                  decoration: InputDecoration(
-                                    enabledBorder: OutlineInputBorder(
-                                      borderSide:
-                                          const BorderSide(color: Colors.grey),
-                                      borderRadius: BorderRadius.circular(5),
-                                    ),
-                                    focusedBorder: OutlineInputBorder(
-                                      borderSide:
-                                          const BorderSide(color: Colors.white),
-                                      borderRadius: BorderRadius.circular(5),
-                                    ),
-                                    filled: true,
-                                    fillColor:
-                                        const Color.fromRGBO(217, 217, 217, 1),
-                                    contentPadding: const EdgeInsets.symmetric(
-                                        vertical: 10),
-                                  ),
+                          Expanded(
+                            child: ListView(
+                              controller: _scrollController,
+                              children: [                            
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: List.generate(6, (index) {
+                                    return SizedBox(
+                                      width: 50,
+                                      child: TextField(
+                                        controller: _controllers[index],
+                                        textAlign: TextAlign.center,
+                                        style: const TextStyle(
+                                            color: Colors.black),
+                                        decoration: InputDecoration(
+                                          enabledBorder: OutlineInputBorder(
+                                            borderSide: const BorderSide(
+                                                color: Colors.grey),
+                                            borderRadius:
+                                                BorderRadius.circular(5),
+                                          ),
+                                          focusedBorder: OutlineInputBorder(
+                                            borderSide: const BorderSide(
+                                                color: Colors.white),
+                                            borderRadius:
+                                                BorderRadius.circular(5),
+                                          ),
+                                          filled: true,
+                                          fillColor: const Color.fromRGBO(
+                                              217, 217, 217, 1),
+                                          contentPadding:
+                                              const EdgeInsets.symmetric(
+                                                  vertical: 10),
+                                        ),
+                                      ),
+                                    );
+                                  }),
                                 ),
-                              );
-                            }),
+                              ],
+                            ),
                           ),
                           const SizedBox(height: 20),
                           SizedBox(
@@ -554,7 +582,38 @@ class _LottoPageState extends State<LottoPage> {
     );
   }
 
-  void Search() {}
+  void Search() {
+    // ตรวจสอบว่ามี `_controllers` ที่มีขนาดเพียงพอ
+    if (_controllers.length < 6) {
+      print('Error: Not enough controllers');
+      return;
+    }
+
+    final searchTerms =
+        _controllers.map((controller) => controller.text).toList();
+
+    // ปริ้นต์คำค้นหาเพื่อการดีบัก
+    print('Search Terms: $searchTerms');
+
+    final results = searchTerms.map((searchTerm) {
+      return _randomNumbers
+          .where((number) => number.contains(searchTerm))
+          .toList();
+    }).toList();
+
+    for (int i = 0; i < searchTerms.length; i++) {
+      if (results[i].isNotEmpty) {
+        print('Found numbers for "${searchTerms[i]}": ${results[i]}');
+        // เลื่อนหน้าจอไปยังตำแหน่งที่ค้นหาเจอ
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          _scrollController
+              .jumpTo(_scrollController.position.maxScrollExtent * (i / 6));
+        });
+      } else {
+        print('No numbers found for search term: "${searchTerms[i]}"');
+      }
+    }
+  }
 
 // เมธอดสำหรับเรียก API และสุ่มตัวเลข
   Future<void> fetchRandomNumbers() async {
@@ -586,110 +645,110 @@ class _LottoPageState extends State<LottoPage> {
   }
 
   void selectLottoNumber(String lottoNumber) {
-  // เก็บ context ปัจจุบันไว้
-  final currentContext = context;
+    // เก็บ context ปัจจุบันไว้
+    final currentContext = context;
 
-  showDialog(
-    context: currentContext,
-    builder: (BuildContext context) {
-      return AlertDialog(
-        title: Text(
-          'ยืนยันการซื้อเลขนี้',
-          style: TextStyle(
-              color: Color.fromRGBO(0, 115, 85, 1),
-              fontWeight: FontWeight.bold),
-        ),
-        content: Text(
-          'คุณต้องการที่จะซื้อ Lotto $lottoNumber ใช่หรือไม่?',
-          style: TextStyle(fontSize: 18),
-        ),
-        actions: <Widget>[
-          TextButton(
-            child: Text('ไม่ใช่', style: TextStyle(fontWeight: FontWeight.bold)),
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
+    showDialog(
+      context: currentContext,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(
+            'ยืนยันการซื้อเลขนี้',
+            style: TextStyle(
+                color: Color.fromRGBO(0, 115, 85, 1),
+                fontWeight: FontWeight.bold),
           ),
-          TextButton(
-            child: Text('ใช่', style: TextStyle(fontWeight: FontWeight.bold)),
-            onPressed: () async {
-              Navigator.of(context).pop();
-              setState(() {
-                selectedLottoNumber = lottoNumber;
-                log('Selected lotto number: $lottoNumber');
-              });
+          content: Text(
+            'คุณต้องการที่จะซื้อ Lotto $lottoNumber ใช่หรือไม่?',
+            style: TextStyle(fontSize: 18),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child:
+                  Text('ไม่ใช่', style: TextStyle(fontWeight: FontWeight.bold)),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: Text('ใช่', style: TextStyle(fontWeight: FontWeight.bold)),
+              onPressed: () async {
+                Navigator.of(context).pop();
+                setState(() {
+                  selectedLottoNumber = lottoNumber;
+                  log('Selected lotto number: $lottoNumber');
+                });
 
-              int result = await BuyLotto();
+                int result = await BuyLotto();
 
-              if (currentContext.mounted) {
-                if (result == 201) {
-                  showDialog(
-                    context: currentContext,
-                    builder: (BuildContext context) {
-                      return AlertDialog(
-                        title: Text('การซื้อสำเร็จ'),
-                        content: Text(
-                            'คุณได้ทำการซื้อเลข $lottoNumber เรียบร้อยแล้ว'),
-                        actions: <Widget>[
-                          TextButton(
-                            child: Text('ตกลง'),
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                            },
-                          ),
-                        ],
-                      );
-                    },
-                  );
-                } else if (result == 400) {
-                  showDialog(
-                    context: currentContext,
-                    builder: (BuildContext context) {
-                      return AlertDialog(
-                        title: Text('การไม่ซื้อสำเร็จ'),
-                        content: Text(
-                            'คุณได้ทำการซื้อเลข $lottoNumber ไปแล้ว ไม่สามารถซื้อซ้ำได้อีก T_T'),
-                        actions: <Widget>[
-                          TextButton(
-                            child: Text('ตกลง'),
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                            },
-                          ),
-                        ],
-                      );
-                    },
-                  );
-                } else if (result == 300) {
-                  showDialog(
-                    context: currentContext,
-                    builder: (BuildContext context) {
-                      return AlertDialog(
-                        title: Text('การไม่ซื้อสำเร็จ'),
-                        content: Text('ยอดเงินของคุณไม่พอ'),
-                        actions: <Widget>[
-                          TextButton(
-                            child: Text('ตกลง'),
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                            },
-                          ),
-                        ],
-                      );
-                    },
-                  );
-                } else {
-                  // คุณสามารถจัดการกรณีอื่น ๆ ที่นี่
+                if (currentContext.mounted) {
+                  if (result == 201) {
+                    showDialog(
+                      context: currentContext,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: Text('การซื้อสำเร็จ'),
+                          content: Text(
+                              'คุณได้ทำการซื้อเลข $lottoNumber เรียบร้อยแล้ว'),
+                          actions: <Widget>[
+                            TextButton(
+                              child: Text('ตกลง'),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  } else if (result == 400) {
+                    showDialog(
+                      context: currentContext,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: Text('การไม่ซื้อสำเร็จ'),
+                          content: Text(
+                              'คุณได้ทำการซื้อเลข $lottoNumber ไปแล้ว ไม่สามารถซื้อซ้ำได้อีก T_T'),
+                          actions: <Widget>[
+                            TextButton(
+                              child: Text('ตกลง'),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  } else if (result == 300) {
+                    showDialog(
+                      context: currentContext,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: Text('การไม่ซื้อสำเร็จ'),
+                          content: Text('ยอดเงินของคุณไม่พอ'),
+                          actions: <Widget>[
+                            TextButton(
+                              child: Text('ตกลง'),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  } else {
+                    // คุณสามารถจัดการกรณีอื่น ๆ ที่นี่
+                  }
                 }
-              }
-            },
-          ),
-        ],
-      );
-    },
-  );
-}
-
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
 
 // เมธอดสำหรับซื้อ Lotto
   BuyLotto() async {
