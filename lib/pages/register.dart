@@ -306,6 +306,8 @@ class _RegisterPageState extends State<RegisterPage> {
               "อีเมล หรือ เบอร์โทรศัพท์ ถูกใช้แล้ว : กรุณาลองอีกครั้ง";
         } else if (response.statusCode == 400) {
           errorMessage = 'ยืนยันรหัสผ่านไม่ถูกต้อง : กรุณาลองอีกครั้ง';
+        }else if (response.statusCode == 403) {
+          errorMessage = 'ยอดเงินไม่ถึงขั้นต่ำที่กำหนด : กรุณาลองอีกครั้ง';
         } else {
           errorMessage = 'เกิดข้อผิดพลาด : กรุณาลองอีกครั้ง';
         }

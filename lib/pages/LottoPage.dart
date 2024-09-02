@@ -583,36 +583,6 @@ class _LottoPageState extends State<LottoPage> {
   }
 
   void Search() {
-    // ตรวจสอบว่ามี `_controllers` ที่มีขนาดเพียงพอ
-    if (_controllers.length < 6) {
-      print('Error: Not enough controllers');
-      return;
-    }
-
-    final searchTerms =
-        _controllers.map((controller) => controller.text).toList();
-
-    // ปริ้นต์คำค้นหาเพื่อการดีบัก
-    print('Search Terms: $searchTerms');
-
-    final results = searchTerms.map((searchTerm) {
-      return _randomNumbers
-          .where((number) => number.contains(searchTerm))
-          .toList();
-    }).toList();
-
-    for (int i = 0; i < searchTerms.length; i++) {
-      if (results[i].isNotEmpty) {
-        print('Found numbers for "${searchTerms[i]}": ${results[i]}');
-        // เลื่อนหน้าจอไปยังตำแหน่งที่ค้นหาเจอ
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          _scrollController
-              .jumpTo(_scrollController.position.maxScrollExtent * (i / 6));
-        });
-      } else {
-        print('No numbers found for search term: "${searchTerms[i]}"');
-      }
-    }
   }
 
 // เมธอดสำหรับเรียก API และสุ่มตัวเลข

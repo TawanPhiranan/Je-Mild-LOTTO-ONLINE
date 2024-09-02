@@ -1,5 +1,8 @@
+import 'dart:convert';
 import 'dart:developer';
 import 'package:flutter/material.dart';
+import 'package:mini_project/config/config.dart';
+import 'package:mini_project/models/request/%E0%B8%B5user_add_wthdraw_post_req.dart';
 import 'package:mini_project/pages/LoginPage.dart';
 import 'package:mini_project/pages/LogoPage.dart';
 import 'package:mini_project/pages/LottoPage.dart';
@@ -7,6 +10,7 @@ import 'package:mini_project/pages/OrderPage.dart';
 import 'package:mini_project/pages/profile.dart';
 import 'package:mini_project/pages/walletPage.dart';
 import 'package:mini_project/pages/HomePage.dart';
+import 'package:http/http.dart' as http;
 
 class Walletpage extends StatefulWidget {
   int userId;
@@ -14,7 +18,6 @@ class Walletpage extends StatefulWidget {
 
   @override
   State<Walletpage> createState() => _WalletpageState();
-  
 }
 
 class _WalletpageState extends State<Walletpage> {
@@ -33,23 +36,44 @@ class _WalletpageState extends State<Walletpage> {
     });
 
     // Navigate to different pages based on the selected index
-     switch (index) {
-    case 0:
-      Navigator.push(context, MaterialPageRoute(builder: (context) => Homepage(userId: widget.userId )));
-      break;
-    case 1:
-      Navigator.push(context, MaterialPageRoute(builder: (context) => Walletpage(userId: widget.userId )));
-      break;
-    case 2:
-      Navigator.push(context, MaterialPageRoute(builder: (context) => LottoPage(userId: widget.userId,)));
-      break;
-    case 3:
-      Navigator.push(context, MaterialPageRoute(builder: (context) => OrderPage(userId: widget.userId,)));
-      break;
-    case 4:
-      Navigator.push(context, MaterialPageRoute(builder: (context) => ProfilePage(userId: widget.userId,)));
-      break;
-  }
+    switch (index) {
+      case 0:
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => Homepage(userId: widget.userId)));
+        break;
+      case 1:
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => Walletpage(userId: widget.userId)));
+        break;
+      case 2:
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => LottoPage(
+                      userId: widget.userId,
+                    )));
+        break;
+      case 3:
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => OrderPage(
+                      userId: widget.userId,
+                    )));
+        break;
+      case 4:
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => ProfilePage(
+                      userId: widget.userId,
+                    )));
+        break;
+    }
   }
 
   @override
@@ -62,7 +86,7 @@ class _WalletpageState extends State<Walletpage> {
               fontWeight: FontWeight.bold,
               color: Colors.white,
             )),
-                 leading: IconButton(
+        leading: IconButton(
           icon:
               const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white),
           onPressed: () {
@@ -241,7 +265,9 @@ class _WalletpageState extends State<Walletpage> {
                   children: [
                     Expanded(
                       child: FilledButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            showWithdrawAdd(context);
+                          },
                           style: FilledButton.styleFrom(
                             backgroundColor:
                                 const Color.fromRGBO(213, 96, 97, 1),
@@ -256,7 +282,9 @@ class _WalletpageState extends State<Walletpage> {
                     const SizedBox(width: 10),
                     Expanded(
                       child: FilledButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            showWithdrawDialog(context);
+                          },
                           style: FilledButton.styleFrom(
                             backgroundColor:
                                 const Color.fromRGBO(213, 96, 97, 1),
@@ -388,12 +416,220 @@ class _WalletpageState extends State<Walletpage> {
       ),
     );
   }
+
+  //ใส่เงินที่ต้องการเติม
+  void showWithdrawAdd(BuildContext context) {
+    TextEditingController amountController = TextEditingController();
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(
+            'เติมเงิน (ขั้นต่ำ 500 บ.)',
+            style: TextStyle(
+                color: Color.fromARGB(255, 0, 136, 29),
+                fontWeight: FontWeight.bold),
+          ),
+          content: TextField(
+            controller: amountController,
+            keyboardType: TextInputType.number,
+            decoration: InputDecoration(
+              labelText: 'ระบุจำนวนเงินที่จะเติม',
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text(
+                'ยกเลิก',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child:
+                  Text('ตกลง', style: TextStyle(fontWeight: FontWeight.bold)),
+              onPressed: () async {
+                int? amount = int.tryParse(amountController.text);
+                if (amount != null && amount > 0) {
+                  try {
+                    await AddMoney(amount);
+                    Navigator.of(context).pop();
+
+                    showConfirmationDialog(context, "เติมเงินสำเร็จ :)");
+                  } catch (err) {
+                    showErrorDialog(context, err.toString());
+                  }
+                } else {
+                  showErrorDialog(context, "Invalid amount");
+                }
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  //เติมเงิน
+  Future<void> AddMoney(int amount) async {
+    var value = await Configuration.getConfig();
+    var url = value['apiEndpoint'];
+
+    var data = UserAddWithdrawPostRequest(amount: amount).toJson();
+    print('Sending data: ${jsonEncode(data)}');
+
+    try {
+      var response = await http.post(
+        Uri.parse('$url/wallet/add/${widget.userId}'),
+        headers: {"Content-Type": "application/json; charset=utf-8"},
+        body: jsonEncode(data),
+      );
+
+      if (response.statusCode == 200) {
+        log("ID: ${widget.userId} เติมเงินสำเร็จนะ");
+      } else if (response.statusCode == 403) {
+        throw Exception("ยอดเงินไม่ถึงขั้นต่ำที่กำหนด : กรุณาลองอีกครั้ง");
+      } else {
+        throw Exception("Error inserting into Wallet: ${response.body}");
+      }
+    } catch (err) {
+      throw Exception("$err");
+    }
+  }
+
+  //ใส่เงินที่จะถอน
+  void showWithdrawDialog(BuildContext context) {
+    TextEditingController amountController = TextEditingController();
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(
+            'ถอนเงิน',
+            style: TextStyle(
+                color: const Color.fromARGB(255, 255, 17, 0),
+                fontWeight: FontWeight.bold),
+          ),
+          content: TextField(
+            controller: amountController,
+            keyboardType: TextInputType.number,
+            decoration: InputDecoration(
+              labelText: 'ระบุจำนวนเงินที่จะถอน',
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text(
+                'ยกเลิก',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child:
+                  Text('ตกลง', style: TextStyle(fontWeight: FontWeight.bold)),
+              onPressed: () async {
+                int? amount = int.tryParse(amountController.text);
+                if (amount != null && amount > 0) {
+                  await WithdrawMoney(amount);
+                  Navigator.of(context).pop();
+
+                  showConfirmationDialog(context, "ถอนเงินสำเร็จ :)");
+                } else {
+                  showErrorDialog(context, "จำนวนเงินไม่ถูกต้อง!!");
+                }
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+//ถอนเงิน
+  Future<void> WithdrawMoney(int amount) async {
+    var value = await Configuration.getConfig();
+    var url = value['apiEndpoint'];
+
+    var data = UserAddWithdrawPostRequest(amount: amount).toJson();
+    print('Sending data: ${jsonEncode(data)}');
+
+    try {
+      var response = await http.post(
+        Uri.parse('$url/wallet/withdraw/${widget.userId}'),
+        headers: {"Content-Type": "application/json; charset=utf-8"},
+        body: jsonEncode(data),
+      );
+
+      if (response.statusCode == 200) {
+        log("ID: ${widget.userId} ถอนเงินสำเร็จนะ");
+      } else if (response.statusCode == 400) {
+        // แสดงข้อผิดพลาดถ้าเงินไม่พอถอน
+        throw Exception("ขออภัยจำนวนเงินของคุณไม่เพียงพอที่จะถอน T_T");
+      } else {
+        throw Exception("Error inserting into Wallet: ${response.body}");
+      }
+    } catch (err) {
+      // ขว้างข้อผิดพลาดไปให้ `showWithdrawDialog` จัดการ
+      throw Exception("$err");
+    }
+  }
+
+  void showConfirmationDialog(BuildContext context, String message) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('ทำรายการสำเร็จ',
+              style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Color.fromARGB(255, 11, 160, 16))),
+          content: Text(message),
+          actions: <Widget>[
+            TextButton(
+              child:
+                  Text('ตกลง', style: TextStyle(fontWeight: FontWeight.bold)),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void showErrorDialog(BuildContext context, String message) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Error!!',
+              style: TextStyle(fontWeight: FontWeight.bold, color: Colors.red)),
+          content: Text(message),
+          actions: <Widget>[
+            TextButton(
+              child:
+                  Text('ตกลง', style: TextStyle(fontWeight: FontWeight.bold)),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   void Logout() {
-     Navigator.push(
-                context,
-                MaterialPageRoute(
-                builder: (context) => Logopage(),
-                )
-     );
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => Logopage(),
+        ));
   }
 }
