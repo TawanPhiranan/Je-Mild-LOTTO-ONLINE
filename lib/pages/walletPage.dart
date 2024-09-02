@@ -28,7 +28,6 @@ class _WalletpageState extends State<Walletpage> {
   List<ShowMoneyGetResponse> showMoney = [];
   List<WalletGetResponse> showTransaction = [];
 
-
   @override
   void initState() {
     super.initState();
@@ -350,59 +349,63 @@ class _WalletpageState extends State<Walletpage> {
                               child: const Padding(
                                   padding: EdgeInsets.all(
                                       16.0), // กำหนด padding ภายในกล่อง
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment
-                                        .start, // Align content to the start
-                                    children: [
-                                      Column(
+                                  child: SingleChildScrollView(
+                                    child: Card(
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment
+                                            .start, // Align content to the start
                                         children: [
+                                          Column(
+                                            children: [
+                                              Row(
+                                                mainAxisAlignment: MainAxisAlignment
+                                                    .end, // Align date to the right
+                                                children: [
+                                                  Text(
+                                                    '7 กรกฎาคม 2567',
+                                                    style: TextStyle(
+                                                      color: Color.fromRGBO(
+                                                          84, 84, 84, 1),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
+                                          ),
                                           Row(
-                                            mainAxisAlignment: MainAxisAlignment
-                                                .end, // Align date to the right
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
                                             children: [
                                               Text(
-                                                '7 กรกฎาคม 2567',
+                                                'เงินเข้า',
                                                 style: TextStyle(
+                                                  fontSize: 18,
                                                   color:
                                                       Color.fromRGBO(84, 84, 84, 1),
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                              Text(
+                                                '+ 100',
+                                                style: TextStyle(
+                                                  fontSize: 18,
+                                                  color: Color.fromARGB(
+                                                      255, 0, 255, 26),
+                                                  fontWeight: FontWeight.bold,
                                                 ),
                                               ),
                                             ],
                                           ),
+                                          Divider(
+                                            color:
+                                                Colors.grey, // Color of the divider
+                                            thickness:
+                                                1.0, // Thickness of the divider
+                                          ),
+                                          SizedBox(height: 8),
                                         ],
                                       ),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Text(
-                                            'เงินเข้า',
-                                            style: TextStyle(
-                                              fontSize: 18,
-                                              color:
-                                                  Color.fromRGBO(84, 84, 84, 1),
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
-                                          Text(
-                                            '+ 100',
-                                            style: TextStyle(
-                                              fontSize: 18,
-                                              color: Color.fromARGB(
-                                                  255, 0, 255, 26),
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      Divider(
-                                        color:
-                                            Colors.grey, // Color of the divider
-                                        thickness:
-                                            1.0, // Thickness of the divider
-                                      ),
-                                      SizedBox(height: 8),
-                                    ],
+                                    ),
                                   )),
                             )),
                       ])
