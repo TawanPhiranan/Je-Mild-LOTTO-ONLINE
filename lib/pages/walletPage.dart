@@ -595,6 +595,8 @@ class _WalletpageState extends State<Walletpage> {
                   Text('ตกลง', style: TextStyle(fontWeight: FontWeight.bold)),
               onPressed: () {
                 Navigator.of(context).pop();
+                // Refresh the page after closing the dialog
+                setState(() {});
               },
             ),
           ],
@@ -617,6 +619,8 @@ class _WalletpageState extends State<Walletpage> {
                   Text('ตกลง', style: TextStyle(fontWeight: FontWeight.bold)),
               onPressed: () {
                 Navigator.of(context).pop();
+                // Refresh the page after closing the dialog
+                setState(() {});
               },
             ),
           ],

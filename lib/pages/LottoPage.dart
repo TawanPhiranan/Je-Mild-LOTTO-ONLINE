@@ -28,25 +28,12 @@ class _LottoPageState extends State<LottoPage> {
   late Future<void> loadData;
   String? selectedLottoNumber;
   int failed = 0;
-  List<TextEditingController> _controllers = [];
-  late ScrollController _scrollController;
 
   @override
   void initState() {
     super.initState();
-    _controllers = List.generate(6, (_) => TextEditingController());
-    _scrollController = ScrollController();
 
     fetchRandomNumbers();
-  }
-
-  @override
-  void dispose() {
-    for (var controller in _controllers) {
-      controller.dispose();
-    }
-    _scrollController.dispose();
-    super.dispose();
   }
 
   void _onItemTapped(int index) {
@@ -238,7 +225,6 @@ class _LottoPageState extends State<LottoPage> {
                           const SizedBox(height: 20),
                           Expanded(
                             child: ListView(
-                              controller: _scrollController,
                               children: [                            
                                 Row(
                                   mainAxisAlignment:
@@ -247,7 +233,6 @@ class _LottoPageState extends State<LottoPage> {
                                     return SizedBox(
                                       width: 50,
                                       child: TextField(
-                                        controller: _controllers[index],
                                         textAlign: TextAlign.center,
                                         style: const TextStyle(
                                             color: Colors.black),
