@@ -401,8 +401,7 @@ class _WalletpageState extends State<Walletpage> {
                                                     : 'เงินออก',
                                                 style: TextStyle(
                                                   fontSize: 18,
-                                                  color: Color.fromRGBO(
-                                                      84, 84, 84, 1),
+                                                  color: Color.fromRGBO(56, 56, 56, 1),
                                                   fontWeight: FontWeight.bold,
                                                 ),
                                               ),
@@ -437,6 +436,9 @@ class _WalletpageState extends State<Walletpage> {
                             ),
                           ),
                         ],
+                      ),
+                      SizedBox(
+                        height: 20,
                       )
                     ],
                   ),
