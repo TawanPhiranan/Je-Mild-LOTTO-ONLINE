@@ -20,6 +20,25 @@ class Walletpage extends StatefulWidget {
 
   @override
   State<Walletpage> createState() => _WalletpageState();
+  
+  String displayAmount(double amount) {
+    if (amount > 0) {
+      return '+ ${amount.toString()}'; // เงินเข้า
+    } else if (amount < 0) {
+      return '${amount.toString()}'; // เงินออก (แสดงค่าลบ)
+    } else {
+      return '0'; // ถ้าเป็นศูนย์
+    }
+  }
+
+  String checkTransactionStatus(double amount) {
+    if (amount >= 0) {
+      return 'เงินเข้า'; // สถานะเงินเข้า
+    } else {
+      return 'เงินออก'; // สถานะเงินออก
+    }
+  }
+
 }
 
 class _WalletpageState extends State<Walletpage> {
@@ -198,7 +217,7 @@ class _WalletpageState extends State<Walletpage> {
                 );
               }
               return Padding(
-                padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
+                padding: const EdgeInsets.fromLTRB(10, 30, 10, 10),
                 child: SingleChildScrollView(
                   child: Column(
                     children: [
@@ -333,42 +352,42 @@ class _WalletpageState extends State<Walletpage> {
                         ],
                       ),
                       const SizedBox(height: 8),
-                      Column(children: [
-                        SizedBox(
-                            width: double.infinity, // ทำให้การ์ดกว้างเต็มจอ
+                      Column(
+                        children: [
+                          SizedBox(
+                            width: double.infinity,
                             child: Container(
                               decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(
-                                    10), // มุมโค้งของสี่เหลี่ยม
+                                borderRadius: BorderRadius.circular(10),
                                 border: Border.all(
-                                  color: const Color.fromRGBO(
-                                      177, 36, 24, 1), // สีของเส้นขอบ
-                                  width: 2, // ความหนาของเส้นขอบ
+                                  color: const Color.fromRGBO(177, 36, 24, 1),
+                                  width: 2,
                                 ),
                               ),
-                              child: const Padding(
-                                  padding: EdgeInsets.all(
-                                      16.0), // กำหนด padding ภายในกล่อง
-                                  child: SingleChildScrollView(
-                                    child: Card(
-                                      child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment
-                                            .start, // Align content to the start
+                              child: Padding(
+                                padding: EdgeInsets.all(16.0),
+                                child: SizedBox(
+                                  // เปลี่ยนจาก Expanded เป็น Container
+                                  height: 400, // กำหนดความสูงให้กับ Container
+                                  child: ListView.builder(
+                                    itemCount: showTransaction.length,
+                                    itemBuilder: (context, index) {
+                                      final transaction =
+                                          showTransaction[index];
+                                      return Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                         children: [
-                                          Column(
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.end,
                                             children: [
-                                              Row(
-                                                mainAxisAlignment: MainAxisAlignment
-                                                    .end, // Align date to the right
-                                                children: [
-                                                  Text(
-                                                    '7 กรกฎาคม 2567',
-                                                    style: TextStyle(
-                                                      color: Color.fromRGBO(
-                                                          84, 84, 84, 1),
-                                                    ),
-                                                  ),
-                                                ],
+                                              Text(
+                                                transaction.transactionDate,
+                                                style: TextStyle(
+                                                  color: Color.fromRGBO(
+                                                      84, 84, 84, 1),
+                                                ),
                                               ),
                                             ],
                                           ),
@@ -377,38 +396,48 @@ class _WalletpageState extends State<Walletpage> {
                                                 MainAxisAlignment.spaceBetween,
                                             children: [
                                               Text(
-                                                'เงินเข้า',
+                                                transaction.amount >= 0
+                                                    ? 'เงินเข้า'
+                                                    : 'เงินออก',
                                                 style: TextStyle(
                                                   fontSize: 18,
-                                                  color:
-                                                      Color.fromRGBO(84, 84, 84, 1),
+                                                  color: Color.fromRGBO(
+                                                      84, 84, 84, 1),
                                                   fontWeight: FontWeight.bold,
                                                 ),
                                               ),
                                               Text(
-                                                '+ 100',
+                                                '${transaction.amount > 0 ? '+' : '-'}${transaction.amount.abs()}', // Use abs() for the display
                                                 style: TextStyle(
                                                   fontSize: 18,
-                                                  color: Color.fromARGB(
-                                                      255, 0, 255, 26),
+                                                  color: transaction.amount > 0
+                                                      ? Color.fromARGB(
+                                                          255, 0, 255, 26)
+                                                      : Color.fromARGB(
+                                                          255,
+                                                          255,
+                                                          0,
+                                                          0), // Green for income, red for expense
                                                   fontWeight: FontWeight.bold,
                                                 ),
                                               ),
                                             ],
                                           ),
                                           Divider(
-                                            color:
-                                                Colors.grey, // Color of the divider
-                                            thickness:
-                                                1.0, // Thickness of the divider
+                                            color: Colors.grey,
+                                            thickness: 1.0,
                                           ),
                                           SizedBox(height: 8),
                                         ],
-                                      ),
-                                    ),
-                                  )),
-                            )),
-                      ])
+                                      );
+                                    },
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      )
                     ],
                   ),
                 ),
@@ -596,6 +625,9 @@ class _WalletpageState extends State<Walletpage> {
                   Text('ตกลง', style: TextStyle(fontWeight: FontWeight.bold)),
               onPressed: () {
                 Navigator.of(context).pop();
+                setState(() {
+                  loadData = loadDataAsync();
+                });
               },
             ),
           ],
@@ -618,6 +650,9 @@ class _WalletpageState extends State<Walletpage> {
                   Text('ตกลง', style: TextStyle(fontWeight: FontWeight.bold)),
               onPressed: () {
                 Navigator.of(context).pop();
+                setState(() {
+                  loadData = loadDataAsync();
+                });
               },
             ),
           ],
@@ -639,10 +674,11 @@ class _WalletpageState extends State<Walletpage> {
     var url = config['apiEndpoint'];
     var showMoneyResponse =
         await http.get(Uri.parse('$url/wallet/total/${widget.userId}'));
-    var showTransactionResponse =
-        await http.get(Uri.parse('$url/wallet/transaction/${widget.userId}'));
+    var showTransactionResponse = await http
+        .get(Uri.parse('$url/wallet/transaction?userID=${widget.userId}'));
 
     showMoney = showMoneyGetResponseFromJson(showMoneyResponse.body);
     showTransaction = walletGetResponseFromJson(showTransactionResponse.body);
+    print('${showTransactionResponse.body}');
   }
 }
