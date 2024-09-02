@@ -1,27 +1,27 @@
 // To parse this JSON data, do
 //
-//     final transactionGetResponse = transactionGetResponseFromJson(jsonString);
+//     final walletGetResponse = walletGetResponseFromJson(jsonString);
 
 import 'dart:convert';
 
-List<TransactionGetResponse> transactionGetResponseFromJson(String str) => List<TransactionGetResponse>.from(json.decode(str).map((x) => TransactionGetResponse.fromJson(x)));
+List<WalletGetResponse> walletGetResponseFromJson(String str) => List<WalletGetResponse>.from(json.decode(str).map((x) => WalletGetResponse.fromJson(x)));
 
-String transactionGetResponseToJson(List<TransactionGetResponse> data) => json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
+String walletGetResponseToJson(List<WalletGetResponse> data) => json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
-class TransactionGetResponse {
+class WalletGetResponse {
     int transactionId;
     int userId;
     int amount;
     String transactionDate;
 
-    TransactionGetResponse({
+    WalletGetResponse({
         required this.transactionId,
         required this.userId,
         required this.amount,
         required this.transactionDate,
     });
 
-    factory TransactionGetResponse.fromJson(Map<String, dynamic> json) => TransactionGetResponse(
+    factory WalletGetResponse.fromJson(Map<String, dynamic> json) => WalletGetResponse(
         transactionId: json["transactionID"],
         userId: json["userID"],
         amount: json["amount"],
