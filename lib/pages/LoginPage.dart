@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:mini_project/models/request/users_login_post_req.dart';
 import 'package:mini_project/models/response/users_login_post_res.dart';
 import 'package:mini_project/pages/AdminHomePage.dart';
@@ -167,6 +168,31 @@ class _LoginpageState extends State<Loginpage> {
   }
 
   void login() async {
+    if (phoneCtl.text.isEmpty || passwordCtl.text.isEmpty) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('ข้อมูลไม่ถูกต้อง',
+                style: TextStyle(
+                    color: Color.fromARGB(255, 255, 0, 0),
+                    fontWeight: FontWeight.bold)),
+            content: Text('กรุณากรอกเบอร์โทรและรหัสผ่านให้ครบถ้วน'),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child:
+                    Text('ตกลง',style: TextStyle(fontWeight: FontWeight.bold)),
+              ),
+            ],
+          );
+        },
+      );
+      return;
+    }
+
     log(phoneCtl.text);
     log(passwordCtl.text);
     try {
@@ -175,12 +201,13 @@ class _LoginpageState extends State<Loginpage> {
       var value = await http.post(Uri.parse('$API_ENDPOINT/login'),
           headers: {"Content-Type": "application/json; charset=utf-8"},
           body: usersLoginPostRequestToJson(data));
-          // log('Response Body: ${value.body}');
+
       UsersLoginPostResponse users = usersLoginPostResponseFromJson(value.body);
-      // log(users.users.email);
+
       setState(() {
         text = '';
       });
+
       if (users.user.typeId == 1) {
         Navigator.push(
             context,
@@ -195,7 +222,32 @@ class _LoginpageState extends State<Loginpage> {
             ));
       }
     } catch (eeee) {
-      log(eeee.toString()+'eiei');
+      log(eeee.toString() + 'eiei');
+
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('ข้อมูลไม่ถูกต้อง',
+                style: TextStyle(
+                    color: Color.fromARGB(255, 255, 0, 0),
+                    fontWeight: FontWeight.bold)),
+            content: Text('เบอร์โทรหรือรหัสผ่านไม่ถูกต้อง'),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: Text(
+                  'ตกลง',
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+              ),
+            ],
+          );
+        },
+      );
+
       setState(() {
         text = 'phone no or password incorrect';
       });

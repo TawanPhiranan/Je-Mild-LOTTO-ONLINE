@@ -1,7 +1,9 @@
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:mini_project/config/config.dart';
+import 'package:mini_project/models/response/Order_response.dart';
 import 'package:mini_project/models/response/admin_draws_get_res.dart';
 import 'package:mini_project/pages/LoginPage.dart';
 import 'package:mini_project/pages/LogoPage.dart';
@@ -24,7 +26,10 @@ class _OrderPageState extends State<OrderPage> {
   int _selectedIndex = 3; // Track the selected index
   int _Index = 0;
   List<AdminDrawGetResponse> draws = [];
+  List<String> oorder= [];
   late Future<void> loadData;
+  int money = 0; 
+  List<String> winningOrders = [];
 
   @override
   void initState() {
@@ -482,11 +487,11 @@ class _OrderPageState extends State<OrderPage> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           ElevatedButton(
-                            onPressed: () {
-                              setState(() {
-                                _Index = 0; // เปลี่ยนเป็นมุมมองที่ต้องการ
-                              });
-                            },
+                             onPressed: Order, //() {
+                            //   setState(() {
+                            //     _Index = 0; // เปลี่ยนเป็นมุมมองที่ต้องการ
+                            //   });
+                            // },
                             // ignore: sort_child_properties_last
                             child: const Text(
                               "คำสั่งซื้อ",
@@ -552,236 +557,179 @@ class _OrderPageState extends State<OrderPage> {
                           ),
                         ],
                       ),
-                      Padding(
-                        padding: const EdgeInsets.all(5.0),
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: SizedBox(
-                                height: 170,
-                                child: Card(
-                                  color: const Color.fromRGBO(217, 217, 217, 1),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(15),
-                                  ),
-                                  child: Stack(
+
+    Padding(
+  padding: const EdgeInsets.all(5.0),
+  child: Row(
+    children: [
+      Expanded(
+        child: Column(
+          children: oorder
+              .map((lottoNumber) => SizedBox(
+                    height: 170,
+                    child: Card(
+                      color: const Color.fromRGBO(217, 217, 217, 1),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                      child: Stack(
+                        children: [
+                          Align(
+                            alignment: Alignment.topLeft,
+                            child: Padding(
+                              padding: const EdgeInsets.all(5.0),
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
-                                      Align(
-                                        alignment: Alignment.topLeft,
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(5.0),
-                                          child: Row(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  Row(
-                                                    children: [
-                                                      Image.asset(
-                                                          'assets/images/flying-money.png',
-                                                          width: 30),
-                                                      const Text(
-                                                        'สลากกินแบ่ง Je’ Mild ',
-                                                        style: TextStyle(
-                                                          color: Colors.black,
-                                                          fontSize: 15,
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                  Row(
-                                                    children: [
-                                                      Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .only(
-                                                                left: 30.0),
-                                                        child: ClipOval(
-                                                          child: Image.asset(
-                                                            'assets/images/logoMild.jpeg',
-                                                            width: 60,
-                                                            height: 60,
-                                                            fit: BoxFit.cover,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      SizedBox(
-                                                        width: 160,
-                                                        height: 50,
-                                                        child: Padding(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .only(
-                                                                  left: 15.0),
-                                                          child: Card(
-                                                            color: const Color
-                                                                .fromRGBO(254,
-                                                                248, 195, 1.0),
-                                                            shape:
-                                                                RoundedRectangleBorder(
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          5),
-                                                            ),
-                                                            child: const Center(
-                                                              child: Text(
-                                                                '4  0  7  0  4  1',
-                                                                style:
-                                                                    TextStyle(
-                                                                  fontSize: 19,
-                                                                  color: Colors
-                                                                      .black,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold,
-                                                                ),
-                                                              ),
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                  Row(
-                                                    children: [
-                                                      Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .only(
-                                                                left: 10.0),
-                                                        child: Row(
-                                                          children: [
-                                                            const Column(
-                                                              children: [
-                                                                Text(
-                                                                  '120',
-                                                                  style:
-                                                                      TextStyle(
-                                                                    color: Colors
-                                                                        .black,
-                                                                    fontSize:
-                                                                        16,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .bold,
-                                                                  ),
-                                                                ),
-                                                                Text(
-                                                                  'บาท',
-                                                                  style:
-                                                                      TextStyle(
-                                                                    color: Colors
-                                                                        .black,
-                                                                    fontSize:
-                                                                        16,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .bold,
-                                                                  ),
-                                                                ),
-                                                              ],
-                                                            ),
-                                                            const SizedBox(
-                                                                height: 5),
-                                                            Column(
-                                                              children: [
-                                                                Padding(
-                                                                  padding:
-                                                                      const EdgeInsets
-                                                                          .only(
-                                                                          left:
-                                                                              5.0),
-                                                                  child:
-                                                                      ClipOval(
-                                                                    child: Image
-                                                                        .asset(
-                                                                      'assets/images/signature.png',
-                                                                      width: 50,
-                                                                      height:
-                                                                          50,
-                                                                      fit: BoxFit
-                                                                          .cover,
-                                                                    ),
-                                                                  ),
-                                                                ),
-                                                              ],
-                                                            )
-                                                          ],
-                                                        ),
-                                                      ),
-                                                      const Padding(
-                                                        padding:
-                                                            EdgeInsets.only(
-                                                                left: 5.0),
-                                                        child: Text(
-                                                          '1 สิงหาคม 2567',
-                                                          style: TextStyle(
-                                                            color:
-                                                                Color.fromRGBO(
-                                                                    0,
-                                                                    91,
-                                                                    228,
-                                                                    1),
-                                                            fontSize: 18,
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ],
-                                              ),
-                                            ],
+                                      Row(
+                                        children: [
+                                          Image.asset(
+                                            'assets/images/flying-money.png',
+                                            width: 30,
                                           ),
-                                        ),
+                                          const Text(
+                                            'สลากกินแบ่ง Je’ Mild ',
+                                            style: TextStyle(
+                                              color: Colors.black,
+                                              fontSize: 15,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                        ],
                                       ),
-                                      const Align(
-                                        alignment: Alignment.centerRight,
-                                        child: SizedBox(
-                                          width: 50,
-                                          height: 170,
-                                          child: Card(
-                                            color: Colors.white,
-                                            shape: RoundedRectangleBorder(
-                                              borderRadius: BorderRadius.only(
-                                                topRight: Radius.circular(
-                                                    15), // ขอบมุมขวาบน
-                                                bottomRight: Radius.circular(
-                                                    15), // ขอบมุมขวาล่าง
+                                      Row(
+                                        children: [
+                                          Padding(
+                                            padding: const EdgeInsets.only(left: 30.0),
+                                            child: ClipOval(
+                                              child: Image.asset(
+                                                'assets/images/logoMild.jpeg',
+                                                width: 60,
+                                                height: 60,
+                                                fit: BoxFit.cover,
                                               ),
                                             ),
-                                            child: Center(
-                                              child: RotatedBox(
-                                                quarterTurns: 3,
-                                                child: Text(
-                                                  'เจ๊มายพารวย',
-                                                  style: TextStyle(
-                                                    color: Colors.black,
-                                                    fontSize: 16,
-                                                    fontWeight: FontWeight.bold,
+                                          ),
+                                          SizedBox(
+                                            width: 160,
+                                            height: 50,
+                                            child: Padding(
+                                              padding: const EdgeInsets.only(left: 15.0),
+                                              child: Card(
+                                                color: const Color.fromRGBO(254, 248, 195, 1.0),
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius: BorderRadius.circular(5),
+                                                ),
+                                                child: Center(
+                                                  child: Text(
+                                                    lottoNumber, // Use number['lottoNumber'] here
+                                                    style: TextStyle(
+                                                      fontSize: 19,
+                                                      color: Colors.black,
+                                                      fontWeight: FontWeight.bold,
+                                                    ),
                                                   ),
                                                 ),
                                               ),
                                             ),
                                           ),
-                                        ),
+                                        ],
+                                      ),
+                                      Row(
+                                        children: [
+                                          Padding(
+                                            padding: const EdgeInsets.only(left: 10.0),
+                                            child: Row(
+                                              children: [
+                                                const Column(
+                                                  children: [
+                                                    Text(
+                                                      '120',
+                                                      style: TextStyle(
+                                                        color: Colors.black,
+                                                        fontSize: 16,
+                                                        fontWeight: FontWeight.bold,
+                                                      ),
+                                                    ),
+                                                    Text(
+                                                      'บาท',
+                                                      style: TextStyle(
+                                                        color: Colors.black,
+                                                        fontSize: 16,
+                                                        fontWeight: FontWeight.bold,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                                const SizedBox(height: 5),
+                                                Column(
+                                                  children: [
+                                                    Padding(
+                                                      padding: const EdgeInsets.only(left: 5.0),
+                                                      child: ClipOval(
+                                                        child: Image.asset(
+                                                          'assets/images/signature.png',
+                                                          width: 50,
+                                                          height: 50,
+                                                          fit: BoxFit.cover,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ],
                                       ),
                                     ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          const Align(
+                            alignment: Alignment.centerRight,
+                            child: SizedBox(
+                              width: 50,
+                              height: 170,
+                              child: Card(
+                                color: Colors.white,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.only(
+                                    topRight: Radius.circular(15), // ขอบมุมขวาบน
+                                    bottomRight: Radius.circular(15), // ขอบมุมขวาล่าง
+                                  ),
+                                ),
+                                child: Center(
+                                  child: RotatedBox(
+                                    quarterTurns: 3,
+                                    child: Text(
+                                      'เจ๊มายพารวย',
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
                                   ),
                                 ),
                               ),
                             ),
-                            
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
+                    ),
+                  ))
+              .toList(), // Convert Iterable to List
+        ),
+      ),
+    ],
+  ),
+),
                     ] else if (_Index == 1) ...[
                        SizedBox(
                         width: 390,
@@ -1060,12 +1008,13 @@ class _OrderPageState extends State<OrderPage> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          ElevatedButton(
-                            onPressed: () {
-                              setState(() {
-                                _Index = 0; // หน้าที่จะไป
-                              });
-                            },
+                         ElevatedButton(
+                          onPressed: () async {
+                            await Order; // Call the Order function
+                            setState(() {
+                              _Index = 0; // Update the state to navigate or change the view
+                            });
+                          },
                             // ignore: sort_child_properties_last
                             child: const Text(
                               "คำสั่งซื้อ",
@@ -1094,12 +1043,14 @@ class _OrderPageState extends State<OrderPage> {
                               ),
                             ),
                           ),
+
                           ElevatedButton(
-                            onPressed: () {
-                              setState(() {
-                                _Index = 1; // เปลี่ยนเป็นหน้าที่ต้องการ
-                              });
-                            },
+                            onPressed:() async {
+                            await drawmoney(); 
+                            setState(() {
+                              _Index = 1;
+                            });
+                          },
 
                             // ignore: sort_child_properties_last
                             child: const Text(
@@ -1130,99 +1081,6 @@ class _OrderPageState extends State<OrderPage> {
                             ),
                           ),
                         ],
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(5.0),
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: SizedBox(
-                                height: 130,
-                                child: Stack(
-                                  children: [
-                                    Positioned(
-                                      top: 0,
-                                      left: 0,
-                                      right: 0,
-                                      bottom: 0,
-                                      child: Card(
-                                        color: const Color.fromRGBO(
-                                            254, 248, 195, 1.0),
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(20),
-                                        ),
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(5.0),
-                                          child: Stack(
-                                            children: [
-                                              Positioned(
-                                                bottom: 5,
-                                                left: 5,
-                                                child: const Text(
-                                                  'คุณถูกรางวัล 1 ใบ',
-                                                  style: TextStyle(
-                                                    color: Colors.black,
-                                                    fontSize: 15,
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    Positioned(
-                                      top: 0,
-                                      left: 0,
-                                      right: 0,
-                                      height: 90,
-                                      child: Card(
-                                        color: const Color.fromRGBO(
-                                            217, 217, 217, 1),
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(15),
-                                        ),
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(5.0),
-                                          child: Column(
-                                            children: [
-                                              Align(
-                                                alignment: Alignment.centerLeft,
-                                                child: const Text(
-                                                  'สลากกินแบ่ง Je’ Mild ',
-                                                  style: TextStyle(
-                                                    color: Colors.black,
-                                                    fontSize: 15,
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
-                                                ),
-                                              ),
-                                              const SizedBox(height: 10),
-                                              Center(
-                                                child: const Text(
-                                                  '1 สิงหาคม 2567',
-                                                  style: TextStyle(
-                                                    color: Color.fromRGBO(
-                                                        0, 0, 0, 1),
-                                                    fontSize: 18,
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
                       ),
 
                       Padding(
@@ -1266,7 +1124,7 @@ class _OrderPageState extends State<OrderPage> {
                                                 bottom: 30,
                                                 left: 5,
                                                 child: const Text(
-                                                  'รับเงินรางวัล 100,000 บาท',
+                                                  'รับเงินรางวัล  บาท',
                                                   style: TextStyle(
                                                     color: Colors.black,
                                                     fontSize: 12,
@@ -1554,7 +1412,7 @@ class _OrderPageState extends State<OrderPage> {
                                                                             const Center(
                                                                           child:
                                                                               Text(
-                                                                            '4  0  7  0  4  1',
+                                                                           "",
                                                                             style:
                                                                                 TextStyle(
                                                                               fontSize: 19,
@@ -1618,27 +1476,7 @@ class _OrderPageState extends State<OrderPage> {
                                                                       ],
                                                                     ),
                                                                   ),
-                                                                  const Padding(
-                                                                    padding: EdgeInsets
-                                                                        .only(
-                                                                            left:
-                                                                                5.0),
-                                                                    child: Text(
-                                                                      '1 สิงหาคม 2567',
-                                                                      style:
-                                                                          TextStyle(
-                                                                        color: Color.fromRGBO(
-                                                                            0,
-                                                                            91,
-                                                                            228,
-                                                                            1),
-                                                                        fontSize:
-                                                                            18,
-                                                                        fontWeight:
-                                                                            FontWeight.bold,
-                                                                      ),
-                                                                    ),
-                                                                  ),
+
                                                                 ],
                                                               ),
                                                             ],
@@ -1722,8 +1560,69 @@ class _OrderPageState extends State<OrderPage> {
           builder: (context) => Logopage(),
         ));
   }
+Future<List<Map<String, dynamic>>> drawmoney() async {
+  await loadDataAsync();
+  await Order();
 
-  Future<void> loadDataAsync() async {
+  List<String> purchasedLottoNumbers = oorder; 
+  List<Map<String, dynamic>> results = [];
+  
+  for (var draw in draws) {
+    if (purchasedLottoNumbers.contains(draw.winningNumber)) {
+      int money = 0;
+      switch (draw.prizeType) {
+        case 1:
+          money = 100000;
+          break;
+        case 2:
+          money = 70000;
+          break;
+        case 3:
+          money = 50000;
+          break;
+        case 4:
+          money = 25000;
+          break;
+        case 5:
+          money = 10000;
+          break;
+        default:
+          money = 0;
+          break;
+      }
+      results.add({
+        'winningNumber': draw.winningNumber,
+        'prizeType': draw.prizeType,
+        'money': money,
+      });
+      print('Winning number: ${draw.winningNumber}, Prize Type: ${draw.prizeType}, Money set to: $money');
+    }
+  }
+  return results;
+}
+
+Future<void> Order() async {
+  try {
+    final response = await http.get(Uri.parse("http://172.20.10.6:3000/order/PurchasedLotto/${widget.userId}"));
+
+    if (response.statusCode == 200) {
+      final List<dynamic> data = jsonDecode(response.body);
+      log('Received data: $data'); 
+      log(widget.userId.toString());
+
+      setState(() {
+        oorder = data.map((item) => item['lottoNumber'] as String).toList();
+      });
+
+    } else {
+      print('Failed to load data. Status code: ${response.statusCode}');
+    }
+  } catch (e) {
+    print('An error occurred: $e');
+  }
+}
+
+Future<void> loadDataAsync() async {
     var config = await Configuration.getConfig();
     var url = config['apiEndpoint'];
     var response = await http.get(Uri.parse('$url/admin/drawsNow'));
