@@ -585,7 +585,7 @@ class _LottoPageState extends State<LottoPage> {
     try {
       var config = await Configuration.getConfig();
       var url = config['apiEndpoint'];
-      final response = await http.get(Uri.parse('$url/admin/randomAll'));
+      final response = await http.get(Uri.parse('$url/admin/randomALL3'));
       // final response = await http.get(Uri.parse('http://10.160.65.51:3000/order/random'));
 
       log(response.body);
