@@ -547,47 +547,13 @@ class _LottoPageState extends State<LottoPage> {
       ),
     );
   }
-
-  Future<void> Search() async {
-    List<String> inputNumbers =
-        controllers.map((controller) => controller.text).toList();
-
-    try {
-      await fetchRandomNumbers();
-
-      if (_randomNumbers.isNotEmpty) {
-        List<String> allNumbers = _randomNumbers;
-        List<String> filteredNumbers = allNumbers.where((number) {
-          for (int i = 0; i < inputNumbers.length; i++) {
-            if (inputNumbers[i].isNotEmpty && inputNumbers[i] != number[i]) {
-              return false;
-            }
-          }
-          return true;
-        }).toList();
-
-        setState(() {
-          _randomNumbers = filteredNumbers;
-        });
-      } else {
-        setState(() {
-          _randomNumbers = ['No numbers available'];
-        });
-      }
-    } catch (e) {
-      setState(() {
-        _randomNumbers = ['Error: $e'];
-      });
-    }
-  }
-
-  Future<void> fetchRandomNumbers([List<String>? numbers]) async {
+///////////// 
+// เมธอดสำหรับเรียก API และสุ่มตัวเลข
+  Future<void> fetchRandomNumbers() async {
     try {
       var config = await Configuration.getConfig();
       var url = config['apiEndpoint'];
       final response = await http.get(Uri.parse('$url/admin/randomALL3'));
-      // final response = await http.get(Uri.parse('http://10.160.65.51:3000/order/random'));
-
       log(response.body);
 
       if (response.statusCode == 200) {
@@ -660,6 +626,9 @@ class _LottoPageState extends State<LottoPage> {
                               child: Text('ตกลง'),
                               onPressed: () {
                                 Navigator.of(context).pop();
+                                setState(() {
+                                  fetchRandomNumbers();
+                                });
                               },
                             ),
                           ],
@@ -751,6 +720,39 @@ class _LottoPageState extends State<LottoPage> {
     } catch (e) {
       print('Error: $e');
       failed = 3; // เกิดข้อผิดพลาด
+    }
+  }
+
+  Future<void> Search() async {
+    List<String> inputNumbers =
+        controllers.map((controller) => controller.text).toList();
+
+    try {
+      await fetchRandomNumbers();
+
+      if (_randomNumbers.isNotEmpty) {
+        List<String> allNumbers = _randomNumbers;
+        List<String> filteredNumbers = allNumbers.where((number) {
+          for (int i = 0; i < inputNumbers.length; i++) {
+            if (inputNumbers[i].isNotEmpty && inputNumbers[i] != number[i]) {
+              return false;
+            }
+          }
+          return true;
+        }).toList();
+
+        setState(() {
+          _randomNumbers = filteredNumbers;
+        });
+      } else {
+        setState(() {
+          _randomNumbers = ['No numbers available'];
+        });
+      }
+    } catch (e) {
+      setState(() {
+        _randomNumbers = ['Error: $e'];
+      });
     }
   }
 
