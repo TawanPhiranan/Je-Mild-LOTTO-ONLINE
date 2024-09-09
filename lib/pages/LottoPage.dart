@@ -6,6 +6,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mini_project/config/config.dart';
+import 'package:mini_project/models/request/user_buy_post_req.dart';
 import 'package:mini_project/pages/LogoPage.dart';
 import 'package:mini_project/pages/LottoPage.dart';
 import 'package:mini_project/pages/OrderPage.dart';
@@ -27,6 +28,9 @@ class _LottoPageState extends State<LottoPage> {
   List<String> _randomNumbers = [];
   var controllers = List.generate(6, (index) => TextEditingController());
   var focusNodes = List.generate(6, (index) => FocusNode());
+  late Future<void> loadData;
+  String? selectedLottoNumber;
+  int failed = 0;
 
   @override
   void initState() {
@@ -81,7 +85,8 @@ class _LottoPageState extends State<LottoPage> {
           ),
         ),
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white),
+          icon:
+              const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white),
           onPressed: () {
             Navigator.of(context).pop();
           },
@@ -205,9 +210,11 @@ class _LottoPageState extends State<LottoPage> {
                           ),
                           const SizedBox(height: 20),
                           LayoutBuilder(
-                            builder: (BuildContext context, BoxConstraints constraints) {
+                            builder: (BuildContext context,
+                                BoxConstraints constraints) {
                               return Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: List.generate(
                                   controllers.length,
                                   (index) => Container(
@@ -234,7 +241,8 @@ class _LottoPageState extends State<LottoPage> {
                                         cursorColor: Colors.transparent,
                                         inputFormatters: [
                                           LengthLimitingTextInputFormatter(1),
-                                          FilteringTextInputFormatter.digitsOnly,
+                                          FilteringTextInputFormatter
+                                              .digitsOnly,
                                         ],
                                         decoration: InputDecoration(
                                           border: InputBorder.none,
@@ -242,8 +250,10 @@ class _LottoPageState extends State<LottoPage> {
                                           hintStyle: TextStyle(
                                             fontFamily: 'prompt',
                                             fontWeight: FontWeight.w500,
-                                            fontSize: constraints.maxWidth * 0.1,
-                                            color: const Color.fromARGB(162, 0, 0, 0),
+                                            fontSize:
+                                                constraints.maxWidth * 0.1,
+                                            color: const Color.fromARGB(
+                                                162, 0, 0, 0),
                                           ),
                                         ),
                                         style: TextStyle(
@@ -288,8 +298,8 @@ class _LottoPageState extends State<LottoPage> {
               padding: const EdgeInsets.symmetric(horizontal: 20.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Text(
+                children: const [
+                  Text(
                     'แนะนำ',
                     style: TextStyle(
                       fontSize: 18,
@@ -298,30 +308,7 @@ class _LottoPageState extends State<LottoPage> {
                       decoration: TextDecoration.underline,
                     ),
                   ),
-                  FilledButton(
-                    onPressed: fetchRandomNumbers,
-                    style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all(const Color.fromRGBO(177, 36, 24, 1)),
-                    ),
-                    child: const Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.sync,
-                          color: Colors.white,
-                          size: 20.0,
-                        ),
-                        SizedBox(width: 4),
-                        Text(
-                          'สุ่ม',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 20,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
+        
                 ],
               ),
             ),
@@ -331,6 +318,7 @@ class _LottoPageState extends State<LottoPage> {
               physics: const NeverScrollableScrollPhysics(),
               itemCount: _randomNumbers.length,
               itemBuilder: (context, index) {
+                final lottoNumber = _randomNumbers[index];
                 return Padding(
                   padding: const EdgeInsets.all(5.0),
                   child: Row(
@@ -350,14 +338,18 @@ class _LottoPageState extends State<LottoPage> {
                                   child: Padding(
                                     padding: const EdgeInsets.all(10.0),
                                     child: Row(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
                                         Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
                                           children: [
                                             Row(
                                               children: [
-                                                Image.asset('assets/images/flying-money.png', width: 30),
+                                                Image.asset(
+                                                    'assets/images/flying-money.png',
+                                                    width: 30),
                                                 const Text(
                                                   'สลากกินแบ่ง Je’ Mild ',
                                                   style: TextStyle(
@@ -371,7 +363,9 @@ class _LottoPageState extends State<LottoPage> {
                                             Row(
                                               children: [
                                                 Padding(
-                                                  padding: const EdgeInsets.only(left: 30.0),
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          left: 30.0),
                                                   child: ClipOval(
                                                     child: Image.asset(
                                                       'assets/images/logoMild.jpeg',
@@ -385,11 +379,21 @@ class _LottoPageState extends State<LottoPage> {
                                                   width: 160,
                                                   height: 50,
                                                   child: Padding(
-                                                    padding: const EdgeInsets.only(left: 15.0),
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            left: 15.0),
                                                     child: Card(
-                                                      color: const Color.fromRGBO(254, 248, 195, 1.0),
-                                                      shape: RoundedRectangleBorder(
-                                                        borderRadius: BorderRadius.circular(5),
+                                                      color:
+                                                          const Color.fromRGBO(
+                                                              254,
+                                                              248,
+                                                              195,
+                                                              1.0),
+                                                      shape:
+                                                          RoundedRectangleBorder(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(5),
                                                       ),
                                                       child: Center(
                                                         child: Text(
@@ -397,7 +401,8 @@ class _LottoPageState extends State<LottoPage> {
                                                           style: TextStyle(
                                                             fontSize: 19,
                                                             color: Colors.black,
-                                                            fontWeight: FontWeight.bold,
+                                                            fontWeight:
+                                                                FontWeight.bold,
                                                           ),
                                                         ),
                                                       ),
@@ -409,7 +414,9 @@ class _LottoPageState extends State<LottoPage> {
                                             Row(
                                               children: [
                                                 Padding(
-                                                  padding: const EdgeInsets.only(left: 10.0),
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          left: 10.0),
                                                   child: Row(
                                                     children: [
                                                       const Column(
@@ -417,49 +424,50 @@ class _LottoPageState extends State<LottoPage> {
                                                           Text(
                                                             '120',
                                                             style: TextStyle(
-                                                              color: Colors.black,
+                                                              color:
+                                                                  Colors.black,
                                                               fontSize: 18,
-                                                              fontWeight: FontWeight.bold,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
                                                             ),
                                                           ),
                                                           Text(
                                                             'บาท',
                                                             style: TextStyle(
-                                                              color: Colors.black,
+                                                              color:
+                                                                  Colors.black,
                                                               fontSize: 18,
-                                                              fontWeight: FontWeight.bold,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
                                                             ),
                                                           ),
                                                         ],
                                                       ),
-                                                      const SizedBox(height: 10),
+                                                      const SizedBox(
+                                                          height: 10),
                                                       Column(
                                                         children: [
                                                           Padding(
-                                                            padding: const EdgeInsets.only(left: 20.0),
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .only(
+                                                                    left: 20.0),
                                                             child: ClipOval(
-                                                              child: Image.asset(
+                                                              child:
+                                                                  Image.asset(
                                                                 'assets/images/signature.png',
                                                                 width: 50,
                                                                 height: 50,
-                                                                fit: BoxFit.cover,
+                                                                fit: BoxFit
+                                                                    .cover,
                                                               ),
                                                             ),
                                                           ),
                                                         ],
                                                       ),
                                                     ],
-                                                  ),
-                                                ),
-                                                const Padding(
-                                                  padding: EdgeInsets.only(left: 5.0),
-                                                  child: Text(
-                                                    '1 สิงหาคม 2567',
-                                                    style: TextStyle(
-                                                      color: Color.fromRGBO(0, 91, 228, 1),
-                                                      fontSize: 18,
-                                                      fontWeight: FontWeight.bold,
-                                                    ),
                                                   ),
                                                 ),
                                               ],
@@ -508,12 +516,15 @@ class _LottoPageState extends State<LottoPage> {
                         height: 65,
                         width: 65,
                         child: FilledButton(
-                          onPressed: () {},
+                          onPressed: () => selectLottoNumber(lottoNumber),
                           style: ButtonStyle(
-                            backgroundColor: MaterialStateProperty.all(const Color.fromRGBO(213, 96, 97, 1)),
-                            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                            backgroundColor: MaterialStateProperty.all(
+                                const Color.fromRGBO(213, 96, 97, 1)),
+                            shape: MaterialStateProperty.all<
+                                RoundedRectangleBorder>(
                               RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(32.5), // Make the button round
+                                borderRadius: BorderRadius.circular(
+                                    32.5), // Make the button round
                               ),
                             ),
                           ),
@@ -536,59 +547,206 @@ class _LottoPageState extends State<LottoPage> {
       ),
     );
   }
-
-Future<void> Search() async {
-  List<String> inputNumbers = controllers.map((controller) => controller.text).toList();
-
-  try {
-    await fetchRandomNumbers();
-
-    if (_randomNumbers.isNotEmpty) {
-      List<String> allNumbers = _randomNumbers;
-      List<String> filteredNumbers = allNumbers.where((number) {
-
-        for (int i = 0; i < inputNumbers.length; i++) {
-          if (inputNumbers[i].isNotEmpty && inputNumbers[i] != number[i]) {
-            return false;
-          }
-        }
-        return true;
-      }).toList();
-
-      setState(() {
-        _randomNumbers = filteredNumbers;
-      });
-    } else {
-      setState(() {
-        _randomNumbers = ['No numbers available'];
-      });
-    }
-  } catch (e) {
-    setState(() {
-      _randomNumbers = ['Error: $e'];
-    });
-  }
-}
-
-
-  Future<void> fetchRandomNumbers([List<String>? numbers]) async {
+///////////// 
+// เมธอดสำหรับเรียก API และสุ่มตัวเลข
+  Future<void> fetchRandomNumbers() async {
     try {
       var config = await Configuration.getConfig();
       var url = config['apiEndpoint'];
-      // final response = await http.get(Uri.parse('$url/order/random'));
-      final response = await http.get(Uri.parse('http://10.160.65.51:3000/order/random'));
-
+      final response = await http.get(Uri.parse('$url/admin/randomALL3'));
       log(response.body);
 
       if (response.statusCode == 200) {
         final Map<String, dynamic> data = jsonDecode(response.body);
         final List<dynamic> fetchedNumbers = data['winningNumbers'];
         setState(() {
-          _randomNumbers = fetchedNumbers.map((item) => item.toString()).toList();
+          _randomNumbers =
+              fetchedNumbers.map((item) => item.toString()).toList();
         });
       } else {
         setState(() {
           _randomNumbers = ['Error: ${response.statusCode}'];
+        });
+      }
+    } catch (e) {
+      setState(() {
+        _randomNumbers = ['Error: $e'];
+      });
+    }
+  }
+
+  void selectLottoNumber(String lottoNumber) {
+    // เก็บ context ปัจจุบันไว้
+    final currentContext = context;
+
+    showDialog(
+      context: currentContext,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(
+            'ยืนยันการซื้อเลขนี้',
+            style: TextStyle(
+                color: Color.fromRGBO(0, 115, 85, 1),
+                fontWeight: FontWeight.bold),
+          ),
+          content: Text(
+            'คุณต้องการที่จะซื้อ Lotto $lottoNumber ใช่หรือไม่?',
+            style: TextStyle(fontSize: 18),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child:
+                  Text('ไม่ใช่', style: TextStyle(fontWeight: FontWeight.bold)),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: Text('ใช่', style: TextStyle(fontWeight: FontWeight.bold)),
+              onPressed: () async {
+                Navigator.of(context).pop();
+                setState(() {
+                  selectedLottoNumber = lottoNumber;
+                  log('Selected lotto number: $lottoNumber');
+                });
+
+                int result = await BuyLotto();
+
+                if (currentContext.mounted) {
+                  if (result == 201) {
+                    showDialog(
+                      context: currentContext,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: Text('การซื้อสำเร็จ'),
+                          content: Text(
+                              'คุณได้ทำการซื้อเลข $lottoNumber เรียบร้อยแล้ว'),
+                          actions: <Widget>[
+                            TextButton(
+                              child: Text('ตกลง'),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                                setState(() {
+                                  fetchRandomNumbers();
+                                });
+                              },
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  } else if (result == 400) {
+                    showDialog(
+                      context: currentContext,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: Text('การไม่ซื้อสำเร็จ'),
+                          content: Text(
+                              'คุณได้ทำการซื้อเลข $lottoNumber ไปแล้ว ไม่สามารถซื้อซ้ำได้อีก 😭'),
+                          actions: <Widget>[
+                            TextButton(
+                              child: Text('ตกลง'),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  } else if (result == 300) {
+                    showDialog(
+                      context: currentContext,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: Text('การไม่ซื้อสำเร็จ'),
+                          content: Text('ยอดเงินของคุณไม่พอ'),
+                          actions: <Widget>[
+                            TextButton(
+                              child: Text('ตกลง'),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  } else {
+                    // คุณสามารถจัดการกรณีอื่น ๆ ที่นี่
+                  }
+                }
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  BuyLotto() async {
+    try {
+      if (selectedLottoNumber == null || selectedLottoNumber!.isEmpty) {
+        print('No lotto number selected');
+        return;
+      }
+
+      var config = await Configuration.getConfig();
+      var url = config['apiEndpoint'];
+
+      var data = UserBuyPostRequest(lottoNumber: selectedLottoNumber!).toJson();
+      print('Sending data: ${jsonEncode(data)}'); // ตรวจสอบข้อมูลที่ส่ง
+
+      final response = await http.post(
+        Uri.parse('$url/order/lottoBuy/${widget.userId}'),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode(data),
+      );
+
+      print(
+          'Response status: ${response.statusCode}'); // ตรวจสอบสถานะการตอบกลับ
+      print('Response body: ${response.body}'); // ตรวจสอบเนื้อหาการตอบกลับ
+
+      if (response.statusCode == 201) {
+        print('Lotto purchased successfully');
+        return response.statusCode; // การซื้อสำเร็จ
+      } else if (response.statusCode == 400) {
+        return response.statusCode; // ซื้อล็อตโต้ซ้ำ
+      } else if (response.statusCode == 300) {
+        return response.statusCode; // เงินไม่พอ
+      } else {
+        return response.statusCode; // กรณีอื่น ๆ
+      }
+    } catch (e) {
+      print('Error: $e');
+      failed = 3; // เกิดข้อผิดพลาด
+    }
+  }
+
+  Future<void> Search() async {
+    List<String> inputNumbers =
+        controllers.map((controller) => controller.text).toList();
+
+    try {
+      await fetchRandomNumbers();
+
+      if (_randomNumbers.isNotEmpty) {
+        List<String> allNumbers = _randomNumbers;
+        List<String> filteredNumbers = allNumbers.where((number) {
+          for (int i = 0; i < inputNumbers.length; i++) {
+            if (inputNumbers[i].isNotEmpty && inputNumbers[i] != number[i]) {
+              return false;
+            }
+          }
+          return true;
+        }).toList();
+
+        setState(() {
+          _randomNumbers = filteredNumbers;
+        });
+      } else {
+        setState(() {
+          _randomNumbers = ['No numbers available'];
         });
       }
     } catch (e) {

@@ -23,8 +23,6 @@ class _RegisterPageState extends State<RegisterPage> {
   var emailCtl = TextEditingController();
   var passwordCtl = TextEditingController();
   var confirmpassCtl = TextEditingController();
-  var AmountmoneyCtl = TextEditingController();
-  int amount = 0;
 
   String url = '';
   @override
@@ -174,35 +172,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 ],
               ),
             ),
-            const Padding(
-              padding: EdgeInsets.fromLTRB(10, 2, 10, 10),
-              child: Text(
-                "**กรุณาเติมเงินขั้นต่ำ 500 บาทเพื่อใช้งานเเอปพลิเคชัน",
-                style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.normal,
-                    color: Color.fromRGBO(177, 36, 24, 1)),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    'ระบุจำนวนเงิน*',
-                    style: const TextStyle(
-                        fontSize: 18, color: Color.fromARGB(255, 0, 0, 0)),
-                  ),
-                  TextField(
-                      controller: AmountmoneyCtl,
-                      keyboardType: TextInputType.number,
-                      decoration: const InputDecoration(
-                          border: OutlineInputBorder(
-                              borderSide: BorderSide(width: 1)))),
-                ],
-              ),
-            ),
+            
             Padding(
               padding: const EdgeInsets.all(10),
               child: Column(
@@ -238,9 +208,8 @@ class _RegisterPageState extends State<RegisterPage> {
         phoneCtl.text.isEmpty ||
         emailCtl.text.isEmpty ||
         passwordCtl.text.isEmpty ||
-        confirmpassCtl.text.isEmpty ||
-        AmountmoneyCtl.text.isEmpty) {
-      log("----");
+        confirmpassCtl.text.isEmpty) {
+      log("ข้อมูลไม่ครบ");
       showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -266,7 +235,6 @@ class _RegisterPageState extends State<RegisterPage> {
       email: emailCtl.text,
       password: passwordCtl.text,
       confirmPassword: confirmpassCtl.text,
-      amount: int.tryParse(AmountmoneyCtl.text) ?? 0,
     );
 
     http
@@ -306,8 +274,6 @@ class _RegisterPageState extends State<RegisterPage> {
               "อีเมล หรือ เบอร์โทรศัพท์ ถูกใช้แล้ว : กรุณาลองอีกครั้ง";
         } else if (response.statusCode == 400) {
           errorMessage = 'ยืนยันรหัสผ่านไม่ถูกต้อง : กรุณาลองอีกครั้ง';
-        }else if (response.statusCode == 403) {
-          errorMessage = 'ยอดเงินไม่ถึงขั้นต่ำที่กำหนด : กรุณาลองอีกครั้ง';
         } else {
           errorMessage = 'เกิดข้อผิดพลาด : กรุณาลองอีกครั้ง';
         }
