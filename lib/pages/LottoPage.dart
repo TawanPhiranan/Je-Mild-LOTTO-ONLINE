@@ -25,9 +25,14 @@ class LottoPage extends StatefulWidget {
 class _LottoPageState extends State<LottoPage> {
   int _selectedIndex = 2; // Track the selected index
   List<String> _randomNumbers = [];
+  List<String> _randomNumbers2 = [];
+
   late Future<void> loadData;
   String? selectedLottoNumber;
   int failed = 0;
+
+  var controllers = List.generate(6, (index) => TextEditingController());
+  var focusNodes = List.generate(6, (index) => FocusNode());
 
   @override
   void initState() {
@@ -225,7 +230,7 @@ class _LottoPageState extends State<LottoPage> {
                           const SizedBox(height: 20),
                           Expanded(
                             child: ListView(
-                              children: [                            
+                              children: [
                                 Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
@@ -567,15 +572,12 @@ class _LottoPageState extends State<LottoPage> {
     );
   }
 
-  void Search() {
-  }
-
 // เมธอดสำหรับเรียก API และสุ่มตัวเลข
   Future<void> fetchRandomNumbers() async {
     try {
       var config = await Configuration.getConfig();
       var url = config['apiEndpoint'];
-      final response = await http.get(Uri.parse('$url/order/random'));
+      final response = await http.get(Uri.parse('$url/admin/randomALL3'));
       log(response.body);
 
       if (response.statusCode == 200) {
@@ -650,6 +652,9 @@ class _LottoPageState extends State<LottoPage> {
                               child: Text('ตกลง'),
                               onPressed: () {
                                 Navigator.of(context).pop();
+                                setState(() {
+                                  fetchRandomNumbers();
+                                });
                               },
                             ),
                           ],
@@ -703,6 +708,40 @@ class _LottoPageState extends State<LottoPage> {
         );
       },
     );
+  }
+
+// Search
+  Future<void> Search() async {
+    List<String> inputNumbers =
+        controllers.map((controller) => controller.text).toList();
+
+    try {
+      await fetchRandomNumbers();
+
+      if (_randomNumbers.isNotEmpty) {
+        List<String> allNumbers = _randomNumbers;
+        List<String> filteredNumbers = allNumbers.where((number) {
+          for (int i = 0; i < inputNumbers.length; i++) {
+            if (inputNumbers[i].isNotEmpty && inputNumbers[i] != number[i]) {
+              return false;
+            }
+          }
+          return true;
+        }).toList();
+
+        setState(() {
+          _randomNumbers = filteredNumbers;
+        });
+      } else {
+        setState(() {
+          _randomNumbers = ['No numbers available'];
+        });
+      }
+    } catch (e) {
+      setState(() {
+        _randomNumbers = ['Error: $e'];
+      });
+    }
   }
 
 // เมธอดสำหรับซื้อ Lotto

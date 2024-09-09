@@ -14,7 +14,6 @@ class UserResgisterPostRequest {
     String email;
     String password;
     String confirmPassword;
-    int amount;
 
     UserResgisterPostRequest({
         required this.username,
@@ -22,7 +21,6 @@ class UserResgisterPostRequest {
         required this.email,
         required this.password,
         required this.confirmPassword,
-        required this.amount,
     });
 
     factory UserResgisterPostRequest.fromJson(Map<String, dynamic> json) => UserResgisterPostRequest(
@@ -31,7 +29,6 @@ class UserResgisterPostRequest {
         email: json["email"],
         password: json["password"],
         confirmPassword: json["confirmPassword"],
-        amount: json["amount"],
     );
 
     Map<String, dynamic> toJson() => {
@@ -39,7 +36,6 @@ class UserResgisterPostRequest {
         "phone": phone,
         "email": email,
         "password": password,
-        "confirmPassword": confirmPassword,
-        "amount": amount,
+        "confirmPassword": confirmPassword
     };
 }
