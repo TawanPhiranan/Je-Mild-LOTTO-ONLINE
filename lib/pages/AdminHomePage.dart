@@ -545,26 +545,19 @@ class _AdiminhomepageState extends State<Adiminhomepage> {
                 SnackBar(
                   content: Text(
                     'ลบข้อมูลสำเร็จ',
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 18),
+                    style: TextStyle(color: Colors.white, fontSize: 18),
                   ),
-                  backgroundColor:
-                      const Color.fromARGB(255, 86, 86, 86), 
-                  behavior: SnackBarBehavior
-                      .floating, 
+                  backgroundColor: const Color.fromARGB(255, 86, 86, 86),
+                  behavior: SnackBarBehavior.floating,
                   shape: RoundedRectangleBorder(
-                   
                     borderRadius: BorderRadius.circular(20),
                   ),
-                  margin: EdgeInsets.all(
-                      20),
-                  duration: Duration(seconds: 3), 
+                  margin: EdgeInsets.all(20),
+                  duration: Duration(seconds: 3),
                   action: SnackBarAction(
                     label: 'ปิด',
-                    textColor: Colors.yellow, 
-                    onPressed: () {
-                    },
+                    textColor: Colors.yellow,
+                    onPressed: () {},
                   ),
                 ),
               );
