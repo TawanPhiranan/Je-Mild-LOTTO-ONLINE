@@ -1,14 +1,25 @@
+import 'dart:convert';
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:mini_project/config/config.dart';
 import 'package:mini_project/pages/AdminProfile.dart';
+import 'package:http/http.dart' as http;
+import 'package:mini_project/pages/LogoPage.dart';
 
 class Admineditpassword extends StatefulWidget {
-  const Admineditpassword({super.key});
+  int userId;
+  Admineditpassword({super.key, required this.userId});
 
   @override
   State<Admineditpassword> createState() => _AdmineditpasswordState();
 }
 
 class _AdmineditpasswordState extends State<Admineditpassword> {
+  TextEditingController currentPasswordCtl = TextEditingController();
+  TextEditingController newPasswordCtl = TextEditingController();
+  TextEditingController confirmPasswordCtl = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -55,7 +66,7 @@ class _AdmineditpasswordState extends State<Admineditpassword> {
                             child: const Text('ไม่'),
                           ),
                           FilledButton(
-                            onPressed: () {},
+                            onPressed: Logout,
                             child: const Text('ใช่'),
                           ),
                         ],
@@ -94,7 +105,8 @@ class _AdmineditpasswordState extends State<Admineditpassword> {
               const SizedBox(height: 20), // Additional space after the header
               const Text('รหัสผ่านเดิม'),
               const SizedBox(height: 8.0),
-              const TextField(
+              TextField(
+                controller: currentPasswordCtl,
                 decoration: InputDecoration(
                   filled: true,
                   fillColor: Color.fromRGBO(217, 217, 217, 1),
@@ -109,7 +121,8 @@ class _AdmineditpasswordState extends State<Admineditpassword> {
               const SizedBox(height: 10),
               const Text('รหัสผ่านใหม่'),
               const SizedBox(height: 8.0),
-              const TextField(
+              TextField(
+                controller: newPasswordCtl,
                 decoration: InputDecoration(
                   filled: true,
                   fillColor: Color.fromRGBO(217, 217, 217, 1),
@@ -124,7 +137,8 @@ class _AdmineditpasswordState extends State<Admineditpassword> {
               const SizedBox(height: 10),
               const Text('ยืนยันรหัสผ่าน'),
               const SizedBox(height: 8.0),
-              const TextField(
+              TextField(
+                controller: confirmPasswordCtl,
                 decoration: InputDecoration(
                   filled: true,
                   fillColor: Color.fromRGBO(217, 217, 217, 1),
@@ -155,12 +169,115 @@ class _AdmineditpasswordState extends State<Admineditpassword> {
     );
   }
 
-  void _changePassword() {
-    // Navigator.push(
-    //   context,
-    //   MaterialPageRoute(
-    //     builder: (context) => const Adminprofile(),
-    //   ),
-    // );
+  void _changePassword() async {
+    if (currentPasswordCtl.text.isEmpty ||
+        newPasswordCtl.text.isEmpty ||
+        confirmPasswordCtl.text.isEmpty) {
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text('ข้อมูลไม่ครบถ้วน'),
+          content: const Text(
+              'ไม่สามารถเปลี่ยนรหัสใหม่ได้ โปรดกรอกข้อมูลให้ครบถ้วนก่อน'),
+          actions: [
+            FilledButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Text('ปิด'),
+            ),
+          ],
+        ),
+      );
+      return; // ออกจากฟังก์ชันถ้าข้อมูลไม่ครบ
+    }
+
+    // ตรวจสอบว่ารหัสผ่านใหม่และการยืนยันรหัสผ่านตรงกันหรือไม่
+    if (newPasswordCtl.text != confirmPasswordCtl.text) {
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text('รหัสผ่านไม่ตรงกัน'),
+          content: const Text('รหัสผ่านใหม่และการยืนยันรหัสผ่านไม่ตรงกัน'),
+          actions: [
+            FilledButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Text('ปิด'),
+            ),
+          ],
+        ),
+      );
+      return; // ออกจากฟังก์ชันถ้ารหัสผ่านไม่ตรงกัน
+    }
+
+    var json = {
+      "currentPassword": currentPasswordCtl.text,
+      "newPassword": newPasswordCtl.text,
+      "confirmPassword": confirmPasswordCtl.text,
+    };
+    var config = await Configuration.getConfig();
+    var url = config['apiEndpoint'];
+
+    try {
+      var res = await http.put(
+        Uri.parse('$url/resetpassword/${widget.userId}'),
+        headers: {"Content-Type": "application/json; charset=utf-8"},
+        body: jsonEncode(json),
+      );
+
+      if (res.statusCode == 200) {
+        log(res.body);
+        var result = jsonDecode(res.body);
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: const Text('สำเร็จ'),
+            content: const Text('เปลี่ยนรหัสผ่านเรียบร้อย'),
+            actions: [
+              FilledButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => Adminprofile(userId: widget.userId),
+                    ),
+                  );
+                },
+                child: const Text('ปิด'),
+              ),
+            ],
+          ),
+        );
+      } else {
+        throw Exception('Failed to update password: ${res.statusCode}');
+      }
+    } catch (err) {
+      log('Error: $err');
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text('ผิดพลาด'),
+          content: Text('เปลี่ยนรหัสผ่านไม่สำเร็จ: ' + err.toString()),
+          actions: [
+            FilledButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Text('ปิด'),
+            ),
+          ],
+        ),
+      );
+    }
+  }
+
+  void Logout() {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => Logopage(),
+        ));
   }
 }

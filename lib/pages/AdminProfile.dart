@@ -305,12 +305,11 @@ class _AdminprofileState extends State<Adminprofile> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => const Admineditpassword(),
+        builder: (context) => Admineditpassword(userId: widget.userId),
       ),
     );
   }
 
-  editProfileImage() {}
 
   void Logout() {
     Navigator.push(
