@@ -541,8 +541,39 @@ class _AdiminhomepageState extends State<Adiminhomepage> {
           // ปุ่มตกลง
           FilledButton(
             onPressed: () {
-              Navigator.pop(context); // ปิดหน้าต่างก่อนเริ่มการลบ
-              reset(context); // เรียกใช้ฟังก์ชัน reset เมื่อยืนยันการลบ
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(
+                    'ลบข้อมูลสำเร็จ',
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 18),
+                  ),
+                  backgroundColor:
+                      const Color.fromARGB(255, 86, 86, 86), 
+                  behavior: SnackBarBehavior
+                      .floating, 
+                  shape: RoundedRectangleBorder(
+                   
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  margin: EdgeInsets.all(
+                      20),
+                  duration: Duration(seconds: 3), 
+                  action: SnackBarAction(
+                    label: 'ปิด',
+                    textColor: Colors.yellow, 
+                    onPressed: () {
+                    },
+                  ),
+                ),
+              );
+
+              Navigator.pop(context); // ปิด dialog หลังแสดง SnackBar
+              reset(context);
+              setState(() {
+                loadData = loadDataAsync();
+              });
             },
             child: const Text('ตกลง'),
           ),

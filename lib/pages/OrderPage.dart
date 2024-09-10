@@ -683,7 +683,7 @@ class _OrderPageState extends State<OrderPage> {
                                                                       child:
                                                                           Center(
                                                                         child:
-                                                                           Text(
+                                                                            Text(
                                                                           item['lottoNumber'] ??
                                                                               'ไม่ทราบ',
                                                                           style:
@@ -1328,7 +1328,22 @@ class _OrderPageState extends State<OrderPage> {
                                                                                     // Show a SnackBar message
                                                                                     ScaffoldMessenger.of(context).showSnackBar(
                                                                                       SnackBar(
-                                                                                        content: Text('การขึ้นเงินรางวัลเสร็จสิ้น'),
+                                                                                        content: Text(
+                                                                                          'การขึ้นเงินรางวัลเสร็จสิ้น',
+                                                                                          style: TextStyle(color: Colors.white, fontSize: 18),
+                                                                                        ),
+                                                                                        backgroundColor: const Color.fromARGB(255, 86, 86, 86),
+                                                                                        behavior: SnackBarBehavior.floating,
+                                                                                        shape: RoundedRectangleBorder(
+                                                                                          borderRadius: BorderRadius.circular(20),
+                                                                                        ),
+                                                                                        margin: EdgeInsets.all(20),
+                                                                                        duration: Duration(seconds: 3),
+                                                                                        action: SnackBarAction(
+                                                                                          label: 'ปิด',
+                                                                                          textColor: Colors.yellow,
+                                                                                          onPressed: () {},
+                                                                                        ),
                                                                                       ),
                                                                                     );
                                                                                   } catch (e) {
@@ -1627,97 +1642,98 @@ class _OrderPageState extends State<OrderPage> {
           builder: (context) => Logopage(),
         ));
   }
-Future<void> Check() async {
-  try {
-    final response = await http.get(
-        Uri.parse("$API_ENDPOINT/order/check/${widget.userId}"));
 
-    if (response.statusCode == 200) {
-      final List<dynamic> data = jsonDecode(response.body);
-      log(data.toString());
+  Future<void> Check() async {
+    try {
+      final response = await http
+          .get(Uri.parse("$API_ENDPOINT/order/check/${widget.userId}"));
 
-      // ดึงเลขล็อตเตอรี่และ purchaseID ทั้งหมดจากรายการที่ซื้อ
-      List<Map<String, dynamic>> purchasedNumbers = data
-          .map((item) => {
-                'lottoNumber': item['lottoNumber']?.toString() ?? '',
-                'purchaseID': item['purchaseID']?.toString() ?? ''
-              })
-          .where((item) =>
-              item['lottoNumber'] != null && item['lottoNumber']!.isNotEmpty)
-          .toList();
-      log('Purchased numbers: $purchasedNumbers');
+      if (response.statusCode == 200) {
+        final List<dynamic> data = jsonDecode(response.body);
+        log(data.toString());
 
-      final drawResponse = await http.get(Uri.parse('$API_ENDPOINT/order/check2'));
+        // ดึงเลขล็อตเตอรี่และ purchaseID ทั้งหมดจากรายการที่ซื้อ
+        List<Map<String, dynamic>> purchasedNumbers = data
+            .map((item) => {
+                  'lottoNumber': item['lottoNumber']?.toString() ?? '',
+                  'purchaseID': item['purchaseID']?.toString() ?? ''
+                })
+            .where((item) =>
+                item['lottoNumber'] != null && item['lottoNumber']!.isNotEmpty)
+            .toList();
+        log('Purchased numbers: $purchasedNumbers');
 
-      if (drawResponse.statusCode == 200) {
-        final List<dynamic> drawData = jsonDecode(drawResponse.body);
+        final drawResponse =
+            await http.get(Uri.parse('$API_ENDPOINT/order/check2'));
 
-        // วนลูปผ่านทุกรายการของ drawData เพื่อเช็คผลรางวัล
-        List<Map<String, dynamic>> updatedResults = [];
-        for (var draw in drawData) {
-          String drawnNumber = draw['winningNumber']?.toString() ?? '';
+        if (drawResponse.statusCode == 200) {
+          final List<dynamic> drawData = jsonDecode(drawResponse.body);
 
-          if (drawnNumber.isNotEmpty) {
-            int prizeType = draw['prizeType'] ?? 0;
-            int money = 0;
+          // วนลูปผ่านทุกรายการของ drawData เพื่อเช็คผลรางวัล
+          List<Map<String, dynamic>> updatedResults = [];
+          for (var draw in drawData) {
+            String drawnNumber = draw['winningNumber']?.toString() ?? '';
 
-            switch (prizeType) {
-              case 1:
-                money = 100000;
-                break;
-              case 2:
-                money = 70000;
-                break;
-              case 3:
-                money = 50000;
-                break;
-              case 4:
-                money = 25000;
-                break;
-              case 5:
-                money = 10000;
-                break;
-              default:
-                money = 0;
-                break;
-            }
+            if (drawnNumber.isNotEmpty) {
+              int prizeType = draw['prizeType'] ?? 0;
+              int money = 0;
 
-            // วนลูปผ่านทุกรายการของ purchasedNumbers เพื่อเช็คว่า drawnNumber ตรงกับ lottoNumber ไหม
-            for (var item in purchasedNumbers) {
-              String lottoNumber = item['lottoNumber'] ?? '';
-              String purchaseID = item['purchaseID'] ?? '';
+              switch (prizeType) {
+                case 1:
+                  money = 100000;
+                  break;
+                case 2:
+                  money = 70000;
+                  break;
+                case 3:
+                  money = 50000;
+                  break;
+                case 4:
+                  money = 25000;
+                  break;
+                case 5:
+                  money = 10000;
+                  break;
+                default:
+                  money = 0;
+                  break;
+              }
 
-              if (drawnNumber == lottoNumber) {
-                log('Match found: $drawnNumber with prize type $prizeType, prize money: $money, purchaseID: $purchaseID');
+              // วนลูปผ่านทุกรายการของ purchasedNumbers เพื่อเช็คว่า drawnNumber ตรงกับ lottoNumber ไหม
+              for (var item in purchasedNumbers) {
+                String lottoNumber = item['lottoNumber'] ?? '';
+                String purchaseID = item['purchaseID'] ?? '';
 
-                updatedResults.add({
-                  'drawnNumber': drawnNumber,
-                  'prizeMoney': money,
-                  'purchaseID': purchaseID,
-                  'prizeType': prizeType
-                });
+                if (drawnNumber == lottoNumber) {
+                  log('Match found: $drawnNumber with prize type $prizeType, prize money: $money, purchaseID: $purchaseID');
+
+                  updatedResults.add({
+                    'drawnNumber': drawnNumber,
+                    'prizeMoney': money,
+                    'purchaseID': purchaseID,
+                    'prizeType': prizeType
+                  });
+                }
               }
             }
           }
+          setState(() {
+            matchResults = updatedResults;
+            win = matchResults
+                .map((item) =>
+                    '${item['drawnNumber']} ${item['prizeMoney']} ${item['prizeType']} ${item['purchaseID']}')
+                .toList();
+          });
+        } else {
+          log('Failed to load draw data. Status code: ${drawResponse.statusCode}');
         }
-        setState(() {
-          matchResults = updatedResults;
-          win = matchResults
-              .map((item) =>
-                  '${item['drawnNumber']} ${item['prizeMoney']} ${item['prizeType']} ${item['purchaseID']}')
-              .toList();
-        });
       } else {
-        log('Failed to load draw data. Status code: ${drawResponse.statusCode}');
+        log('Failed to load purchased data. Status code: ${response.statusCode}');
       }
-    } else {
-      log('Failed to load purchased data. Status code: ${response.statusCode}');
+    } catch (e) {
+      log('An error occurred: $e');
     }
-  } catch (e) {
-    log('An error occurred: $e');
   }
-}
-
 
   Future<void> Order() async {
     try {
@@ -1728,7 +1744,7 @@ Future<void> Check() async {
         log('Received data: $data');
         log(widget.userId.toString());
 
-       setState(() {
+        setState(() {
           // Store both lottoNumber and purchaseDate in a combined list
           oorder = data
               .map((item) => {
