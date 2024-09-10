@@ -136,28 +136,7 @@ class _AdmineditpasswordState extends State<Admineditpassword> {
                 keyboardType: TextInputType.text,
                 obscureText: true,
               ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    TextButton(
-                      onPressed: () {},
-                      child: const Text(
-                        'ลืมรหัสผ่าน?',
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: Colors.blue,
-                          decoration: TextDecoration.underline,
-                          decorationColor: Colors.blue,
-                          decorationThickness: 2,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 10),
+              const SizedBox(height: 30),
               SizedBox(
                 child: Center(
                   child: FilledButton(
