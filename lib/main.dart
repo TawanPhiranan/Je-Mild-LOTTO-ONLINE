@@ -17,7 +17,6 @@ class MyApp extends StatelessWidget {
       // theme: ThemeData(useMaterial3: f),
       title: 'Flutter Demo',
       home: Logopage()
-      
     );
   }
 }

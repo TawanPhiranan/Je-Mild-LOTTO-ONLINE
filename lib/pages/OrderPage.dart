@@ -3,6 +3,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:mini_project/config/config.dart';
+import 'package:mini_project/config/internal_config.dart';
 import 'package:mini_project/models/response/Order_response.dart';
 import 'package:mini_project/models/response/admin_draws_get_res.dart';
 import 'package:mini_project/pages/LoginPage.dart';
@@ -28,13 +29,13 @@ class _OrderPageState extends State<OrderPage> {
   List<AdminDrawGetResponse> draws = [];
   List<Map<String, String>> oorder = [];
   List<String> win = [];
-  List<String> winmoney= [];
+  List<String> winmoney = [];
   late Future<void> loadData;
   int money = 0;
   List<Map<String, dynamic>> results = [];
-   List<Map<String, dynamic>> matchResults = [];
-   List<Map<String, dynamic>> matchResultsmoney = [];
-   List<String> drawnNumbers = [];
+  List<Map<String, dynamic>> matchResults = [];
+  List<Map<String, dynamic>> matchResultsmoney = [];
+  List<String> drawnNumbers = [];
   List<int> prizeTypes = [];
   List<int> prizeMoneys = [];
 
@@ -682,8 +683,9 @@ class _OrderPageState extends State<OrderPage> {
                                                                       child:
                                                                           Center(
                                                                         child:
-                                                                            Text(
-                                                                          lottoNumber,
+                                                                           Text(
+                                                                          item['lottoNumber'] ??
+                                                                              'ไม่ทราบ',
                                                                           style:
                                                                               TextStyle(
                                                                             fontSize:
@@ -1171,15 +1173,14 @@ class _OrderPageState extends State<OrderPage> {
                           ),
                         ],
                       ),
-
                       Padding(
                         padding: const EdgeInsets.all(5.0),
                         child: Row(
                           children: [
                             Expanded(
                               child: Column(
-                                children: win
-                                    .map((drawnNumber) => SizedBox(
+                                children: matchResults
+                                    .map((item) => SizedBox(
                                           height: 198,
                                           child: Stack(
                                             children: [
@@ -1205,8 +1206,8 @@ class _OrderPageState extends State<OrderPage> {
                                                         Positioned(
                                                           bottom: 45,
                                                           left: 5,
-                                                          child: const Text(
-                                                            'คุณถูกรางวัล 1 ใบ',
+                                                          child: Text(
+                                                            'คุณถูกรางวัลที่ ${item['prizeType']}',
                                                             style: TextStyle(
                                                               color:
                                                                   Colors.black,
@@ -1220,8 +1221,8 @@ class _OrderPageState extends State<OrderPage> {
                                                         Positioned(
                                                           bottom: 30,
                                                           left: 5,
-                                                          child: const Text(
-                                                            'รับเงินรางวัล  บาท',
+                                                          child: Text(
+                                                            ' รับเงินรางวัล ${item['prizeMoney']} บาท',
                                                             style: TextStyle(
                                                               color:
                                                                   Colors.black,
@@ -1299,20 +1300,41 @@ class _OrderPageState extends State<OrderPage> {
                                                                                     borderRadius: BorderRadius.circular(10),
                                                                                   ),
                                                                                 ),
-                                                                                child: const Text(
+                                                                                child: Text(
                                                                                   'ไม่',
                                                                                   style: TextStyle(fontSize: 18),
                                                                                 ),
                                                                               ),
                                                                               TextButton(
                                                                                 onPressed: () async {
-                                                                                  await CheckMoney();
-                                                                                  Navigator.of(context).pop();
-                                                                                  ScaffoldMessenger.of(context).showSnackBar(
-                                                                                    SnackBar(
-                                                                                      content: Text('การขึ้นเงินรางวัลเสร็จสิ้น'),
-                                                                                    ),
-                                                                                  );
+                                                                                  try {
+                                                                                    // Assuming item['purchaseID'] and item['prizeMoney'] are Strings
+                                                                                    String purchaseIDString = item['purchaseID'].toString();
+                                                                                    String prizeMoneyString = item['prizeMoney'].toString();
+
+                                                                                    // Convert from String to int
+                                                                                    int purchaseID = int.parse(purchaseIDString);
+                                                                                    int prizeMoney = int.parse(prizeMoneyString);
+
+                                                                                    // Call the CheckMoney function
+                                                                                    CheckMoney(purchaseID, prizeMoney);
+
+                                                                                    // Close the current screen or dialog
+                                                                                    Navigator.of(context).pop();
+                                                                                    setState(() {
+                                                                                      matchResults.removeWhere((item) => item['purchaseID'] == purchaseIDString);
+                                                                                    });
+
+                                                                                    // Show a SnackBar message
+                                                                                    ScaffoldMessenger.of(context).showSnackBar(
+                                                                                      SnackBar(
+                                                                                        content: Text('การขึ้นเงินรางวัลเสร็จสิ้น'),
+                                                                                      ),
+                                                                                    );
+                                                                                  } catch (e) {
+                                                                                    print('Error: $e');
+                                                                                    // Handle the error, e.g., show an error message to the user
+                                                                                  }
                                                                                 },
                                                                                 style: TextButton.styleFrom(
                                                                                   backgroundColor: const Color.fromARGB(255, 98, 96, 95),
@@ -1457,7 +1479,7 @@ class _OrderPageState extends State<OrderPage> {
                                                                                   ),
                                                                                   child: Center(
                                                                                     child: Text(
-                                                                                      drawnNumber,
+                                                                                      item['drawnNumber'],
                                                                                       style: TextStyle(
                                                                                         fontSize: 19,
                                                                                         color: Colors.black,
@@ -1588,7 +1610,7 @@ class _OrderPageState extends State<OrderPage> {
                           ],
                         ),
                       )
-                 ],
+                    ],
                     const SizedBox(height: 10),
                   ],
                 ),
@@ -1605,36 +1627,39 @@ class _OrderPageState extends State<OrderPage> {
           builder: (context) => Logopage(),
         ));
   }
+Future<void> Check() async {
+  try {
+    final response = await http.get(
+        Uri.parse("$API_ENDPOINT/order/check/${widget.userId}"));
 
-  Future<void> Check() async {
-    try {
-      final response = await http.get(
-          Uri.parse("http://172.20.10.3:3000/order/check/${widget.userId}"));
+    if (response.statusCode == 200) {
+      final List<dynamic> data = jsonDecode(response.body);
+      log(data.toString());
 
-      if (response.statusCode == 200) {
-        final List<dynamic> data = jsonDecode(response.body);
+      // ดึงเลขล็อตเตอรี่และ purchaseID ทั้งหมดจากรายการที่ซื้อ
+      List<Map<String, dynamic>> purchasedNumbers = data
+          .map((item) => {
+                'lottoNumber': item['lottoNumber']?.toString() ?? '',
+                'purchaseID': item['purchaseID']?.toString() ?? ''
+              })
+          .where((item) =>
+              item['lottoNumber'] != null && item['lottoNumber']!.isNotEmpty)
+          .toList();
+      log('Purchased numbers: $purchasedNumbers');
 
-        List<String> purchasedNumbers = data
-            .map((item) => item['lottoNumber'] != null
-                ? item['lottoNumber'].toString()
-                : '')
-            .where((number) => number.isNotEmpty)
-            .toList();
-        log('Purchased numbers: $purchasedNumbers');
-
-        final drawResponse =
-            await http.get(Uri.parse('http://172.20.10.3:3000/order/check2'));
+      final drawResponse = await http.get(Uri.parse('$API_ENDPOINT/order/check2'));
 
       if (drawResponse.statusCode == 200) {
         final List<dynamic> drawData = jsonDecode(drawResponse.body);
 
-          for (var draw in drawData) {
-            String drawnNumber = draw['winningNumber']?.toString() ?? '';
+        // วนลูปผ่านทุกรายการของ drawData เพื่อเช็คผลรางวัล
+        List<Map<String, dynamic>> updatedResults = [];
+        for (var draw in drawData) {
+          String drawnNumber = draw['winningNumber']?.toString() ?? '';
 
-            if (drawnNumber.isNotEmpty &&
-                purchasedNumbers.contains(drawnNumber)) {
-              int prizeType = draw['prizeType'] ?? 0;
-              int money = 0;
+          if (drawnNumber.isNotEmpty) {
+            int prizeType = draw['prizeType'] ?? 0;
+            int money = 0;
 
             switch (prizeType) {
               case 1:
@@ -1657,33 +1682,47 @@ class _OrderPageState extends State<OrderPage> {
                 break;
             }
 
-              log('Match found: $drawnNumber with prize type $prizeType, prize money: $money');
-              setState(() {
-                matchResults
-                    .add({'drawnNumber': drawnNumber, 'prizeMoney': money});
-                win = matchResults
-                    .map((item) => '${item['drawnNumber']}')
-                    .toList();
-                // matchResultsmoney.add({'prizeMoney': money});
-                // winmoney = matchResultsmoney.map((item) => '${item['prizeMoney']}').toList();
-              });
+            // วนลูปผ่านทุกรายการของ purchasedNumbers เพื่อเช็คว่า drawnNumber ตรงกับ lottoNumber ไหม
+            for (var item in purchasedNumbers) {
+              String lottoNumber = item['lottoNumber'] ?? '';
+              String purchaseID = item['purchaseID'] ?? '';
+
+              if (drawnNumber == lottoNumber) {
+                log('Match found: $drawnNumber with prize type $prizeType, prize money: $money, purchaseID: $purchaseID');
+
+                updatedResults.add({
+                  'drawnNumber': drawnNumber,
+                  'prizeMoney': money,
+                  'purchaseID': purchaseID,
+                  'prizeType': prizeType
+                });
+              }
             }
           }
-        } else {
-          log('Failed to load draw data. Status code: ${drawResponse.statusCode}');
         }
+        setState(() {
+          matchResults = updatedResults;
+          win = matchResults
+              .map((item) =>
+                  '${item['drawnNumber']} ${item['prizeMoney']} ${item['prizeType']} ${item['purchaseID']}')
+              .toList();
+        });
       } else {
-        log('Failed to load purchased data. Status code: ${response.statusCode}');
+        log('Failed to load draw data. Status code: ${drawResponse.statusCode}');
       }
-    } catch (e) {
-      log('An error occurred: $e');
+    } else {
+      log('Failed to load purchased data. Status code: ${response.statusCode}');
     }
+  } catch (e) {
+    log('An error occurred: $e');
   }
+}
+
 
   Future<void> Order() async {
     try {
-      final response = await http
-          .get(Uri.parse("$API_ENDPOINT/order/PurchasedLotto/${widget.userId}"));
+      final response = await http.get(
+          Uri.parse("$API_ENDPOINT/order/PurchasedLotto/${widget.userId}"));
       if (response.statusCode == 200) {
         final List<dynamic> data = jsonDecode(response.body);
         log('Received data: $data');
@@ -1713,7 +1752,28 @@ class _OrderPageState extends State<OrderPage> {
 
     draws = adminDrawGetResponseFromJson(response.body);
   }
-  CheckMoney(){
 
-  CheckMoney() {}
+  void CheckMoney(int purchaseID, int prizeMoney) async {
+    print('Purchase ID: ${purchaseID.toString()}');
+    print('Prize Money: ${prizeMoney.toString()}');
+    final url = Uri.parse(
+        '$API_ENDPOINT/order/prizeMoney/${widget.userId}/$purchaseID');
+
+    try {
+      final response = await http.post(
+        url,
+        headers: {"Content-Type": "application/json"},
+        body: jsonEncode({"prizeMoney": prizeMoney}),
+      );
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        print('Transaction success: ${data['message']}');
+      } else {
+        print('Error: ${response.body}');
+      }
+    } catch (error) {
+      print('An error occurred: $error');
+    }
+  }
 }
