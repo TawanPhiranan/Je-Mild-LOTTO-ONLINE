@@ -3,6 +3,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:mini_project/config/config.dart';
+import 'package:mini_project/config/internal_config.dart';
 import 'package:mini_project/models/response/Order_response.dart';
 import 'package:mini_project/models/response/admin_draws_get_res.dart';
 import 'package:mini_project/pages/LoginPage.dart';
@@ -26,18 +27,33 @@ class _OrderPageState extends State<OrderPage> {
   int _selectedIndex = 3; // Track the selected index
   int _Index = 0;
   List<AdminDrawGetResponse> draws = [];
-  List<String> oorder = [];
+  List<Map<String, String>> oorder = [];
   List<String> win = [];
-  List<String> winmoney= [];
+  List<String> winmoney = [];
   late Future<void> loadData;
   int money = 0;
   List<Map<String, dynamic>> results = [];
-   List<Map<String, dynamic>> matchResults = [];
-   List<Map<String, dynamic>> matchResultsmoney = [];
-   List<String> drawnNumbers = [];
+  List<Map<String, dynamic>> matchResults = [];
+  List<Map<String, dynamic>> matchResultsmoney = [];
+  List<String> drawnNumbers = [];
   List<int> prizeTypes = [];
   List<int> prizeMoneys = [];
-  
+
+  String typeMoney(double prizeType) {
+    if (prizeType == 1) {
+      return '100,000';
+    } else if (prizeType == 2) {
+      return '70,000';
+    } else if (prizeType == 3) {
+      return '50,000';
+    } else if (prizeType == 4) {
+      return '25,000';
+    } else if (prizeType == 5) {
+      return '10,000';
+    } else {
+      return '0';
+    }
+  }
 
   @override
   void initState() {
@@ -574,7 +590,7 @@ class _OrderPageState extends State<OrderPage> {
                             Expanded(
                               child: Column(
                                 children: oorder
-                                    .map((lottoNumber) => SizedBox(
+                                    .map((item) => SizedBox(
                                           height: 170,
                                           child: Card(
                                             color: const Color.fromRGBO(
@@ -667,8 +683,9 @@ class _OrderPageState extends State<OrderPage> {
                                                                       child:
                                                                           Center(
                                                                         child:
-                                                                            Text(
-                                                                          lottoNumber, 
+                                                                           Text(
+                                                                          item['lottoNumber'] ??
+                                                                              'ไม่ทราบ',
                                                                           style:
                                                                               TextStyle(
                                                                             fontSize:
@@ -734,6 +751,18 @@ class _OrderPageState extends State<OrderPage> {
                                                                                 fit: BoxFit.cover,
                                                                               ),
                                                                             ),
+                                                                          ),
+                                                                        ],
+                                                                      ),
+                                                                      Column(
+                                                                        mainAxisAlignment:
+                                                                            MainAxisAlignment.end,
+                                                                        children: [
+                                                                          Padding(
+                                                                            padding:
+                                                                                EdgeInsets.only(left: 20.0),
+                                                                            child:
+                                                                                Text('วันที่ซื้อ: ${item['purchaseDate'] ?? 'ไม่ทราบ'}', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.red)),
                                                                           ),
                                                                         ],
                                                                       ),
@@ -1070,19 +1099,17 @@ class _OrderPageState extends State<OrderPage> {
                           ),
                         ],
                       ),
-                      const SizedBox(height: 20), // เพิ่มระยะห่างก่อนปุ่ม
+                      const SizedBox(height: 20),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           ElevatedButton(
                             onPressed: () async {
-                              await Order; // Call the Order function
+                              await Order;
                               setState(() {
-                                _Index =
-                                    0; // Update the state to navigate or change the view
+                                _Index = 0;
                               });
                             },
-                            // ignore: sort_child_properties_last
                             child: const Text(
                               "คำสั่งซื้อ",
                               style: TextStyle(
@@ -1090,7 +1117,6 @@ class _OrderPageState extends State<OrderPage> {
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
-                            // เปลี่ยนสีปุ่มตามเงื่อนไข
                             style: ElevatedButton.styleFrom(
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 60, vertical: 15),
@@ -1101,9 +1127,8 @@ class _OrderPageState extends State<OrderPage> {
                                 ),
                               ),
                               backgroundColor: _Index == 0
-                                  ? Color.fromRGBO(
-                                      202, 72, 74, 1) // สีเมื่อถูกเลือก
-                                  : Color.fromRGBO(213, 96, 97, 1), // สีปกติ
+                                  ? Color.fromRGBO(202, 72, 74, 1)
+                                  : Color.fromRGBO(213, 96, 97, 1),
                               textStyle: const TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,
@@ -1148,463 +1173,444 @@ class _OrderPageState extends State<OrderPage> {
                           ),
                         ],
                       ),
-                      
-         Padding(
+                      Padding(
                         padding: const EdgeInsets.all(5.0),
                         child: Row(
                           children: [
                             Expanded(
                               child: Column(
-                                children: win
-                                    .map((drawnNumber) =>  SizedBox(
-                                    height: 198,
-                                    child: Stack(
-                                      children: [
-                                        Positioned(
-                                          top: -5.0,
-                                          left: -5.0,
-                                          right: -5.0,
-                                          bottom: -27.0,
-                                          child: Card(
-                                            color: const Color.fromRGBO(
-                                                254, 248, 195, 1.0),
-                                            shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(30),
-                                            ),
-                                            child: Padding(
-                                              padding:
-                                                  const EdgeInsets.all(5.0),
-                                              child: Stack(
-                                                children: [
-                                                  Positioned(
-                                                    bottom: 45,
-                                                    left: 5,
-                                                    child: const Text(
-                                                      'คุณถูกรางวัล 1 ใบ',
-                                                      style: TextStyle(
-                                                        color: Colors.black,
-                                                        fontSize: 15,
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                      ),
-                                                    ),
+                                children: matchResults
+                                    .map((item) => SizedBox(
+                                          height: 198,
+                                          child: Stack(
+                                            children: [
+                                              Positioned(
+                                                top: -5.0,
+                                                left: -5.0,
+                                                right: -5.0,
+                                                bottom: -27.0,
+                                                child: Card(
+                                                  color: const Color.fromRGBO(
+                                                      254, 248, 195, 1.0),
+                                                  shape: RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            30),
                                                   ),
-                                                  Positioned(
-                                                    bottom: 30,
-                                                    left: 5,
-                                                    child: const Text(
-                                                      'รับเงินรางวัล  บาท',
-                                                      style: TextStyle(
-                                                        color: Colors.black,
-                                                        fontSize: 12,
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                  Positioned(
-                                                    bottom: 18.5,
-                                                    right: 10,
-                                                    child: ElevatedButton(
-                                                      onPressed: () {
-                                                        showDialog(
-                                                          context: context,
-                                                          builder: (BuildContext
-                                                              context) {
-                                                            return Dialog(
-                                                              shape:
-                                                                  RoundedRectangleBorder(
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            200),
+                                                  child: Padding(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            5.0),
+                                                    child: Stack(
+                                                      children: [
+                                                        Positioned(
+                                                          bottom: 45,
+                                                          left: 5,
+                                                          child: Text(
+                                                            'คุณถูกรางวัลที่ ${item['prizeType']}',
+                                                            style: TextStyle(
+                                                              color:
+                                                                  Colors.black,
+                                                              fontSize: 15,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        Positioned(
+                                                          bottom: 30,
+                                                          left: 5,
+                                                          child: Text(
+                                                            ' รับเงินรางวัล ${item['prizeMoney']} บาท',
+                                                            style: TextStyle(
+                                                              color:
+                                                                  Colors.black,
+                                                              fontSize: 12,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        Positioned(
+                                                          bottom: 18.5,
+                                                          right: 10,
+                                                          child: ElevatedButton(
+                                                            onPressed: () {
+                                                              showDialog(
+                                                                context:
+                                                                    context,
+                                                                builder:
+                                                                    (BuildContext
+                                                                        context) {
+                                                                  return Dialog(
+                                                                    shape:
+                                                                        RoundedRectangleBorder(
+                                                                      borderRadius:
+                                                                          BorderRadius.circular(
+                                                                              200),
+                                                                    ),
+                                                                    child:
+                                                                        Container(
+                                                                      width:
+                                                                          800,
+                                                                      height:
+                                                                          200,
+                                                                      padding: const EdgeInsets
+                                                                          .all(
+                                                                          20),
+                                                                      color: Color.fromARGB(
+                                                                          255,
+                                                                          63,
+                                                                          60,
+                                                                          61),
+                                                                      child:
+                                                                          Column(
+                                                                        mainAxisSize:
+                                                                            MainAxisSize.min,
+                                                                        children: [
+                                                                          const SizedBox(
+                                                                              height: 20,
+                                                                              width: 70),
+                                                                          const Text(
+                                                                            'คุณต้องการขึ้นเงินรางวัลใช่หรือไม่',
+                                                                            textAlign:
+                                                                                TextAlign.start,
+                                                                            style: TextStyle(
+                                                                                fontSize: 22,
+                                                                                fontWeight: FontWeight.bold,
+                                                                                color: Colors.white),
+                                                                          ),
+                                                                          const SizedBox(
+                                                                              height: 30),
+                                                                          Row(
+                                                                            mainAxisAlignment:
+                                                                                MainAxisAlignment.spaceBetween,
+                                                                            children: [
+                                                                              TextButton(
+                                                                                onPressed: () {
+                                                                                  Navigator.of(context).pop();
+                                                                                },
+                                                                                style: TextButton.styleFrom(
+                                                                                  backgroundColor: const Color.fromARGB(255, 98, 96, 95),
+                                                                                  foregroundColor: Colors.white,
+                                                                                  padding: const EdgeInsets.symmetric(horizontal: 28),
+                                                                                  shape: RoundedRectangleBorder(
+                                                                                    borderRadius: BorderRadius.circular(10),
+                                                                                  ),
+                                                                                ),
+                                                                                child: Text(
+                                                                                  'ไม่',
+                                                                                  style: TextStyle(fontSize: 18),
+                                                                                ),
+                                                                              ),
+                                                                              TextButton(
+                                                                                onPressed: () async {
+                                                                                  try {
+                                                                                    // Assuming item['purchaseID'] and item['prizeMoney'] are Strings
+                                                                                    String purchaseIDString = item['purchaseID'].toString();
+                                                                                    String prizeMoneyString = item['prizeMoney'].toString();
+
+                                                                                    // Convert from String to int
+                                                                                    int purchaseID = int.parse(purchaseIDString);
+                                                                                    int prizeMoney = int.parse(prizeMoneyString);
+
+                                                                                    // Call the CheckMoney function
+                                                                                    CheckMoney(purchaseID, prizeMoney);
+
+                                                                                    // Close the current screen or dialog
+                                                                                    Navigator.of(context).pop();
+                                                                                    setState(() {
+                                                                                      matchResults.removeWhere((item) => item['purchaseID'] == purchaseIDString);
+                                                                                    });
+
+                                                                                    // Show a SnackBar message
+                                                                                    ScaffoldMessenger.of(context).showSnackBar(
+                                                                                      SnackBar(
+                                                                                        content: Text('การขึ้นเงินรางวัลเสร็จสิ้น'),
+                                                                                      ),
+                                                                                    );
+                                                                                  } catch (e) {
+                                                                                    print('Error: $e');
+                                                                                    // Handle the error, e.g., show an error message to the user
+                                                                                  }
+                                                                                },
+                                                                                style: TextButton.styleFrom(
+                                                                                  backgroundColor: const Color.fromARGB(255, 98, 96, 95),
+                                                                                  foregroundColor: Colors.white,
+                                                                                  padding: const EdgeInsets.symmetric(horizontal: 28),
+                                                                                  shape: RoundedRectangleBorder(
+                                                                                    borderRadius: BorderRadius.circular(10),
+                                                                                  ),
+                                                                                ),
+                                                                                child: const Text(
+                                                                                  'ใช่',
+                                                                                  style: TextStyle(fontSize: 18),
+                                                                                ),
+                                                                              ),
+                                                                            ],
+                                                                          ),
+                                                                        ],
+                                                                      ),
+                                                                    ),
+                                                                  );
+                                                                },
+                                                              );
+                                                            },
+                                                            style: ButtonStyle(
+                                                              backgroundColor:
+                                                                  MaterialStateProperty.all<
+                                                                          Color>(
+                                                                      Color.fromARGB(
+                                                                          255,
+                                                                          222,
+                                                                          219,
+                                                                          34)),
+                                                              shape: MaterialStateProperty
+                                                                  .all<
+                                                                      RoundedRectangleBorder>(
+                                                                RoundedRectangleBorder(
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              20),
+                                                                ),
                                                               ),
-                                                              child: Container(
-                                                                width: 800,
-                                                                height: 200,
-                                                                padding:
-                                                                    const EdgeInsets
-                                                                        .all(
-                                                                        20),
+                                                            ),
+                                                            child: const Text(
+                                                              'ขึ้นเงินรางวัล',
+                                                              style: TextStyle(
                                                                 color: Color
                                                                     .fromARGB(
                                                                         255,
-                                                                        63,
-                                                                        60,
-                                                                        61),
-                                                                child: Column(
-                                                                  mainAxisSize:
-                                                                      MainAxisSize
-                                                                          .min,
+                                                                        18,
+                                                                        17,
+                                                                        17),
+                                                                fontSize: 17,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                              Positioned.fill(
+                                                top: -10,
+                                                left: -10,
+                                                right: -10,
+                                                bottom: 40,
+                                                child: Padding(
+                                                  padding:
+                                                      const EdgeInsets.all(5.0),
+                                                  child: Stack(
+                                                    children: [
+                                                      Card(
+                                                        color: const Color
+                                                            .fromRGBO(
+                                                            217, 217, 217, 1),
+                                                        shape:
+                                                            RoundedRectangleBorder(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(15),
+                                                        ),
+                                                        child: Stack(
+                                                          children: [
+                                                            Align(
+                                                              alignment:
+                                                                  Alignment
+                                                                      .topLeft,
+                                                              child: Padding(
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                        .all(
+                                                                        5.0),
+                                                                child: Row(
+                                                                  crossAxisAlignment:
+                                                                      CrossAxisAlignment
+                                                                          .start,
                                                                   children: [
-                                                                    const SizedBox(
-                                                                        height:
-                                                                            20,
-                                                                        width:
-                                                                            70),
-                                                                    const Text(
-                                                                      'คุณต้องการขึ้นเงินรางวัลใช่หรือไม่',
-                                                                      textAlign:
-                                                                          TextAlign
+                                                                    Column(
+                                                                      crossAxisAlignment:
+                                                                          CrossAxisAlignment
                                                                               .start,
-                                                                      style: TextStyle(
-                                                                          fontSize:
-                                                                              22,
-                                                                          fontWeight: FontWeight
-                                                                              .bold,
-                                                                          color:
-                                                                              Colors.white),
-                                                                    ),
-                                                                    const SizedBox(
-                                                                        height:
-                                                                            30),
-                                                                    Row(
-                                                                      mainAxisAlignment:
-                                                                          MainAxisAlignment
-                                                                              .spaceBetween,
                                                                       children: [
-                                                                        TextButton(
-                                                                          onPressed:
-                                                                              () {
-                                                                            Navigator.of(context).pop();
-                                                                          },
-                                                                          style:
-                                                                              TextButton.styleFrom(
-                                                                            backgroundColor: const Color.fromARGB(
-                                                                                255,
-                                                                                98,
-                                                                                96,
-                                                                                95),
-                                                                            foregroundColor:
-                                                                                Colors.white,
-                                                                            padding:
-                                                                                const EdgeInsets.symmetric(horizontal: 28),
-                                                                            shape:
-                                                                                RoundedRectangleBorder(
-                                                                              borderRadius: BorderRadius.circular(10),
+                                                                        Row(
+                                                                          children: [
+                                                                            Image.asset(
+                                                                              'assets/images/flying-money.png',
+                                                                              width: 30,
                                                                             ),
-                                                                          ),
-                                                                          child:
-                                                                              const Text(
-                                                                            'ไม่',
-                                                                            style:
-                                                                                TextStyle(fontSize: 18),
-                                                                          ),
+                                                                            const Text(
+                                                                              'สลากกินแบ่ง Je’ Mild ',
+                                                                              style: TextStyle(
+                                                                                color: Colors.black,
+                                                                                fontSize: 15,
+                                                                                fontWeight: FontWeight.bold,
+                                                                              ),
+                                                                            ),
+                                                                          ],
                                                                         ),
-                                                                        TextButton(
-                                                                          onPressed:() async {
-                                                                              await CheckMoney(); 
-                                                                              Navigator.of(context).pop();
-                                                                              ScaffoldMessenger.of(context).showSnackBar(
-                                                                                SnackBar(
-                                                                                  content: Text('การขึ้นเงินรางวัลเสร็จสิ้น'),
+                                                                        Row(
+                                                                          children: [
+                                                                            Padding(
+                                                                              padding: const EdgeInsets.only(left: 30.0),
+                                                                              child: ClipOval(
+                                                                                child: Image.asset(
+                                                                                  'assets/images/logoMild.jpeg',
+                                                                                  width: 60,
+                                                                                  height: 60,
+                                                                                  fit: BoxFit.cover,
                                                                                 ),
-                                                                              );
-                                                                          },
-                                                                          style:
-                                                                              TextButton.styleFrom(
-                                                                            backgroundColor: const Color.fromARGB(
-                                                                                255,
-                                                                                98,
-                                                                                96,
-                                                                                95),
-                                                                            foregroundColor:
-                                                                                Colors.white,
-                                                                            padding:
-                                                                                const EdgeInsets.symmetric(horizontal: 28),
-                                                                            shape:
-                                                                                RoundedRectangleBorder(
-                                                                              borderRadius: BorderRadius.circular(10),
+                                                                              ),
                                                                             ),
-                                                                          ),
-                                                                          child:
-                                                                              const Text(
-                                                                            'ใช่',
-                                                                            style:
-                                                                                TextStyle(fontSize: 18),
-                                                                          ),
+                                                                            SizedBox(
+                                                                              width: 160,
+                                                                              height: 50,
+                                                                              child: Padding(
+                                                                                padding: const EdgeInsets.only(left: 15.0),
+                                                                                child: Card(
+                                                                                  color: const Color.fromRGBO(254, 248, 195, 1.0),
+                                                                                  shape: RoundedRectangleBorder(
+                                                                                    borderRadius: BorderRadius.circular(5),
+                                                                                  ),
+                                                                                  child: Center(
+                                                                                    child: Text(
+                                                                                      item['drawnNumber'],
+                                                                                      style: TextStyle(
+                                                                                        fontSize: 19,
+                                                                                        color: Colors.black,
+                                                                                        fontWeight: FontWeight.bold,
+                                                                                      ),
+                                                                                    ),
+                                                                                  ),
+                                                                                ),
+                                                                              ),
+                                                                            ),
+                                                                          ],
+                                                                        ),
+                                                                        Row(
+                                                                          children: [
+                                                                            Padding(
+                                                                              padding: const EdgeInsets.only(left: 10.0),
+                                                                              child: Row(
+                                                                                children: [
+                                                                                  const Column(
+                                                                                    children: [
+                                                                                      Text(
+                                                                                        '120',
+                                                                                        style: TextStyle(
+                                                                                          color: Colors.black,
+                                                                                          fontSize: 16,
+                                                                                          fontWeight: FontWeight.bold,
+                                                                                        ),
+                                                                                      ),
+                                                                                      Text(
+                                                                                        'บาท',
+                                                                                        style: TextStyle(
+                                                                                          color: Colors.black,
+                                                                                          fontSize: 16,
+                                                                                          fontWeight: FontWeight.bold,
+                                                                                        ),
+                                                                                      ),
+                                                                                    ],
+                                                                                  ),
+                                                                                  const SizedBox(height: 5),
+                                                                                  Column(
+                                                                                    children: [
+                                                                                      Padding(
+                                                                                        padding: const EdgeInsets.only(left: 5.0),
+                                                                                        child: ClipOval(
+                                                                                          child: Image.asset(
+                                                                                            'assets/images/signature.png',
+                                                                                            width: 50,
+                                                                                            height: 50,
+                                                                                            fit: BoxFit.cover,
+                                                                                          ),
+                                                                                        ),
+                                                                                      ),
+                                                                                    ],
+                                                                                  )
+                                                                                ],
+                                                                              ),
+                                                                            ),
+                                                                          ],
                                                                         ),
                                                                       ],
                                                                     ),
                                                                   ],
                                                                 ),
                                                               ),
-                                                            );
-                                                          },
-                                                        );
-                                                      },
-                                                      style: ButtonStyle(
-                                                        backgroundColor:
-                                                            MaterialStateProperty
-                                                                .all<Color>(Color
-                                                                    .fromARGB(
-                                                                        255,
-                                                                        222,
-                                                                        219,
-                                                                        34)),
-                                                        shape: MaterialStateProperty
-                                                            .all<
-                                                                RoundedRectangleBorder>(
-                                                          RoundedRectangleBorder(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        20),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      child: const Text(
-                                                        'ขึ้นเงินรางวัล',
-                                                        style: TextStyle(
-                                                          color: Color.fromARGB(
-                                                              255, 18, 17, 17),
-                                                          fontSize: 17,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                        Positioned.fill(
-                                          top: -10,
-                                          left: -10,
-                                          right: -10,
-                                          bottom: 40,
-                                          child: Padding(
-                                            padding: const EdgeInsets.all(5.0),
-                                            child: Stack(
-                                              children: [
-                                                Card(
-                                                  color: const Color.fromRGBO(
-                                                      217, 217, 217, 1),
-                                                  shape: RoundedRectangleBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            15),
-                                                  ),
-                                                  child: Stack(
-                                                    children: [
-                                                      Align(
-                                                        alignment:
-                                                            Alignment.topLeft,
-                                                        child: Padding(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .all(5.0),
-                                                          child: Row(
-                                                            crossAxisAlignment:
-                                                                CrossAxisAlignment
-                                                                    .start,
-                                                            children: [
-                                                              Column(
-                                                                crossAxisAlignment:
-                                                                    CrossAxisAlignment
-                                                                        .start,
-                                                                children: [
-                                                                  Row(
-                                                                    children: [
-                                                                      Image
-                                                                          .asset(
-                                                                        'assets/images/flying-money.png',
-                                                                        width:
-                                                                            30,
-                                                                      ),
-                                                                      const Text(
-                                                                        'สลากกินแบ่ง Je’ Mild ',
+                                                            ),
+                                                            Align(
+                                                              alignment: Alignment
+                                                                  .topRight, // ปรับตำแหน่งให้ติดด้านบน
+                                                              child: SizedBox(
+                                                                width: 50,
+                                                                height: 170,
+                                                                child: Card(
+                                                                  color: Colors
+                                                                      .white,
+                                                                  shape:
+                                                                      RoundedRectangleBorder(
+                                                                    borderRadius:
+                                                                        BorderRadius
+                                                                            .only(
+                                                                      topRight:
+                                                                          Radius.circular(
+                                                                              15), // ขอบมุมขวาบน
+                                                                      bottomRight:
+                                                                          Radius.circular(
+                                                                              15), // ขอบมุมขวาล่าง
+                                                                    ),
+                                                                  ),
+                                                                  child: Center(
+                                                                    child:
+                                                                        RotatedBox(
+                                                                      quarterTurns:
+                                                                          3,
+                                                                      child:
+                                                                          Text(
+                                                                        'เจ๊มายพารวย',
                                                                         style:
                                                                             TextStyle(
-                                                                          color:
-                                                                              Colors.black,
+                                                                          color: const Color
+                                                                              .fromARGB(
+                                                                              255,
+                                                                              222,
+                                                                              3,
+                                                                              3),
                                                                           fontSize:
-                                                                              15,
+                                                                              16,
                                                                           fontWeight:
                                                                               FontWeight.bold,
                                                                         ),
                                                                       ),
-                                                                    ],
-                                                                  ),
-                                                                  Row(
-                                                                    children: [
-                                                                      Padding(
-                                                                        padding: const EdgeInsets
-                                                                            .only(
-                                                                            left:
-                                                                                30.0),
-                                                                        child:
-                                                                            ClipOval(
-                                                                          child:
-                                                                              Image.asset(
-                                                                            'assets/images/logoMild.jpeg',
-                                                                            width:
-                                                                                60,
-                                                                            height:
-                                                                                60,
-                                                                            fit:
-                                                                                BoxFit.cover,
-                                                                          ),
-                                                                        ),
-                                                                      ),
-                                                                      SizedBox(
-                                                                        width:
-                                                                            160,
-                                                                        height:
-                                                                            50,
-                                                                        child:
-                                                                            Padding(
-                                                                          padding: const EdgeInsets
-                                                                              .only(
-                                                                              left: 15.0),
-                                                                          child:
-                                                                              Card(
-                                                                            color: const Color.fromRGBO(
-                                                                                254,
-                                                                                248,
-                                                                                195,
-                                                                                1.0),
-                                                                            shape:
-                                                                                RoundedRectangleBorder(
-                                                                              borderRadius: BorderRadius.circular(5),
-                                                                            ),
-                                                                            child:
-                                                                                Center(
-                                                                              child:Text(
-                                                                                drawnNumber,
-                                                                                  style: TextStyle(
-                                                                                    fontSize: 19,
-                                                                                    color: Colors.black,
-                                                                                    fontWeight: FontWeight.bold,
-                                                                                  ),
-                                                                                ),
-                                                                            ),
-                                                                          ),
-                                                                        ),
-                                                                      ),
-                                                                    ],
-                                                                  ),
-                                                                  Row(
-                                                                    children: [
-                                                                      Padding(
-                                                                        padding: const EdgeInsets
-                                                                            .only(
-                                                                            left:
-                                                                                10.0),
-                                                                        child:
-                                                                            Row(
-                                                                          children: [
-                                                                            const Column(
-                                                                              children: [
-                                                                                Text(
-                                                                                  '120',
-                                                                                  style: TextStyle(
-                                                                                    color: Colors.black,
-                                                                                    fontSize: 16,
-                                                                                    fontWeight: FontWeight.bold,
-                                                                                  ),
-                                                                                ),
-                                                                                Text(
-                                                                                  'บาท',
-                                                                                  style: TextStyle(
-                                                                                    color: Colors.black,
-                                                                                    fontSize: 16,
-                                                                                    fontWeight: FontWeight.bold,
-                                                                                  ),
-                                                                                ),
-                                                                              ],
-                                                                            ),
-                                                                            const SizedBox(height: 5),
-                                                                            Column(
-                                                                              children: [
-                                                                                Padding(
-                                                                                  padding: const EdgeInsets.only(left: 5.0),
-                                                                                  child: ClipOval(
-                                                                                    child: Image.asset(
-                                                                                      'assets/images/signature.png',
-                                                                                      width: 50,
-                                                                                      height: 50,
-                                                                                      fit: BoxFit.cover,
-                                                                                    ),
-                                                                                  ),
-                                                                                ),
-                                                                              ],
-                                                                            )
-                                                                          ],
-                                                                        ),
-                                                                      ),
-                                                                    ],
-                                                                  ),
-                                                                ],
-                                                              ),
-                                                            ],
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      Align(
-                                                        alignment: Alignment
-                                                            .topRight, // ปรับตำแหน่งให้ติดด้านบน
-                                                        child: SizedBox(
-                                                          width: 50,
-                                                          height: 170,
-                                                          child: Card(
-                                                            color: Colors.white,
-                                                            shape:
-                                                                RoundedRectangleBorder(
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .only(
-                                                                topRight: Radius
-                                                                    .circular(
-                                                                        15), // ขอบมุมขวาบน
-                                                                bottomRight: Radius
-                                                                    .circular(
-                                                                        15), // ขอบมุมขวาล่าง
-                                                              ),
-                                                            ),
-                                                            child: Center(
-                                                              child: RotatedBox(
-                                                                quarterTurns: 3,
-                                                                child: Text(
-                                                                  'เจ๊มายพารวย',
-                                                                  style:
-                                                                      TextStyle(
-                                                                    color: const Color
-                                                                        .fromARGB(
-                                                                        255,
-                                                                        222,
-                                                                        3,
-                                                                        3),
-                                                                    fontSize:
-                                                                        16,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .bold,
+                                                                    ),
                                                                   ),
                                                                 ),
                                                               ),
                                                             ),
-                                                          ),
+                                                          ],
                                                         ),
                                                       ),
                                                     ],
                                                   ),
                                                 ),
-                                              ],
-                                            ),
+                                              ),
+                                            ],
                                           ),
-                                        ),
-                                      ],
-                                    ),
-                                  ) 
-                                )  .toList(),
+                                        ))
+                                    .toList(),
                               ),
                             ),
                           ],
                         ),
                       )
-                 ],
+                    ],
                     const SizedBox(height: 10),
                   ],
                 ),
@@ -1623,26 +1629,35 @@ class _OrderPageState extends State<OrderPage> {
   }
 Future<void> Check() async {
   try {
-    final response = await http.get(Uri.parse("http://172.20.10.3:3000/order/check/${widget.userId}"));
+    final response = await http.get(
+        Uri.parse("$API_ENDPOINT/order/check/${widget.userId}"));
 
     if (response.statusCode == 200) {
       final List<dynamic> data = jsonDecode(response.body);
+      log(data.toString());
 
-      List<String> purchasedNumbers = data
-          .map((item) => item['lottoNumber'] != null ? item['lottoNumber'].toString() : '')
-          .where((number) => number.isNotEmpty) 
+      // ดึงเลขล็อตเตอรี่และ purchaseID ทั้งหมดจากรายการที่ซื้อ
+      List<Map<String, dynamic>> purchasedNumbers = data
+          .map((item) => {
+                'lottoNumber': item['lottoNumber']?.toString() ?? '',
+                'purchaseID': item['purchaseID']?.toString() ?? ''
+              })
+          .where((item) =>
+              item['lottoNumber'] != null && item['lottoNumber']!.isNotEmpty)
           .toList();
       log('Purchased numbers: $purchasedNumbers');
 
-      final drawResponse = await http.get(Uri.parse('http://172.20.10.3:3000/order/check2'));
+      final drawResponse = await http.get(Uri.parse('$API_ENDPOINT/order/check2'));
 
       if (drawResponse.statusCode == 200) {
         final List<dynamic> drawData = jsonDecode(drawResponse.body);
 
+        // วนลูปผ่านทุกรายการของ drawData เพื่อเช็คผลรางวัล
+        List<Map<String, dynamic>> updatedResults = [];
         for (var draw in drawData) {
           String drawnNumber = draw['winningNumber']?.toString() ?? '';
 
-          if (drawnNumber.isNotEmpty && purchasedNumbers.contains(drawnNumber)) {
+          if (drawnNumber.isNotEmpty) {
             int prizeType = draw['prizeType'] ?? 0;
             int money = 0;
 
@@ -1667,15 +1682,31 @@ Future<void> Check() async {
                 break;
             }
 
-           log('Match found: $drawnNumber with prize type $prizeType, prize money: $money');
-            setState(() {
-                matchResults.add({'drawnNumber': drawnNumber,'prizeMoney': money});
-                win = matchResults.map((item) => '${item['drawnNumber']}').toList();
-                // matchResultsmoney.add({'prizeMoney': money});
-                // winmoney = matchResultsmoney.map((item) => '${item['prizeMoney']}').toList();
-              });
+            // วนลูปผ่านทุกรายการของ purchasedNumbers เพื่อเช็คว่า drawnNumber ตรงกับ lottoNumber ไหม
+            for (var item in purchasedNumbers) {
+              String lottoNumber = item['lottoNumber'] ?? '';
+              String purchaseID = item['purchaseID'] ?? '';
+
+              if (drawnNumber == lottoNumber) {
+                log('Match found: $drawnNumber with prize type $prizeType, prize money: $money, purchaseID: $purchaseID');
+
+                updatedResults.add({
+                  'drawnNumber': drawnNumber,
+                  'prizeMoney': money,
+                  'purchaseID': purchaseID,
+                  'prizeType': prizeType
+                });
+              }
+            }
           }
         }
+        setState(() {
+          matchResults = updatedResults;
+          win = matchResults
+              .map((item) =>
+                  '${item['drawnNumber']} ${item['prizeMoney']} ${item['prizeType']} ${item['purchaseID']}')
+              .toList();
+        });
       } else {
         log('Failed to load draw data. Status code: ${drawResponse.statusCode}');
       }
@@ -1687,17 +1718,24 @@ Future<void> Check() async {
   }
 }
 
+
   Future<void> Order() async {
     try {
-      final response = await http.get(Uri.parse(
-          "http://172.20.10.3:3000/order/Purchased/${widget.userId}"));
+      final response = await http.get(
+          Uri.parse("$API_ENDPOINT/order/PurchasedLotto/${widget.userId}"));
       if (response.statusCode == 200) {
         final List<dynamic> data = jsonDecode(response.body);
         log('Received data: $data');
         log(widget.userId.toString());
 
-        setState(() {
-          oorder = data.map((item) => item['lottoNumber'] as String).toList();
+       setState(() {
+          // Store both lottoNumber and purchaseDate in a combined list
+          oorder = data
+              .map((item) => {
+                    'lottoNumber': item['lottoNumber'].toString(),
+                    'purchaseDate': item['purchaseDate'].toString(),
+                  })
+              .toList();
         });
       } else {
         print('Failed to load data. Status code: ${response.statusCode}');
@@ -1714,7 +1752,28 @@ Future<void> Check() async {
 
     draws = adminDrawGetResponseFromJson(response.body);
   }
-  CheckMoney(){
 
+  void CheckMoney(int purchaseID, int prizeMoney) async {
+    print('Purchase ID: ${purchaseID.toString()}');
+    print('Prize Money: ${prizeMoney.toString()}');
+    final url = Uri.parse(
+        '$API_ENDPOINT/order/prizeMoney/${widget.userId}/$purchaseID');
+
+    try {
+      final response = await http.post(
+        url,
+        headers: {"Content-Type": "application/json"},
+        body: jsonEncode({"prizeMoney": prizeMoney}),
+      );
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        print('Transaction success: ${data['message']}');
+      } else {
+        print('Error: ${response.body}');
+      }
+    } catch (error) {
+      print('An error occurred: $error');
+    }
   }
 }
