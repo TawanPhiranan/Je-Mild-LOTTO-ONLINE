@@ -308,7 +308,6 @@ class _LottoPageState extends State<LottoPage> {
                       decoration: TextDecoration.underline,
                     ),
                   ),
-        
                 ],
               ),
             ),
@@ -318,7 +317,7 @@ class _LottoPageState extends State<LottoPage> {
               physics: const NeverScrollableScrollPhysics(),
               itemCount: _randomNumbers.length,
               itemBuilder: (context, index) {
-                 final lottoNumber = _randomNumbers[index];
+                final lottoNumber = _randomNumbers[index];
                 return Padding(
                   padding: const EdgeInsets.all(5.0),
                   child: Row(
@@ -467,6 +466,20 @@ class _LottoPageState extends State<LottoPage> {
                                                           ),
                                                         ],
                                                       ),
+                                                      Column(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .end,
+                                                        children: [
+                                                          Padding(
+                                                            padding:
+                                                                EdgeInsets.only(
+                                                                    left: 20.0),
+                                                            child: Text(
+                                                                'ใบที่ ${index + 1}',style: TextStyle(fontSize:18, fontWeight: FontWeight.bold, color: Colors.red)),
+                                                          ),
+                                                        ],
+                                                      ),
                                                     ],
                                                   ),
                                                 ),
@@ -548,46 +561,45 @@ class _LottoPageState extends State<LottoPage> {
     );
   }
 
-Future<void> Search() async {
-  List<String> inputNumbers = controllers.map((controller) => controller.text).toList();
+  Future<void> Search() async {
+    List<String> inputNumbers =
+        controllers.map((controller) => controller.text).toList();
 
-  try {
-    await fetchRandomNumbers();
+    try {
+      await fetchRandomNumbers();
 
-    if (_randomNumbers.isNotEmpty) {
-      List<String> allNumbers = _randomNumbers;
-      List<String> filteredNumbers = allNumbers.where((number) {
-
-        for (int i = 0; i < inputNumbers.length; i++) {
-          if (inputNumbers[i].isNotEmpty && inputNumbers[i] != number[i]) {
-            return false;
+      if (_randomNumbers.isNotEmpty) {
+        List<String> allNumbers = _randomNumbers;
+        List<String> filteredNumbers = allNumbers.where((number) {
+          for (int i = 0; i < inputNumbers.length; i++) {
+            if (inputNumbers[i].isNotEmpty && inputNumbers[i] != number[i]) {
+              return false;
+            }
           }
-        }
-        return true;
-      }).toList();
+          return true;
+        }).toList();
 
+        setState(() {
+          _randomNumbers = filteredNumbers;
+        });
+      } else {
+        setState(() {
+          _randomNumbers = ['No numbers available'];
+        });
+      }
+    } catch (e) {
       setState(() {
-        _randomNumbers = filteredNumbers;
-      });
-    } else {
-      setState(() {
-        _randomNumbers = ['No numbers available'];
+        _randomNumbers = ['Error: $e'];
       });
     }
-  } catch (e) {
-    setState(() {
-      _randomNumbers = ['Error: $e'];
-    });
   }
-}
 
-Future<void> fetchRandomNumbers([List<String>? numbers]) async {
+  Future<void> fetchRandomNumbers([List<String>? numbers]) async {
     try {
       var config = await Configuration.getConfig();
       var url = config['apiEndpoint'];
-      // final response = await http.get(Uri.parse('$url/order/random'));
-      final response = await http.get(Uri.parse('http://172.20.10.3:3000/order/random'));
 
+      final response = await http.get(Uri.parse('$url/admin/randomALL3'));
       log(response.body);
 
       if (response.statusCode == 200) {
@@ -608,7 +620,8 @@ Future<void> fetchRandomNumbers([List<String>? numbers]) async {
       });
     }
   }
-    void selectLottoNumber(String lottoNumber) {
+
+  void selectLottoNumber(String lottoNumber) {
     // เก็บ context ปัจจุบันไว้
     final currentContext = context;
 
@@ -659,6 +672,9 @@ Future<void> fetchRandomNumbers([List<String>? numbers]) async {
                               child: Text('ตกลง'),
                               onPressed: () {
                                 Navigator.of(context).pop();
+                                setState(() {
+                                  fetchRandomNumbers();
+                                });
                               },
                             ),
                           ],
@@ -713,8 +729,8 @@ Future<void> fetchRandomNumbers([List<String>? numbers]) async {
       },
     );
   }
-  
- BuyLotto() async {
+
+  BuyLotto() async {
     try {
       if (selectedLottoNumber == null || selectedLottoNumber!.isEmpty) {
         print('No lotto number selected');
@@ -752,6 +768,7 @@ Future<void> fetchRandomNumbers([List<String>? numbers]) async {
       failed = 3; // เกิดข้อผิดพลาด
     }
   }
+
   void Logout() {
     Navigator.push(
       context,

@@ -36,56 +36,6 @@ class _AdminrandomnumberState extends State<Adminrandomnumber> {
             Navigator.of(context).pop();
           },
         ),
-        actions: [
-          PopupMenuButton<String>(
-            icon: Icon(
-              Icons.more_vert,
-              color: Colors.white,
-            ),
-            onSelected: (value) {
-              if (value == 'Logout') {
-                showDialog(
-                  context: context,
-                  builder: (context) => SimpleDialog(
-                    children: [
-                      const Padding(
-                        padding: EdgeInsets.all(16.0),
-                        child: Text(
-                          'คุณต้องการออกจากระบบใช่หรือไม่?',
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          TextButton(
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
-                            child: const Text('ไม่'),
-                          ),
-                          FilledButton(
-                            onPressed: () {},
-                            child: const Text('ใช่'),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                );
-              }
-            },
-            itemBuilder: (context) => [
-              const PopupMenuItem<String>(
-                value: 'Logout',
-                child: Text('ออกจากระบบ'),
-              ),
-            ],
-          ),
-        ],
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0),

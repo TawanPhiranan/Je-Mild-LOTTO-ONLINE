@@ -435,7 +435,7 @@ class _EditProfilepageState extends State<EditProfilepage> {
 }
 
 
-  // ฟังก์ชันออกจากระบบ
+ 
  Future<void> loadDataAsync() async {
   try {
     var config = await Configuration.getConfig();
@@ -455,7 +455,7 @@ class _EditProfilepageState extends State<EditProfilepage> {
   }
 }
 
-
+ // ฟังก์ชันออกจากระบบ
   void Logout() {
     Navigator.push(
         context,
