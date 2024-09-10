@@ -318,7 +318,7 @@ class _LottoPageState extends State<LottoPage> {
               physics: const NeverScrollableScrollPhysics(),
               itemCount: _randomNumbers.length,
               itemBuilder: (context, index) {
-                final lottoNumber = _randomNumbers[index];
+                 final lottoNumber = _randomNumbers[index];
                 return Padding(
                   padding: const EdgeInsets.all(5.0),
                   child: Row(
@@ -547,9 +547,41 @@ class _LottoPageState extends State<LottoPage> {
       ),
     );
   }
-///////////// 
-// เมธอดสำหรับเรียก API และสุ่มตัวเลข
-  Future<void> fetchRandomNumbers() async {
+
+Future<void> Search() async {
+  List<String> inputNumbers = controllers.map((controller) => controller.text).toList();
+
+  try {
+    await fetchRandomNumbers();
+
+    if (_randomNumbers.isNotEmpty) {
+      List<String> allNumbers = _randomNumbers;
+      List<String> filteredNumbers = allNumbers.where((number) {
+
+        for (int i = 0; i < inputNumbers.length; i++) {
+          if (inputNumbers[i].isNotEmpty && inputNumbers[i] != number[i]) {
+            return false;
+          }
+        }
+        return true;
+      }).toList();
+
+      setState(() {
+        _randomNumbers = filteredNumbers;
+      });
+    } else {
+      setState(() {
+        _randomNumbers = ['No numbers available'];
+      });
+    }
+  } catch (e) {
+    setState(() {
+      _randomNumbers = ['Error: $e'];
+    });
+  }
+}
+
+Future<void> fetchRandomNumbers([List<String>? numbers]) async {
     try {
       var config = await Configuration.getConfig();
       var url = config['apiEndpoint'];
@@ -575,8 +607,7 @@ class _LottoPageState extends State<LottoPage> {
       });
     }
   }
-
-  void selectLottoNumber(String lottoNumber) {
+    void selectLottoNumber(String lottoNumber) {
     // เก็บ context ปัจจุบันไว้
     final currentContext = context;
 
@@ -627,9 +658,6 @@ class _LottoPageState extends State<LottoPage> {
                               child: Text('ตกลง'),
                               onPressed: () {
                                 Navigator.of(context).pop();
-                                setState(() {
-                                  fetchRandomNumbers();
-                                });
                               },
                             ),
                           ],
@@ -643,7 +671,7 @@ class _LottoPageState extends State<LottoPage> {
                         return AlertDialog(
                           title: Text('การไม่ซื้อสำเร็จ'),
                           content: Text(
-                              'คุณได้ทำการซื้อเลข $lottoNumber ไปแล้ว ไม่สามารถซื้อซ้ำได้อีก 😭'),
+                              'คุณได้ทำการซื้อเลข $lottoNumber ไปแล้ว ไม่สามารถซื้อซ้ำได้อีก T_T'),
                           actions: <Widget>[
                             TextButton(
                               child: Text('ตกลง'),
@@ -684,8 +712,8 @@ class _LottoPageState extends State<LottoPage> {
       },
     );
   }
-
-  BuyLotto() async {
+  
+ BuyLotto() async {
     try {
       if (selectedLottoNumber == null || selectedLottoNumber!.isEmpty) {
         print('No lotto number selected');
@@ -723,40 +751,6 @@ class _LottoPageState extends State<LottoPage> {
       failed = 3; // เกิดข้อผิดพลาด
     }
   }
-
-  Future<void> Search() async {
-    List<String> inputNumbers =
-        controllers.map((controller) => controller.text).toList();
-
-    try {
-      await fetchRandomNumbers();
-
-      if (_randomNumbers.isNotEmpty) {
-        List<String> allNumbers = _randomNumbers;
-        List<String> filteredNumbers = allNumbers.where((number) {
-          for (int i = 0; i < inputNumbers.length; i++) {
-            if (inputNumbers[i].isNotEmpty && inputNumbers[i] != number[i]) {
-              return false;
-            }
-          }
-          return true;
-        }).toList();
-
-        setState(() {
-          _randomNumbers = filteredNumbers;
-        });
-      } else {
-        setState(() {
-          _randomNumbers = ['No numbers available'];
-        });
-      }
-    } catch (e) {
-      setState(() {
-        _randomNumbers = ['Error: $e'];
-      });
-    }
-  }
-
   void Logout() {
     Navigator.push(
       context,

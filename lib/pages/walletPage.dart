@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:mini_project/config/config.dart';
 import 'package:mini_project/models/response/showMoney_get_res.dart';
 import 'package:mini_project/models/response/wallet_get%20_res.dart';
-import 'package:mini_project/models/request/%E0%B8%B5user_add_wthdraw_post_req.dart';
+import 'package:mini_project/models/request/user_add_wthdraw_post_req.dart';
 import 'package:mini_project/pages/LoginPage.dart';
 import 'package:mini_project/pages/LogoPage.dart';
 import 'package:mini_project/pages/LottoPage.dart';
