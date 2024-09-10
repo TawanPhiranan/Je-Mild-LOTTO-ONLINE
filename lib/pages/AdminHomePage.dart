@@ -159,7 +159,8 @@ class _AdiminhomepageState extends State<Adiminhomepage> {
                   left: 0,
                   right: 2,
                   child: Container(
-                    height: screenHeight * 0.13, // ปรับความสูงของรูปภาพที่ต้องการ
+                    height:
+                        screenHeight * 0.13, // ปรับความสูงของรูปภาพที่ต้องการ
                     width: double.infinity, // ใช้ความกว้างทั้งหมดของ Container
                     child: Image.asset(
                       'assets/images/jemildd.png',
@@ -265,8 +266,8 @@ class _AdiminhomepageState extends State<Adiminhomepage> {
                                               Text(
                                                 "รางวัลละ 70,000 บาท",
                                                 style: TextStyle(
-                                                  color:
-                                                      Color.fromRGBO(75, 9, 9, 1),
+                                                  color: Color.fromRGBO(
+                                                      75, 9, 9, 1),
                                                   fontSize: 14,
                                                   fontWeight: FontWeight.bold,
                                                 ),
@@ -283,7 +284,8 @@ class _AdiminhomepageState extends State<Adiminhomepage> {
                                                     draws[3].winningNumber,
                                                     style: TextStyle(
                                                       fontSize: 24,
-                                                      fontWeight: FontWeight.bold,
+                                                      fontWeight:
+                                                          FontWeight.bold,
                                                       color: Colors.black,
                                                     ),
                                                   ),
@@ -305,8 +307,8 @@ class _AdiminhomepageState extends State<Adiminhomepage> {
                                               Text(
                                                 "รางวัลละ 50,000 บาท",
                                                 style: TextStyle(
-                                                  color:
-                                                      Color.fromRGBO(75, 9, 9, 1),
+                                                  color: Color.fromRGBO(
+                                                      75, 9, 9, 1),
                                                   fontSize: 14,
                                                   fontWeight: FontWeight.bold,
                                                 ),
@@ -323,7 +325,8 @@ class _AdiminhomepageState extends State<Adiminhomepage> {
                                                     draws[2].winningNumber,
                                                     style: TextStyle(
                                                       fontSize: 24,
-                                                      fontWeight: FontWeight.bold,
+                                                      fontWeight:
+                                                          FontWeight.bold,
                                                       color: Colors.black,
                                                     ),
                                                   ),
@@ -352,8 +355,8 @@ class _AdiminhomepageState extends State<Adiminhomepage> {
                                               Text(
                                                 "รางวัลละ 25,000 บาท",
                                                 style: TextStyle(
-                                                  color:
-                                                      Color.fromRGBO(75, 9, 9, 1),
+                                                  color: Color.fromRGBO(
+                                                      75, 9, 9, 1),
                                                   fontSize: 14,
                                                   fontWeight: FontWeight.bold,
                                                 ),
@@ -370,7 +373,8 @@ class _AdiminhomepageState extends State<Adiminhomepage> {
                                                     draws[1].winningNumber,
                                                     style: TextStyle(
                                                       fontSize: 24,
-                                                      fontWeight: FontWeight.bold,
+                                                      fontWeight:
+                                                          FontWeight.bold,
                                                       color: Colors.black,
                                                     ),
                                                   ),
@@ -392,8 +396,8 @@ class _AdiminhomepageState extends State<Adiminhomepage> {
                                               Text(
                                                 "รางวัลละ 10,000 บาท",
                                                 style: TextStyle(
-                                                  color:
-                                                      Color.fromRGBO(75, 9, 9, 1),
+                                                  color: Color.fromRGBO(
+                                                      75, 9, 9, 1),
                                                   fontSize: 14,
                                                   fontWeight: FontWeight.bold,
                                                 ),
@@ -410,7 +414,8 @@ class _AdiminhomepageState extends State<Adiminhomepage> {
                                                     draws[0].winningNumber,
                                                     style: TextStyle(
                                                       fontSize: 24,
-                                                      fontWeight: FontWeight.bold,
+                                                      fontWeight:
+                                                          FontWeight.bold,
                                                       color: Colors.black,
                                                     ),
                                                   ),
@@ -427,20 +432,23 @@ class _AdiminhomepageState extends State<Adiminhomepage> {
                             ),
                             const SizedBox(height: 10),
                             Padding(
-                              padding: const EdgeInsets.fromLTRB(15, 20, 15, 20),
+                              padding:
+                                  const EdgeInsets.fromLTRB(15, 20, 15, 20),
                               child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
                                 children: [
                                   Column(
                                     children: [
                                       FilledButton(
                                         onPressed: LottoDarw,
                                         style: FilledButton.styleFrom(
-                                          backgroundColor:
-                                              const Color.fromRGBO(177, 36, 24, 1),
+                                          backgroundColor: const Color.fromRGBO(
+                                              177, 36, 24, 1),
                                           fixedSize: const Size(170, 100),
                                           shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(16),
+                                            borderRadius:
+                                                BorderRadius.circular(16),
                                           ),
                                         ),
                                         child: const Column(
@@ -463,13 +471,17 @@ class _AdiminhomepageState extends State<Adiminhomepage> {
                                   Column(
                                     children: [
                                       FilledButton(
-                                        onPressed: reset,
+                                        onPressed: () {
+                                          confirmReset(
+                                              context); // เรียกฟังก์ชัน confirmReset เมื่อกดปุ่ม
+                                        },
                                         style: FilledButton.styleFrom(
                                           backgroundColor: const Color.fromRGBO(
                                               108, 108, 108, 1),
                                           fixedSize: const Size(170, 100),
                                           shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(16),
+                                            borderRadius:
+                                                BorderRadius.circular(16),
                                           ),
                                         ),
                                         child: const Column(
@@ -512,13 +524,53 @@ class _AdiminhomepageState extends State<Adiminhomepage> {
     );
   }
 
-  void reset() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => const Logopage(),
+  void confirmReset(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('ยืนยันการลบ'),
+        content: const Text('คุณแน่ใจหรือไม่ว่าต้องการลบข้อมูล?'),
+        actions: [
+          // ปุ่มยกเลิก
+          FilledButton(
+            onPressed: () {
+              Navigator.pop(context); // ปิดหน้าต่างเมื่อกดปุ่มยกเลิก
+            },
+            child: const Text('ยกเลิก'),
+          ),
+          // ปุ่มตกลง
+          FilledButton(
+            onPressed: () {
+              Navigator.pop(context); // ปิดหน้าต่างก่อนเริ่มการลบ
+              reset(context); // เรียกใช้ฟังก์ชัน reset เมื่อยืนยันการลบ
+            },
+            child: const Text('ตกลง'),
+          ),
+        ],
       ),
     );
+  }
+
+  void reset(BuildContext context) async {
+    var config = await Configuration.getConfig();
+    var url = config['apiEndpoint'];
+    try {
+      // ส่งคำขอ HTTP DELETE
+      await http.delete(
+        Uri.parse('$url/reset/delete'),
+        headers: {"Content-Type": "application/json; charset=utf-8"},
+      );
+
+      // แสดงข้อความสำเร็จเมื่อการลบสำเร็จ
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('ลบข้อมูลสำเร็จ')),
+      );
+    } catch (e) {
+      // จัดการข้อผิดพลาด
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('เกิดข้อผิดพลาด: $e')),
+      );
+    }
   }
 
   void Logout() {
@@ -535,5 +587,4 @@ class _AdiminhomepageState extends State<Adiminhomepage> {
     var response = await http.get(Uri.parse('$url/admin/drawsNow'));
     draws = adminDrawGetResponseFromJson(response.body);
   }
-  
 }
