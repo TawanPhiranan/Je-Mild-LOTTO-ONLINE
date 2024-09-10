@@ -466,21 +466,6 @@ class _LottoPageState extends State<LottoPage> {
                                                           ),
                                                         ],
                                                       ),
-                                                      Column(
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .end,
-                                                        children: [
-                                                          Padding(
-                                                            padding:
-                                                                EdgeInsets.only(
-                                                                    left: 20.0),
-                                                            child: Text(
-                                                                'ใบที่ ${index + 1}'),
-                                                          ),
-                                                        ],
-                                                      ),
-
                                                     ],
                                                   ),
                                                 ),
