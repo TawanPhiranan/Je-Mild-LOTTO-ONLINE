@@ -21,6 +21,7 @@ class _AdiminhomepageState extends State<Adiminhomepage> {
   int _selectedIndex = 0;
   List<AdminDrawGetResponse> draws = [];
   late Future<void> loadData;
+  
 
   @override
   void initState() {
@@ -55,7 +56,7 @@ class _AdiminhomepageState extends State<Adiminhomepage> {
   @override
   Widget build(BuildContext context) {
     log('Adiminhomepage initialized with userId: ${widget.userId}');
-
+     double buttonWidth = MediaQuery.of(context).size.width * 0.43;  // กำหนดขนาดปุ่มเป็น 45% ของความกว้างหน้าจอ
     // คำนวณความสูงของหน้าจอ
     final screenHeight = MediaQuery.of(context).size.height;
 
@@ -430,13 +431,12 @@ class _AdiminhomepageState extends State<Adiminhomepage> {
                                 ),
                               ),
                             ),
-                            const SizedBox(height: 10),
                             Padding(
                               padding:
-                                  const EdgeInsets.fromLTRB(15, 20, 15, 20),
+                                  const EdgeInsets.fromLTRB(15, 30, 15, 30),
                               child: Row(
                                 mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   Column(
                                     children: [
@@ -445,7 +445,7 @@ class _AdiminhomepageState extends State<Adiminhomepage> {
                                         style: FilledButton.styleFrom(
                                           backgroundColor: const Color.fromRGBO(
                                               177, 36, 24, 1),
-                                          fixedSize: const Size(170, 100),
+                                           fixedSize: Size(buttonWidth, 100),  // ใช้ค่าที่คำนวณจาก MediaQuery
                                           shape: RoundedRectangleBorder(
                                             borderRadius:
                                                 BorderRadius.circular(16),
@@ -478,7 +478,7 @@ class _AdiminhomepageState extends State<Adiminhomepage> {
                                         style: FilledButton.styleFrom(
                                           backgroundColor: const Color.fromRGBO(
                                               108, 108, 108, 1),
-                                          fixedSize: const Size(170, 100),
+                                          fixedSize: Size(buttonWidth, 100), 
                                           shape: RoundedRectangleBorder(
                                             borderRadius:
                                                 BorderRadius.circular(16),

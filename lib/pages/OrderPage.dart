@@ -118,11 +118,11 @@ class _OrderPageState extends State<OrderPage> {
         title: const Text(
           'Order',
           style: TextStyle(
-            fontSize: 20,
             color: Colors.white,
+            fontWeight: FontWeight.bold,
           ),
         ),
-        backgroundColor: const Color.fromARGB(255, 211, 39, 24),
+        backgroundColor: const Color.fromRGBO(177, 36, 24, 1),
         leading: IconButton(
           icon:
               const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white),
@@ -294,7 +294,7 @@ class _OrderPageState extends State<OrderPage> {
                         ),
                       ),
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
                           SizedBox(
                             width: 185,
@@ -401,7 +401,7 @@ class _OrderPageState extends State<OrderPage> {
                         ],
                       ),
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
                           SizedBox(
                             width: 185,
@@ -886,7 +886,7 @@ class _OrderPageState extends State<OrderPage> {
                         ),
                       ),
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
                           SizedBox(
                             width: 185,
@@ -993,7 +993,7 @@ class _OrderPageState extends State<OrderPage> {
                         ],
                       ),
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
                           SizedBox(
                             width: 185,
