@@ -109,27 +109,7 @@ class _LoginpageState extends State<Loginpage> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    TextButton(
-                        onPressed: forgetpwd,
-                        child: const Text(
-                          'ลืมรหัสผ่าน?',
-                          style: TextStyle(
-                            fontSize: 16,
-                            color: Colors.blue,
-                            decoration: TextDecoration.underline, // ขีดเส้นใต้
-                            decorationColor: Colors.blue, // สีของเส้น
-                            decorationThickness: 2, // ความหนาของเส้น
-                          ),
-                        )),
-                  ],
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
+                padding: const EdgeInsets.fromLTRB(20, 40, 20, 30),
                 child: Column(
                   children: [
                     SizedBox(
