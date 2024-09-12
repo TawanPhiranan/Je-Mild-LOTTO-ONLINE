@@ -512,12 +512,10 @@ class _OrderPageState extends State<OrderPage> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           ElevatedButton(
-                            onPressed: Order, //() {
-                            //   setState(() {
-                            //     _Index = 0; // เปลี่ยนเป็นมุมมองที่ต้องการ
-                            //   });
-                            // },
-                            // ignore: sort_child_properties_last
+                            onPressed: () {
+                              // ไม่จำเป็นต้องใส่ setState() ซ้ำซ้อนหากมีการอัปเดตสถานะในฟังก์ชัน Order อยู่แล้ว
+                              Order();
+                            },
                             child: const Text(
                               "คำสั่งซื้อ",
                               style: TextStyle(
@@ -1105,7 +1103,7 @@ class _OrderPageState extends State<OrderPage> {
                         children: [
                           ElevatedButton(
                             onPressed: () async {
-                              await Order;
+                              await Order();
                               setState(() {
                                 _Index = 0;
                               });

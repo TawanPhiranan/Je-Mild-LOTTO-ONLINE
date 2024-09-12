@@ -541,14 +541,17 @@ class _AdiminhomepageState extends State<Adiminhomepage> {
           ),
           // ปุ่มตกลง
           FilledButton(
-            onPressed: () {
-              // รีเซ็ตข้อมูลและโหลดข้อมูลใหม่
+            onPressed: () async {
+              // รีเซ็ตข้อมูล
               reset(context);
+
+              // เรียกใช้ loadDataAsync โดยไม่ต้องรอค่าผลลัพธ์
+              await loadDataAsync();
               setState(() {
                 loadData = loadDataAsync();
               });
 
-              // แสดง SnackBar
+              // แสดง SnackBar เมื่อเสร็จสิ้นการลบข้อมูล
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                   content: const Text(
