@@ -21,7 +21,6 @@ class _AdiminhomepageState extends State<Adiminhomepage> {
   int _selectedIndex = 0;
   List<AdminDrawGetResponse> draws = [];
   late Future<void> loadData;
-  
 
   @override
   void initState() {
@@ -56,7 +55,8 @@ class _AdiminhomepageState extends State<Adiminhomepage> {
   @override
   Widget build(BuildContext context) {
     log('Adiminhomepage initialized with userId: ${widget.userId}');
-     double buttonWidth = MediaQuery.of(context).size.width * 0.43;  // กำหนดขนาดปุ่มเป็น 45% ของความกว้างหน้าจอ
+    double buttonWidth = MediaQuery.of(context).size.width *
+        0.43; // กำหนดขนาดปุ่มเป็น 45% ของความกว้างหน้าจอ
     // คำนวณความสูงของหน้าจอ
     final screenHeight = MediaQuery.of(context).size.height;
 
@@ -445,7 +445,8 @@ class _AdiminhomepageState extends State<Adiminhomepage> {
                                         style: FilledButton.styleFrom(
                                           backgroundColor: const Color.fromRGBO(
                                               177, 36, 24, 1),
-                                           fixedSize: Size(buttonWidth, 100),  // ใช้ค่าที่คำนวณจาก MediaQuery
+                                          fixedSize: Size(buttonWidth,
+                                              100), // ใช้ค่าที่คำนวณจาก MediaQuery
                                           shape: RoundedRectangleBorder(
                                             borderRadius:
                                                 BorderRadius.circular(16),
@@ -478,7 +479,7 @@ class _AdiminhomepageState extends State<Adiminhomepage> {
                                         style: FilledButton.styleFrom(
                                           backgroundColor: const Color.fromRGBO(
                                               108, 108, 108, 1),
-                                          fixedSize: Size(buttonWidth, 100), 
+                                          fixedSize: Size(buttonWidth, 100),
                                           shape: RoundedRectangleBorder(
                                             borderRadius:
                                                 BorderRadius.circular(16),
@@ -541,9 +542,16 @@ class _AdiminhomepageState extends State<Adiminhomepage> {
           // ปุ่มตกลง
           FilledButton(
             onPressed: () {
+              // รีเซ็ตข้อมูลและโหลดข้อมูลใหม่
+              reset(context);
+              setState(() {
+                loadData = loadDataAsync();
+              });
+
+              // แสดง SnackBar
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
-                  content: Text(
+                  content: const Text(
                     'ลบข้อมูลสำเร็จ',
                     style: TextStyle(color: Colors.white, fontSize: 18),
                   ),
@@ -552,8 +560,8 @@ class _AdiminhomepageState extends State<Adiminhomepage> {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20),
                   ),
-                  margin: EdgeInsets.all(20),
-                  duration: Duration(seconds: 3),
+                  margin: const EdgeInsets.all(20),
+                  duration: const Duration(seconds: 3),
                   action: SnackBarAction(
                     label: 'ปิด',
                     textColor: Colors.yellow,
@@ -562,11 +570,8 @@ class _AdiminhomepageState extends State<Adiminhomepage> {
                 ),
               );
 
-              Navigator.pop(context); // ปิด dialog หลังแสดง SnackBar
-              reset(context);
-              setState(() {
-                loadData = loadDataAsync();
-              });
+              // ปิด dialog หลังจากกดปุ่ม "ตกลง"
+              Navigator.pop(context);
             },
             child: const Text('ตกลง'),
           ),
