@@ -288,7 +288,7 @@ class _EditProfilepageState extends State<EditProfilepage> {
 
     try {
       var res = await http.put(
-        Uri.parse('$url/edituser/${widget.userId}'),
+        Uri.parse('$url/edit/${widget.userId}'),
         headers: {"Content-Type": "application/json; charset=utf-8"},
         body: jsonEncode(json),
       );
