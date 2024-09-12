@@ -1103,7 +1103,10 @@ class _OrderPageState extends State<OrderPage> {
                         children: [
                           ElevatedButton(
                             onPressed: () async {
+                              // เรียกใช้ฟังก์ชัน Order เพื่อดึงข้อมูลคำสั่งซื้อ
                               await Order();
+
+                              // อัปเดตสถานะเพื่อแสดงผลหน้าคำสั่งซื้อ
                               setState(() {
                                 _Index = 0;
                               });
@@ -1135,13 +1138,14 @@ class _OrderPageState extends State<OrderPage> {
                           ),
                           ElevatedButton(
                             onPressed: () async {
+                              // เรียกใช้ฟังก์ชัน Check เพื่อตรวจสอบผลรางวัล
                               await Check();
+
+                              // อัปเดตสถานะเพื่อแสดงผลหน้าผลรางวัล
                               setState(() {
                                 _Index = 1;
                               });
                             },
-
-                            // ignore: sort_child_properties_last
                             child: const Text(
                               "ผลรางวัล",
                               style: TextStyle(
@@ -1149,7 +1153,6 @@ class _OrderPageState extends State<OrderPage> {
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
-                            // เปลี่ยนสีปุ่มตามเงื่อนไข
                             style: ElevatedButton.styleFrom(
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 60, vertical: 15),
