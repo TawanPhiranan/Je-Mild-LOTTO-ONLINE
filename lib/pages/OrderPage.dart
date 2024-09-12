@@ -1100,79 +1100,80 @@ class _OrderPageState extends State<OrderPage> {
                         ],
                       ),
                       const SizedBox(height: 20),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          ElevatedButton(
-                            onPressed: () async {
-                              await Order;
-                              setState(() {
-                                _Index = 0;
-                              });
-                            },
-                            child: const Text(
-                              "คำสั่งซื้อ",
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            style: ElevatedButton.styleFrom(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 60, vertical: 15),
-                              shape: const RoundedRectangleBorder(
-                                borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(10),
-                                  bottomLeft: Radius.circular(10),
-                                ),
-                              ),
-                              backgroundColor: _Index == 0
-                                  ? Color.fromRGBO(202, 72, 74, 1)
-                                  : Color.fromRGBO(213, 96, 97, 1),
-                              textStyle: const TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                          ElevatedButton(
-                            onPressed: () async {
-                              await Check();
-                              setState(() {
-                                _Index = 1;
-                              });
-                            },
+                  Row(
+  mainAxisAlignment: MainAxisAlignment.center,
+  children: [
+    ElevatedButton(
+      onPressed: () async {
+        // เรียกใช้ฟังก์ชัน Order เพื่อดึงข้อมูลคำสั่งซื้อ
+        await Order();
 
-                            // ignore: sort_child_properties_last
-                            child: const Text(
-                              "ผลรางวัล",
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            // เปลี่ยนสีปุ่มตามเงื่อนไข
-                            style: ElevatedButton.styleFrom(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 60, vertical: 15),
-                              shape: const RoundedRectangleBorder(
-                                borderRadius: BorderRadius.only(
-                                  topRight: Radius.circular(10),
-                                  bottomRight: Radius.circular(10),
-                                ),
-                              ),
-                              backgroundColor: _Index == 1
-                                  ? Color.fromRGBO(
-                                      202, 72, 74, 1) // สีเมื่อถูกเลือก
-                                  : Color.fromRGBO(213, 96, 97, 1), // สีปกติ
-                              textStyle: const TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
+        // อัปเดตสถานะเพื่อแสดงผลหน้าคำสั่งซื้อ
+        setState(() {
+          _Index = 0;
+        });
+      },
+      child: const Text(
+        "คำสั่งซื้อ",
+        style: TextStyle(
+          color: Colors.white,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+      style: ElevatedButton.styleFrom(
+        padding: const EdgeInsets.symmetric(horizontal: 60, vertical: 15),
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(10),
+            bottomLeft: Radius.circular(10),
+          ),
+        ),
+        backgroundColor: _Index == 0
+            ? Color.fromRGBO(202, 72, 74, 1)
+            : Color.fromRGBO(213, 96, 97, 1),
+        textStyle: const TextStyle(
+          fontSize: 16,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+    ),
+    ElevatedButton(
+      onPressed: () async {
+        // เรียกใช้ฟังก์ชัน Check เพื่อตรวจสอบผลรางวัล
+        await Check();
+
+        // อัปเดตสถานะเพื่อแสดงผลหน้าผลรางวัล
+        setState(() {
+          _Index = 1;
+        });
+      },
+      child: const Text(
+        "ผลรางวัล",
+        style: TextStyle(
+          color: Colors.white,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+      style: ElevatedButton.styleFrom(
+        padding: const EdgeInsets.symmetric(horizontal: 60, vertical: 15),
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+            topRight: Radius.circular(10),
+            bottomRight: Radius.circular(10),
+          ),
+        ),
+        backgroundColor: _Index == 1
+            ? Color.fromRGBO(202, 72, 74, 1) // สีเมื่อถูกเลือก
+            : Color.fromRGBO(213, 96, 97, 1), // สีปกติ
+        textStyle: const TextStyle(
+          fontSize: 16,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+    ),
+  ],
+),
+
                       Padding(
                         padding: const EdgeInsets.all(5.0),
                         child: Row(
