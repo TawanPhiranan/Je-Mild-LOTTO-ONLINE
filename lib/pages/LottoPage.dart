@@ -193,7 +193,7 @@ class _LottoPageState extends State<LottoPage> {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           const Text(
-                            '1 สิงหาคม 2567',
+                            'กรอกเลขลอตเตอรี่ที่ต้องการสั่งซื้อ',
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 20,
@@ -201,14 +201,7 @@ class _LottoPageState extends State<LottoPage> {
                             ),
                           ),
                           const SizedBox(height: 10),
-                          const Text(
-                            'กรอกเลขลอตเตอรี่ที่ต้องการสั่งซื้อ',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 16,
-                            ),
-                          ),
-                          const SizedBox(height: 20),
+                          
                           LayoutBuilder(
                             builder: (BuildContext context,
                                 BoxConstraints constraints) {

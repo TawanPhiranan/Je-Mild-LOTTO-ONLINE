@@ -60,6 +60,7 @@ class _OrderPageState extends State<OrderPage> {
     super.initState();
     loadData = loadDataAsync();
     Check();
+    Order();
 
     // Log the userId to see its value
     log('OrderPage initialized with userId: ${widget.userId}');
