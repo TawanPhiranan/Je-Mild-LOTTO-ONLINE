@@ -262,7 +262,7 @@ class _LottoPageState extends State<LottoPage> {
                               );
                             },
                           ),
-                          const SizedBox(height: 20),
+                          const SizedBox(height: 25),
                           SizedBox(
                             child: FilledButton(
                               onPressed: Search,

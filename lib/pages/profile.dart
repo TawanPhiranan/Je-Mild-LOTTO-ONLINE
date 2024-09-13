@@ -319,18 +319,18 @@ class _ProfilePageState extends State<ProfilePage> {
                                 context: context,
                                 builder: (BuildContext context) {
                                   return AlertDialog(
-                                    title: const Text('ยืนยันการลบ'),
+                                    title: const Text('ยืนยันการลบ',style: TextStyle(fontWeight: FontWeight.bold, color: Colors.red),),
                                     content: const Text(
                                         'คุณแน่ใจว่าต้องการลบบัญชีผู้ใช้หรือไม่?'),
                                     actions: [
                                       TextButton(
-                                        child: const Text('ยกเลิก'),
+                                        child: const Text('ยกเลิก',style: TextStyle(fontWeight: FontWeight.bold)),
                                         onPressed: () {
                                           Navigator.of(context).pop();
                                         },
                                       ),
                                       TextButton(
-                                        child: const Text('ลบ'),
+                                        child: const Text('ลบ',style: TextStyle(fontWeight: FontWeight.bold)),
                                         onPressed: () {
                                           _deleteAccount();
                                         },
