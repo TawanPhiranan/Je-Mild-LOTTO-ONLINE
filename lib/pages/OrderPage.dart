@@ -1106,7 +1106,6 @@ class _OrderPageState extends State<OrderPage> {
                             onPressed: () async {
                               // เรียกใช้ฟังก์ชัน Order เพื่อดึงข้อมูลคำสั่งซื้อ
                               await Order();
-
                               // อัปเดตสถานะเพื่อแสดงผลหน้าคำสั่งซื้อ
                               setState(() {
                                 _Index = 0;
@@ -1175,14 +1174,23 @@ class _OrderPageState extends State<OrderPage> {
                           ),
                         ],
                       ),
+                      
                       Padding(
                         padding: const EdgeInsets.all(5.0),
                         child: Row(
                           children: [
                             Expanded(
                               child: Column(
-                                children: matchResults
-                                    .map((item) => SizedBox(
+                                children: matchResults == null || matchResults.isEmpty
+      ? [Text('ท่านไม่ถูกรางวัล',style: TextStyle(
+                                                              color:
+                                                                  Colors.black,
+                                                              fontSize: 15,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                            ),)]
+      : matchResults.map((item) => SizedBox(
                                           height: 198,
                                           child: Stack(
                                             children: [

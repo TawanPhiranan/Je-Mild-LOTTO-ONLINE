@@ -200,7 +200,7 @@ class _LottoPageState extends State<LottoPage> {
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          const SizedBox(height: 10),
+                          const SizedBox(height: 40),
                           
                           LayoutBuilder(
                             builder: (BuildContext context,

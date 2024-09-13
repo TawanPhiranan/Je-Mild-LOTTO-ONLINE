@@ -26,7 +26,6 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   int _selectedIndex = 4;
-  
 
   late EditUserIdGetResponse user;
   late Future<void> loadData;
@@ -210,9 +209,8 @@ class _ProfilePageState extends State<ProfilePage> {
                           radius: 100,
                           backgroundImage:
                               AssetImage('assets/images/profile.jpg'),
-                              //  Image.asset('assets/imag')
+                          //  Image.asset('assets/imag')
                         ),
-                       
                       ],
                     ),
                   ),
@@ -316,7 +314,32 @@ class _ProfilePageState extends State<ProfilePage> {
                         SizedBox(
                           width: double.infinity,
                           child: FilledButton(
-                            onPressed: _deleteAccount,
+                            onPressed: () {
+                              showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return AlertDialog(
+                                    title: const Text('ยืนยันการลบ'),
+                                    content: const Text(
+                                        'คุณแน่ใจว่าต้องการลบบัญชีผู้ใช้หรือไม่?'),
+                                    actions: [
+                                      TextButton(
+                                        child: const Text('ยกเลิก'),
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                        },
+                                      ),
+                                      TextButton(
+                                        child: const Text('ลบ'),
+                                        onPressed: () {
+                                          _deleteAccount();
+                                        },
+                                      ),
+                                    ],
+                                  );
+                                },
+                              );
+                            },
                             style: ButtonStyle(
                               backgroundColor:
                                   MaterialStateProperty.all(Colors.grey),
