@@ -61,6 +61,10 @@ class _OrderPageState extends State<OrderPage> {
     loadData = loadDataAsync();
     Check();
     Order();
+<<<<<<< HEAD
+=======
+
+>>>>>>> ac431b8d612137cbc600f3bd846177519677f49d
     // Log the userId to see its value
     log('OrderPage initialized with userId: ${widget.userId}');
   }
@@ -512,12 +516,10 @@ class _OrderPageState extends State<OrderPage> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           ElevatedButton(
-                            onPressed: Order, //() {
-                            //   setState(() {
-                            //     _Index = 0; // เปลี่ยนเป็นมุมมองที่ต้องการ
-                            //   });
-                            // },
-                            // ignore: sort_child_properties_last
+                            onPressed: () {
+                              // ไม่จำเป็นต้องใส่ setState() ซ้ำซ้อนหากมีการอัปเดตสถานะในฟังก์ชัน Order อยู่แล้ว
+                              Order();
+                            },
                             child: const Text(
                               "คำสั่งซื้อ",
                               style: TextStyle(
@@ -1105,7 +1107,9 @@ class _OrderPageState extends State<OrderPage> {
                         children: [
                           ElevatedButton(
                             onPressed: () async {
-                              await Order;
+                              // เรียกใช้ฟังก์ชัน Order เพื่อดึงข้อมูลคำสั่งซื้อ
+                              await Order();
+                              // อัปเดตสถานะเพื่อแสดงผลหน้าคำสั่งซื้อ
                               setState(() {
                                 _Index = 0;
                               });
@@ -1137,13 +1141,14 @@ class _OrderPageState extends State<OrderPage> {
                           ),
                           ElevatedButton(
                             onPressed: () async {
+                              // เรียกใช้ฟังก์ชัน Check เพื่อตรวจสอบผลรางวัล
                               await Check();
+
+                              // อัปเดตสถานะเพื่อแสดงผลหน้าผลรางวัล
                               setState(() {
                                 _Index = 1;
                               });
                             },
-
-                            // ignore: sort_child_properties_last
                             child: const Text(
                               "ผลรางวัล",
                               style: TextStyle(
@@ -1151,7 +1156,6 @@ class _OrderPageState extends State<OrderPage> {
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
-                            // เปลี่ยนสีปุ่มตามเงื่อนไข
                             style: ElevatedButton.styleFrom(
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 60, vertical: 15),
@@ -1173,14 +1177,23 @@ class _OrderPageState extends State<OrderPage> {
                           ),
                         ],
                       ),
+                      
                       Padding(
                         padding: const EdgeInsets.all(5.0),
                         child: Row(
                           children: [
                             Expanded(
                               child: Column(
-                                children: matchResults
-                                    .map((item) => SizedBox(
+                                children: matchResults == null || matchResults.isEmpty
+      ? [Text('ท่านไม่ถูกรางวัล',style: TextStyle(
+                                                              color:
+                                                                  Colors.black,
+                                                              fontSize: 15,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                            ),)]
+      : matchResults.map((item) => SizedBox(
                                           height: 198,
                                           child: Stack(
                                             children: [
